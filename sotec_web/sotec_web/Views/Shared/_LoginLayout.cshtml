@@ -1,0 +1,48 @@
+﻿<!doctype html>
+<html lang="tr">
+<head>
+    <title>SotecWEB::Giriş</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="~/admin_src/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/admin_src/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/admin_src/assets/css/main.css">
+    <link rel="stylesheet" href="~/admin_src/assets/css/color_skins.css">
+</head>
+<body class="theme-green auth-main">
+    <div id="wrapper">
+        <div class="container">
+            <div class="row clearfix">
+                <div class="col-12">
+                    <nav class="navbar navbar-expand-lg">
+                        <a class="navbar-brand" href="javascript:void(0);"><img src="~/admin_src/images/logo-white.png" height="30" class="d-inline-block align-top mr-2" alt=""></a>
+                    </nav>
+                </div>
+                <div class="col-lg-8">
+                    <div class="auth_detail">
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="header">
+                            <p class="lead">Giriş Yapın</p>
+                        </div>
+                        <div class="body">
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END WRAPPER -->
+
+    <script src="~/admin_src/assets/bundles/libscripts.bundle.js"></script>
+    <script src="~/admin_src/assets/bundles/vendorscripts.bundle.js"></script>
+    <script src="~/admin_src/assets/bundles/mainscripts.bundle.js"></script>
+</body>
+</html>
+

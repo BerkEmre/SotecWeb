@@ -1,0 +1,20 @@
+﻿@{
+    string currentController = Convert.ToString(HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"]);
+    string currentAction = Convert.ToString(HttpContext.Current.Request.RequestContext.RouteData.Values["Action"]);
+
+    if (currentController == "Admin")
+    {
+        if (currentAction == "Login")
+        {
+            Layout = "~/Views/Shared/_LoginLayout.cshtml";
+        }
+        else
+        {
+            Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        }
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+}

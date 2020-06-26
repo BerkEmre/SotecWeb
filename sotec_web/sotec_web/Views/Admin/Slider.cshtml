@@ -1,0 +1,122 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    ViewBag.Title = "Slider";
+    DataTable dt_slider = SQL.get("SELECT * FROM slider WHERE silindi = 0 ORDER by slider_id");
+}
+@section style
+{
+}
+@section script
+{
+    <script>
+        function galeri_oge_ekle(btn) {
+            var div = document.createElement("div");
+            div.className = "row clearfix";
+            div.innerHTML =
+                "<div class='col-6'>" +
+                "<input type='hidden' name='slider_id[]' value='0' />" +
+                "    <div class='form-group'>" +
+                "       <label>Resim</label>" +
+                "       <input type='file' name='resim' class='form-control' />" +
+                "    </div>" +
+                "    <div class='form-group'>" +
+                "        <label>Başlık</label>" +
+                "        <input type='text' name='baslik[]' class='form-control' />" +
+                "    </div>" +
+                "    <div class='form-group'>" +
+                "        <label>Yazı</label>" +
+                "        <input type='text' name='yazi[]' class='form-control' />" +
+                "    </div>" +
+                "</div>" +
+                "<div class='col-6'>" +
+                "    <div class='form-group'>" +
+                "        <label>Alt Yazı</label>" +
+                "        <input type='text' name='alt_yazi[]' class='form-control' />" +
+                "    </div>" +
+                "    <div class='form-group'>" +
+                "        <label>Buton Yazısı</label>" +
+                "        <input type='text' name='buton[]' class='form-control' />" +
+                "    </div>" +
+                "    <div class='form-group'>" +
+                "        <label>Buton Linki</label>" +
+                "        <input type='text' name='link[]' class='form-control' />" +
+                "    </div>" +
+                "</div>" +
+                "<div class='col-md-12'><button type='button' class='btn btn-block btn-danger' onclick='galeri_oge_sil(this)'>Sil</button><br/></div>"
+
+            btn.parentNode.childNodes[1].appendChild(div);
+        }
+
+        function galeri_oge_sil(btn) {
+            var row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+    </script>
+}
+<div class="row clearfix">
+    @{ if (Request.Params["hata"] != null)
+        {<div class="alert alert-danger col-md-12" role="alert">@Request.Params["hata"]</div>} }
+    @{ if (Request.Params["tepki"] != null)
+        {
+            if (Request.Params["tepki"].ToString() == "1")
+            { <div class="alert alert-success col-md-12" role="alert">Tebrikler, slider eklendi...</div> }
+            if (Request.Params["tepki"].ToString() == "2")
+            { <div class="alert alert-success col-md-12" role="alert">Tebrikler, slider güncellendi...</div> }
+            if (Request.Params["tepki"].ToString() == "3")
+            { <div class="alert alert-info col-md-12" role="alert">Slider silindi...</div> }
+
+        }
+    }
+    <div class="col-md-12">
+        <div class="card">
+            <form method="post" action="/Admin/sliderGuncelle" enctype="multipart/form-data">
+                <div class="header">
+                    <div class="pull-right">
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                    </div>
+                </div>
+                <div class="body">
+                    <div id="galeri_div">
+                        @foreach (DataRow row in dt_slider.Rows)
+                        {
+                            <div class="row clearfix">
+                                <div class='col-6'>
+                                    <input type='hidden' name='slider_id[]' value='@row["slider_id"]' />
+                                    <div class='form-group'>
+                                        <label>Resim</label>
+                                        <input type='file' name='resim' class='form-control' />
+                                    </div>
+                                    <div class='form-group'>
+                                        <label>Başlık</label>
+                                        <input type='text' name='baslik[]' class='form-control' value='@row["baslik"]' />
+                                    </div>
+                                    <div class='form-group'>
+                                        <label>Yazı</label>
+                                        <input type='text' name='yazi[]' class='form-control' value='@row["yazi"]' />
+                                    </div>
+                                </div>
+                                <div class='col-6'>
+                                    <div class='form-group'>
+                                        <label>Alt Yazı</label>
+                                        <input type='text' name='alt_yazi[]' class='form-control' value='@row["alt_yazi"]' />
+                                    </div>
+                                    <div class='form-group'>
+                                        <label>Buton Yazısı</label>
+                                        <input type='text' name='buton[]' class='form-control' value='@row["buton"]' />
+                                    </div>
+                                    <div class='form-group'>
+                                        <label>Buton Linki</label>
+                                        <input type='text' name='link[]' class='form-control' value='@row["link"]' />
+                                    </div>
+                                </div>
+                                <div class='col-md-12'><button type='button' class='btn btn-block btn-danger' onclick='galeri_oge_sil(this)'>Sil</button><br /></div>
+                            </div>
+                        }
+                    </div>
+                    <button type="button" class="btn btn-block btn-info" onclick="galeri_oge_ekle(this)">Yeni Galeri Öğesi Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

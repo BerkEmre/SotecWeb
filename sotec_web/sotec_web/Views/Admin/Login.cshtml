@@ -1,0 +1,13 @@
+﻿@using (Html.BeginForm("kullaniciGiris", "Admin", FormMethod.Post))
+{
+    <label class="text-danger">@Request.Params["hata"]</label>
+    <div class="form-group">
+        <label for="signin-email" class="control-label sr-only">E-Mail</label>
+        @Html.TextBox("email", null, new { @type = "email", @class = "form-control", @placeholder = "E-Mail" })
+    </div>
+    <div class="form-group">
+        <label for="signin-password" class="control-label sr-only">Şifre</label>
+        @Html.TextBox("sifre", null, new { @type = "password", @class = "form-control", @placeholder = "Şifre" })
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg btn-block">GİRİŞ</button>
+}

@@ -1,0 +1,254 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    int kategori_tipi_parametre_id = ViewBag.kategori_tipi_parametre_id;
+
+    DataRow dr_kategori_tipi_parametre_id = SQL.get("SELECT * FROM parametreler WHERE parametre_id =" + kategori_tipi_parametre_id).Rows[0];
+
+    ViewBag.Title =  "Kategoriler / " + dr_kategori_tipi_parametre_id["deger"];
+
+
+    DataTable dt_kategoriler = SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND ust_kategori_id = 0 AND kategori_tipi_parametre_id = " + kategori_tipi_parametre_id);
+    DataTable dt_kategoriler_all = SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND kategori_tipi_parametre_id = " + kategori_tipi_parametre_id);
+}
+@section style{
+    <style>
+        .liss * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .liss ul li {
+            margin-left: 15px;
+            position: relative;
+            padding-left: 5px;
+        }
+
+            .liss ul li::before {
+                content: " ";
+                position: absolute;
+                width: 1px;
+                background-color: #000;
+                top: 5px;
+                bottom: -12px;
+                left: -10px;
+            }
+
+        .liss body > ul > li:first-child::before {
+            top: 12px;
+        }
+
+        .liss ul li:not(:first-child):last-child::before {
+            display: none;
+        }
+
+        .liss ul li:only-child::before {
+            display: list-item;
+            content: " ";
+            position: absolute;
+            width: 1px;
+            background-color: #000;
+            top: 5px;
+            bottom: 7px;
+            height: 7px;
+            left: -10px;
+        }
+
+        .liss ul li::after {
+            content: " ";
+            position: absolute;
+            left: -10px;
+            width: 10px;
+            height: 1px;
+            background-color: #000;
+            top: 12px;
+        }
+    </style>
+}
+@section script {
+    <script>
+        function kategori_sil(kategori_id) {
+            swal({
+                title: "Silmek istediğinizden emin misiniz?",
+                text: "Silinen kategori geri getirilemez!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Evet, sil!",
+                cancelButtonText: "Hayır",
+                closeOnConfirm: false
+            },
+                function () {
+                    window.location = "/Admin/kategoriSil?kategori_id=" + kategori_id + "&kategori_tipi_parametre_id=" + @kategori_tipi_parametre_id;
+                });
+        }
+    </script>
+}
+
+<div class="row clearfix">
+    @{ if (Request.Params["hata"] != null)
+        {<div class="alert alert-danger col-md-12" role="alert">@Request.Params["hata"]</div>} }
+    @{ if (Request.Params["tepki"] != null)
+        {
+            if (Request.Params["tepki"].ToString() == "1")
+            { <div class="alert alert-success col-md-12" role="alert">Tebrikler, yeni kategori eklendi...</div> }
+            if (Request.Params["tepki"].ToString() == "2")
+            { <div class="alert alert-success col-md-12" role="alert">Tebrikler, kategori güncellendi...</div> }
+            if (Request.Params["tepki"].ToString() == "3")
+            { <div class="alert alert-info col-md-12" role="alert">Kategori silindi...</div> }
+
+        }
+    }
+    <div class="col-md-12">
+        <div class="card">
+            <div class="header">
+                <div class="pull-right"><a href="javascript:void(0);" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#kategori_ekle"><i class="fa fa-plus"></i> Yeni Kategori</a></div>
+            </div>
+            <div class="body">
+                KATEGORİLER
+                <ul class="liss">
+                    @foreach (DataRow item1 in dt_kategoriler.Rows)
+                    {
+                        <li>
+                            @item1["kategori"]
+                            <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_duzenle_@item1["kategori_id"]"><i class="fa fa-edit"></i></a>
+                            <ul>
+                                @foreach (DataRow item2 in SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND ust_kategori_id = " + item1["kategori_id"]).Rows)
+                                {
+                                    <li>
+                                        @item2["kategori"]
+                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_duzenle_@item2["kategori_id"]"><i class="fa fa-edit"></i></a>
+                                        <ul>
+                                            @foreach (DataRow item3 in SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND ust_kategori_id = " + item2["kategori_id"]).Rows)
+                                            {
+                                                <li>
+                                                    @item3["kategori"]
+                                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_duzenle_@item3["kategori_id"]"><i class="fa fa-edit"></i></a>
+                                                    <ul>
+                                                        @foreach (DataRow item4 in SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND ust_kategori_id = " + item3["kategori_id"]).Rows)
+                                                        {
+                                                            <li>
+                                                                @item4["kategori"]
+                                                                <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_duzenle_@item4["kategori_id"]"><i class="fa fa-edit"></i></a>
+                                                                <ul>
+                                                                    @foreach (DataRow item5 in SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND ust_kategori_id = " + item4["kategori_id"]).Rows)
+                                                                    {
+                                                                        <li>
+                                                                            @item5["kategori"]
+                                                                            <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_duzenle_@item5["kategori_id"]"><i class="fa fa-edit"></i></a>
+                                                                            <ul>
+                                                                                @foreach (DataRow item6 in SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND ust_kategori_id = " + item5["kategori_id"]).Rows)
+                                                                                {
+                                                                                    <li>
+                                                                                        @item5["kategori"]
+                                                                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_duzenle_@item6["kategori_id"]"><i class="fa fa-edit"></i></a>
+                                                                                        <ul></ul>
+                                                                                    </li>
+                                                                                }
+                                                                            </ul>
+                                                                        </li>
+                                                                    }
+                                                                </ul>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="kategori_ekle" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            @using (Html.BeginForm("kategoriEkle", "Admin", FormMethod.Post))
+            {
+                <input type="hidden" name="kategori_tipi_parametre_id" value="@kategori_tipi_parametre_id" />
+                <div class="modal-header">
+                    <h6 class="title" id="defaultModalLabel">Kategori Ekle</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="row clearfix">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label">Kategori</label>
+                                @Html.TextBox("kategori", null, new { @type = "text", @class = "form-control", @placeholder = "Ad", @autocomplete = "off" })
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label">Üst Kategori</label>
+                                <select name="ust_kategori_id" class="form-control">
+                                    <option value="0">Ana Kategori</option>
+                                    @foreach (DataRow dr in dt_kategoriler_all.Rows)
+                                    {
+                                        <option value="@dr["kategori_id"]">@dr["kategori"]</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Ekle</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@foreach (DataRow item in dt_kategoriler_all.Rows)
+{
+    <div class="modal fade" id="kategori_duzenle_@item["kategori_id"]" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @using (Html.BeginForm("kategoriDuzenle", "Admin", FormMethod.Post))
+                {
+                    <input type="hidden" name="kategori_id" value="@item["kategori_id"]" />
+                    <input type="hidden" name="kategori_tipi_parametre_id" value="@kategori_tipi_parametre_id" />
+                    <div class="modal-header">
+                        <h6 class="title" id="defaultModalLabel">Kategori Düzenle</h6>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row clearfix">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label class="control-label">Kategori</label>
+                                    @Html.TextBox("kategori", item["kategori"], new { @type = "text", @class = "form-control", @placeholder = "Ad", @autocomplete = "off" })
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label class="control-label">Üst Kategori</label>
+                                    <select name="ust_kategori_id" class="form-control">
+                                        <option value="0" @{if (Convert.ToInt32(item["ust_kategori_id"]) == 0) { @("selected")  } }>Ana Kategori</option>
+                                        @foreach (DataRow dr in SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND kategori_id != " + item["kategori_id"]).Rows)
+                                        {
+                                            <option value="@dr["kategori_id"]" @{if (Convert.ToInt32(item["ust_kategori_id"]) == Convert.ToInt32(dr["kategori_id"])) { @("selected")  } }>@dr["kategori"]</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Düzenle</button>
+                        <button onclick="kategori_sil(@item["kategori_id"])" type="button" class="btn btn-danger">Sil</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+

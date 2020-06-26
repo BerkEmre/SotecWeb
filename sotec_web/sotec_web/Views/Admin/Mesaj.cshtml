@@ -1,0 +1,73 @@
+﻿@using sotec_firma.Helpers
+@using System.Data
+@{
+    ViewBag.Title = "Mesaj";
+
+    DataTable dt_mesajlar = SQL.get("SELECT m.*, ad = ISNULL(k.ad, 'GENEL'), k.soyad FROM mesajlar m LEFT OUTER JOIN kullanicilar k ON k.kullanici_id = m.hedef_kullanici_id WHERE m.silindi = 0");
+    DataTable dt_bilgi = SQL.get("SELECT cnt = COUNT(*) FROM mesajlar WHERE silindi = 0 AND durum_parametre_id = 19");
+}
+@section script
+{
+    <script src="~/admin_src/assets/js/pages/ui/dialogs.js"></script>
+    <script>
+        $('.toggle-email-nav').on('click', function () {
+            $('.mail-left').toggleClass('open');
+        });
+    </script>
+    <script>
+        function mesaj_sil(mesaj_id) {
+            swal({
+                title: "Silmek istediğinizden emin misiniz?",
+                text: "Silinen mesaj geri getirilemez!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Evet, sil!",
+                cancelButtonText: "Hayır",
+                closeOnConfirm: false
+            },
+                function () {
+                    window.location = "/Admin/mesajSil?mesaj_id=" + mesaj_id;
+                });
+        }
+    </script>
+}
+@section style
+{
+    <link rel="stylesheet" href="~/admin_src/assets/css/inbox.css">
+}
+<div class="mail-inbox">
+    <div class="mobile-left">
+        <a href="javascript:void(0);" class="btn btn-primary toggle-email-nav"><i class="fa fa-bars"></i></a>
+    </div>
+    <div class="mail-left">
+        <div class="mail-side">
+            <ul class="nav">
+                <li class="active"><a href="@Url.Action("Mesaj")"><i class="icon-envelope"></i>Gelen Kutusu<span class="badge badge-primary float-right">@dt_bilgi.Rows[0]["cnt"]</span></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="mail-right check-all-parent">
+        <div class="header d-flex align-center">
+            <h2>Gelen Kutusu</h2>
+        </div>
+        <div class="mail-list">
+            <ul class="list-unstyled">
+                @foreach (DataRow item in dt_mesajlar.Rows)
+                {
+                    <li class="clearfix">
+                        <div class="mail-detail-right">
+                            <h6 class="sub"><a href="app-inbox-detail.html" class="mail-detail-expand">@item["ad_soyad"]</a><span class="badge badge-warning mb-0">@item["ad"] @item["soyad"]</span></h6>
+                            <p class="dep"><span class="m-r-10">[@item["email"]] | [@item["telefon"]]</span></p>
+                            <p>@item["mesaj"]</p>
+                            <span class="time">@item["kayit_tarihi"]</span>
+                        </div>
+                        <div class="hover-action">
+                            <button onclick="mesaj_sil(@item["mesaj_id"])" class="btn btn-danger" title="Delete" type="button"><i class="fa fa-trash-o"></i></button>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
