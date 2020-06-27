@@ -5,11 +5,12 @@
 
     DataRow dr_kategori_tipi_parametre_id = SQL.get("SELECT * FROM parametreler WHERE parametre_id =" + kategori_tipi_parametre_id).Rows[0];
 
-    ViewBag.Title =  "Kategoriler / " + dr_kategori_tipi_parametre_id["deger"];
-
-
+    ViewBag.Title = "Kategoriler / " + dr_kategori_tipi_parametre_id["deger"];
+    DataTable dt_diller_vs;
     DataTable dt_kategoriler = SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND ust_kategori_id = 0 AND kategori_tipi_parametre_id = " + kategori_tipi_parametre_id);
     DataTable dt_kategoriler_all = SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND kategori_tipi_parametre_id = " + kategori_tipi_parametre_id);
+
+    bool first = true;
 }
 @section style{
     <style>
@@ -113,36 +114,42 @@
                         <li>
                             @item1["kategori"]
                             <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_duzenle_@item1["kategori_id"]"><i class="fa fa-edit"></i></a>
+                            <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_dil_@item1["kategori_id"]"><i class="fa fa-flag"></i></a>
                             <ul>
                                 @foreach (DataRow item2 in SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND ust_kategori_id = " + item1["kategori_id"]).Rows)
                                 {
                                     <li>
                                         @item2["kategori"]
                                         <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_duzenle_@item2["kategori_id"]"><i class="fa fa-edit"></i></a>
+                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_dil_@item2["kategori_id"]"><i class="fa fa-flag"></i></a>
                                         <ul>
                                             @foreach (DataRow item3 in SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND ust_kategori_id = " + item2["kategori_id"]).Rows)
                                             {
                                                 <li>
                                                     @item3["kategori"]
                                                     <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_duzenle_@item3["kategori_id"]"><i class="fa fa-edit"></i></a>
+                                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_dil_@item3["kategori_id"]"><i class="fa fa-flag"></i></a>
                                                     <ul>
                                                         @foreach (DataRow item4 in SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND ust_kategori_id = " + item3["kategori_id"]).Rows)
                                                         {
                                                             <li>
                                                                 @item4["kategori"]
                                                                 <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_duzenle_@item4["kategori_id"]"><i class="fa fa-edit"></i></a>
+                                                                <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_dil_@item4["kategori_id"]"><i class="fa fa-flag"></i></a>
                                                                 <ul>
                                                                     @foreach (DataRow item5 in SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND ust_kategori_id = " + item4["kategori_id"]).Rows)
                                                                     {
                                                                         <li>
                                                                             @item5["kategori"]
                                                                             <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_duzenle_@item5["kategori_id"]"><i class="fa fa-edit"></i></a>
+                                                                            <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_dil_@item5["kategori_id"]"><i class="fa fa-flag"></i></a>
                                                                             <ul>
                                                                                 @foreach (DataRow item6 in SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND ust_kategori_id = " + item5["kategori_id"]).Rows)
                                                                                 {
                                                                                     <li>
                                                                                         @item5["kategori"]
                                                                                         <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_duzenle_@item6["kategori_id"]"><i class="fa fa-edit"></i></a>
+                                                                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#kategori_dil_@item6["kategori_id"]"><i class="fa fa-flag"></i></a>
                                                                                         <ul></ul>
                                                                                     </li>
                                                                                 }
@@ -244,6 +251,71 @@
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Düzenle</button>
                         <button onclick="kategori_sil(@item["kategori_id"])" type="button" class="btn btn-danger">Sil</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="kategori_dil_@item["kategori_id"]" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @using (Html.BeginForm("kategoriDil", "Admin", FormMethod.Post))
+                {
+                    <div class="modal-header">
+                        <h6 class="title" id="defaultModalLabel">Kategori Dilleri</h6>
+                    </div>
+                    <input type="hidden" name="kategori_id" value="@item["kategori_id"]" />
+                    <input type="hidden" name="kategori_tipi_parametre_id" value="@kategori_tipi_parametre_id" />
+                    <div class="modal-body">
+                        <div class="body">
+                            <ul class="nav nav-tabs">
+                                @{
+                                    first = true;
+                                    dt_diller_vs = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 0");
+                                }
+                                @foreach (DataRow item2 in dt_diller_vs.Rows)
+                                {
+                                    <li class="nav-item"><a class="nav-link @(first == true ? "active show" : "") " data-toggle="tab" href="#dil_@item2["dil_id"]">@item2["dil"]</a></li>
+                                    if (first)
+                                    {
+                                        first = false;
+                                    }
+                                }
+                            </ul>
+
+                            <div class="tab-content">
+                                @{
+                                    first = true;
+                                    dt_diller_vs = SQL.get("SELECT d.*, dk.kategori FROM diller d LEFT OUTER JOIN dil_kategoriler dk ON dk.dil_id = d.dil_id AND dk.kategori_id = " + item["kategori_id"] + " WHERE d.silindi = 0 AND d.varsayilan = 0");
+                                }
+                                @foreach (DataRow item2 in dt_diller_vs.Rows)
+                                {
+                                    <input type="hidden" name="dil_id[]" value="@item2["dil_id"]" />
+                                    <div class="tab-pane @(first ? "active show" : "")" id="dil_@item2["dil_id"]">
+                                        <h6>@item2["dil"]</h6>
+                                        <div class="row clearfix">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Kategori</label>
+                                                    <input name="kategori[]" type="text" class="form-control" placeholder="Kategori" autocomplete="off" value="@item2["kategori"]" />
+                                                    <span class="text-muted small">@item["kategori"]</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    if (first)
+                                    {
+                                        first = false;
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Düzenle</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
                     </div>
                 }

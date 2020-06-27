@@ -1,0 +1,187 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    ViewBag.Title = "Dil";
+
+    DataTable dt_hizmet = SQL.get("SELECT *, p.deger FROM diller d INNER JOIN parametreler p ON p.parametre_id = d.dil_durumu_parametre_id WHERE d.silindi = 0");
+    DataTable dt_yetki = SQL.get("SELECT * FROM parametreler WHERE tip = 'dil_durumlari'");
+}
+@section style
+{
+    <link rel="stylesheet" href="~/admin_src/vendor/dropify/css/dropify.min.css">
+    <script src="~/admin_src/vendor/ckeditor/ckeditor.js"></script>
+}
+@section script
+{
+    <script src="~/admin_src/assets/js/pages/ui/dialogs.js"></script>
+    <script src="~/admin_src/vendor/dropify/js/dropify.min.js"></script>
+    <script>
+        function dil_sil(dil_id) {
+            swal({
+                title: "Silmek istediğinizden emin misiniz?",
+                text: "Silinen hizmet geri getirilemez!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Evet, sil!",
+                cancelButtonText: "Hayır",
+                closeOnConfirm: false
+            },
+                function () {
+                    window.location = "/Admin/dilSil?dil_id=" + dil_id;
+                });
+        }
+    </script>
+}
+
+<div class="row clearfix">
+    @{ if (Request.Params["hata"] != null)
+        {<div class="alert alert-danger col-md-12" role="alert">@Request.Params["hata"]</div>} }
+    @{ if (Request.Params["tepki"] != null)
+        {
+            if (Request.Params["tepki"].ToString() == "1")
+            { <div class="alert alert-success col-md-12" role="alert">Tebrikler, yeni dil eklendi...</div> }
+            if (Request.Params["tepki"].ToString() == "2")
+            { <div class="alert alert-success col-md-12" role="alert">Tebrikler, dil güncellendi...</div> }
+            if (Request.Params["tepki"].ToString() == "3")
+            { <div class="alert alert-info col-md-12" role="alert">Dil silindi...</div> }
+
+        }
+    }
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="header">
+                <div class="pull-right">
+                    <a href="javascript:void(0);" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addcontact"><i class="fa fa-plus"></i> Yeni Dil</a>
+                </div>
+            </div>
+            <div class="body">
+                <div class="table-responsive check-all-parent">
+                    <table class="table table-custom table-hover m-b-0 c_list">
+                        <thead>
+                            <tr>
+                                <th>Dil</th>
+                                <th>Kısa Kod</th>
+                                <th>Durum</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (DataRow dr_item in dt_hizmet.Rows)
+                            {
+                                <tr>
+                                    <td>@dr_item["dil"]</td>
+                                    <td>@dr_item["kisa_kod"]</td>
+                                    <td>@dr_item["deger"]</td>
+                                    <td>
+                                        <a href="javascript:void(0);" class="btn btn-sm btn-default" data-toggle="modal" data-target="#tedarikci_duzenle_@dr_item["dil_id"]"><i class="fa fa-edit"></i></a>
+                                        <button onclick="dil_sil(@dr_item["dil_id"])" class="btn btn-danger" title="Delete" type="button"><i class="fa fa-trash-o"></i></button>
+                                    </td>
+                                </tr>
+
+                                <div class="modal fade" id="tedarikci_duzenle_@dr_item["dil_id"]" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <form action="/Admin/dilDuzenle" method="post" enctype="multipart/form-data">
+                                                <div class="modal-header">
+                                                    <h6 class="title" id="defaultModalLabel">Dil Düzenle</h6>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row clearfix">
+                                                        <input name="dil_id" type="hidden" value="@dr_item["dil_id"]" />
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label class="control-label">İkon</label>
+                                                                <input type="file" name="ikon" class="form-control" accept="image/x-png,image/jpeg" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Dil</label>
+                                                                <input type="text" name="dil" class="form-control" placeholder="Dil" autocomplete="off" value="@dr_item["dil"]" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Kısa Kod</label>
+                                                                <input type="text" name="kisa_kod" class="form-control" placeholder="Kısa Kod" autocomplete="off" value="@dr_item["kisa_kod"]" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Durum</label>
+                                                                <select name="dil_durumu_parametre_id" class="form-control">
+                                                                    @foreach (DataRow item in dt_yetki.Rows)
+                                                                    {
+                                                                        <option value="@item["parametre_id"]" @{if (Convert.ToInt32(dr_item["dil_durumu_parametre_id"]) == Convert.ToInt32(item["parametre_id"])) { @("selected")  } }>@item["deger"]</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary">Düzenle</button>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addcontact" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form method="post" action="~/Admin/dilEkle" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h6 class="title" id="defaultModalLabel">Dil Ekle</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="row clearfix">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="control-label">İkon</label>
+                                <input type="file" name="ikon" class="form-control" accept="image/x-png,image/jpeg" />
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="control-label">Dil</label>
+                                <input type="text" name="dil" class="form-control" placeholder="Dil" autocomplete="off" />
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="control-label">Kısa Kod</label>
+                                <input type="text" name="kisa_kod" class="form-control" placeholder="Kısa Kod" autocomplete="off" />
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="control-label">Yetki</label>
+                                <select name="dil_durumu_parametre_id" class="form-control">
+                                    @foreach (DataRow item in dt_yetki.Rows)
+                                    {
+                                        <option value="@item["parametre_id"]">@item["deger"]</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Ekle</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

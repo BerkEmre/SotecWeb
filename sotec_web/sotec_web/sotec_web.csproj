@@ -773,6 +773,9 @@
     <Content Include="Views\Admin\Haber.cshtml" />
     <Content Include="Views\Admin\Hizmet.cshtml" />
     <Content Include="Views\Admin\Mesaj.cshtml" />
+    <Content Include="Views\Admin\SiteBilgileri.cshtml" />
+    <Content Include="Views\Admin\Dil.cshtml" />
+    <Content Include="Views\Admin\Urun.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="admin_src\vendor\bootstrap\css\dist\css\" />

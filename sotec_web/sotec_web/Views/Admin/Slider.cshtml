@@ -1,8 +1,13 @@
 ﻿@using System.Data
 @using sotec_firma.Helpers
 @{
-    ViewBag.Title = "Slider";
-    DataTable dt_slider = SQL.get("SELECT * FROM slider WHERE silindi = 0 ORDER by slider_id");
+    int dil_id = ViewBag.dil_id;
+
+    DataRow dr_dil = SQL.get("SELECT * FROM diller WHERE dil_id = " + dil_id).Rows[0];
+
+    ViewBag.Title = "Slider / " + dr_dil["dil"];
+
+    DataTable dt_slider = SQL.get("SELECT * FROM slider WHERE silindi = 0 AND dil_id = " + dil_id + " ORDER by slider_id");
 }
 @section style
 {
@@ -71,6 +76,7 @@
     <div class="col-md-12">
         <div class="card">
             <form method="post" action="/Admin/sliderGuncelle" enctype="multipart/form-data">
+                <input name="dil_id" type="hidden" value="@dil_id" />
                 <div class="header">
                     <div class="pull-right">
                         <button type="submit" class="btn btn-primary">Kaydet</button>

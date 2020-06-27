@@ -3,6 +3,8 @@
 @{
     string currentAction = Convert.ToString(HttpContext.Current.Request.RequestContext.RouteData.Values["Action"]);
     DataRow dr_kullanici = SQL.get("SELECT * FROM kullanicilar WHERE kullanici_id = " + Session["kullanici_id"]).Rows[0];
+
+    DataTable dt_diller = SQL.get("SELECT * FROM diller WHERE silindi = 0");
 }
 <!doctype html>
 <html lang="tr">
@@ -96,15 +98,35 @@
                         }
                         @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1)
                         {
-                            <li class="@(currentAction == "SiteBilgileri" ? "active" : "")"><a href="@Url.Action("SiteBilgileri", "Admin")"><i class="icon-settings"></i><span>Site Bilgileri</span></a></li>
+                            <li class="@(currentAction == "SiteBilgileri" ? "active" : "")">
+                                <a href="#site_bilgileri" class="has-arrow"><i class="icon-settings"></i><span>Site Bilgileri</span></a>
+                                <ul>
+                                    @foreach (DataRow item in dt_diller.Rows)
+                                    {
+                                        <li><a href="@Url.Action("SiteBilgileri", "Admin", new { id = item["dil_id"] })">@item["dil"]</a></li>
+                                    }
+                                </ul>
+                            </li>
                         }
                         @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1)
                         {
-                            <li class="@(currentAction == "Slider" ? "active" : "")"><a href="@Url.Action("Slider", "Admin")"><i class="icon-directions"></i><span>Slider</span></a></li>
+                            <li class="@(currentAction == "Slider" ? "active" : "")">
+                                <a href="#dil" class="has-arrow"><i class="icon-settings"></i><span>Slider</span></a>
+                                <ul>
+                                    @foreach (DataRow item in dt_diller.Rows)
+                                    {
+                                        <li><a href="@Url.Action("Slider", "Admin", new { id = item["dil_id"] })">@item["dil"]</a></li>
+                                    }
+                                </ul>
+                            </li>
                         }
                         @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1)
                         {
                             <li class="@(currentAction == "Mesaj" ? "active" : "")"><a href="@Url.Action("Mesaj", "Admin")"><i class="icon-envelope-letter"></i><span>Mesajlar</span></a></li>
+                        }
+                        @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1)
+                        {
+                            <li class="@(currentAction == "Dil" ? "active" : "")"><a href="@Url.Action("Dil", "Admin")"><i class="icon-bubble"></i><span>Diller</span></a></li>
                         }
                         @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1)
                         {

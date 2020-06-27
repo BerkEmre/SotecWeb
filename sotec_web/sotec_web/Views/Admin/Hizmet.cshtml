@@ -2,7 +2,9 @@
 @using sotec_firma.Helpers
 @{
     ViewBag.Title = "Hizmet";
-    
+
+    bool first = true;
+    DataTable dt_diller_vs;
     DataTable dt_hizmet = SQL.get("SELECT b.*, k.ad, k.soyad FROM hizmetler b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id WHERE b.silindi = 0");
 }
 @section style
@@ -74,6 +76,7 @@
                                     <td>@dr_item["kayit_tarihi"]</td>
                                     <td>
                                         <a href="javascript:void(0);" class="btn btn-sm btn-default" data-toggle="modal" data-target="#tedarikci_duzenle_@dr_item["hizmet_id"]"><i class="fa fa-edit"></i></a>
+                                        <a href="javascript:void(0);" class="btn btn-sm btn-default" data-toggle="modal" data-target="#tedarikci_dil_@dr_item["hizmet_id"]"><i class="fa fa-flag"></i></a>
                                         <button onclick="hizmet_sil(@dr_item["hizmet_id"])" class="btn btn-danger" title="Delete" type="button"><i class="fa fa-trash-o"></i></button>
                                     </td>
                                 </tr>
@@ -106,6 +109,77 @@
                                                                 <textarea name="yazi" id="ckeditor_@dr_item["hizmet_id"]">@dr_item["yazi"]</textarea>
                                                                 <script>CKEDITOR.replace('ckeditor_@dr_item["hizmet_id"]');</script>
                                                             </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary">Düzenle</button>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade" id="tedarikci_dil_@dr_item["hizmet_id"]" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <form action="/Admin/hizmetDil" method="post" enctype="multipart/form-data">
+                                                <div class="modal-header">
+                                                    <h6 class="title" id="defaultModalLabel">Hizmet Dilleri</h6>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <input name="hizmet_id" type="hidden" value="@dr_item["hizmet_id"]" />
+                                                    <div class="body">
+                                                        <ul class="nav nav-tabs">
+                                                            @{
+                                                                first = true;
+                                                                dt_diller_vs = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 0");
+                                                            }
+                                                            @foreach (DataRow item2 in dt_diller_vs.Rows)
+                                                            {
+                                                                <li class="nav-item"><a class="nav-link @(first == true ? "active show" : "") " data-toggle="tab" href="#dil_@(item2["dil_id"] + "_" + dr_item["hizmet_id"])">@item2["dil"]</a></li>
+                                                                if (first)
+                                                                {
+                                                                    first = false;
+                                                                }
+                                                            }
+                                                        </ul>
+
+
+                                                        <div class="tab-content">
+                                                            @{
+                                                                first = true;
+                                                                dt_diller_vs = SQL.get("SELECT d.*, dk.baslik, dk.yazi FROM diller d LEFT OUTER JOIN dil_hizmetler dk ON dk.dil_id = d.dil_id AND dk.hizmet_id = " + dr_item["hizmet_id"] + " WHERE d.silindi = 0 AND d.varsayilan = 0");
+                                                            }
+                                                            @foreach (DataRow item2 in dt_diller_vs.Rows)
+                                                            {
+                                                                <input type="hidden" name="dil_id[]" value="@item2["dil_id"]" />
+                                                                <div class="tab-pane @(first ? "active show" : "")" id="dil_@(item2["dil_id"] + "_" + dr_item["hizmet_id"])">
+                                                                    <h6>@item2["dil"]</h6>
+                                                                    <div class="row clearfix">
+                                                                        <div class="col-12">
+                                                                            <div class="form-group">
+                                                                                <label class="control-label">Başlık</label>
+                                                                                <input type="text" name="baslik" class="form-control" placeholder="Başlık" autocomplete="off" value="@item2["baslik"]" />
+                                                                                <span class="text-muted small">@dr_item["baslik"]</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-12">
+                                                                            <div class="form-group">
+                                                                                <label class="control-label">Yazı</label>
+                                                                                <textarea name="yazi" id="ckeditor1_@(item2["dil_id"] + "_" + dr_item["hizmet_id"])">@item2["yazi"]</textarea>
+                                                                                <script>CKEDITOR.replace('ckeditor1_@(item2["dil_id"] + "_" + dr_item["hizmet_id"])');</script>
+                                                                                <span class="text-muted small">@MvcHtmlString.Create(dr_item["yazi"].ToString())</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                if (first)
+                                                                {
+                                                                    first = false;
+                                                                }
+                                                            }
                                                         </div>
                                                     </div>
                                                 </div>
