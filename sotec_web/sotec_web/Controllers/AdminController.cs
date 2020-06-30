@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -694,60 +695,137 @@ namespace sotec_web.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult urunEkle(HttpPostedFileBase gorsel, int urun_kategori_id, string urun_adi, string aciklama, decimal fiyat)
+        public ActionResult urunEkle(
+            int[] urun_kategori_id, string barkod, int[] ozellik_id, int[] varyasyon_id, string[] varyasyon_fiyat, string[] varyasyon_stok, string[] resim_path, int[] resim_id, int[] resim_sira,
+            string urun_adi = "", string aciklama = "", string stok_kodu = "", string stok = "", string fiyat = "0")
         {
-            if (urun_adi.Length <= 0)
-                return RedirectToAction("Ürün", new { hata = "Eksik bilgi girdiniz!" });
-
             string result = "";
-            if (gorsel != null && gorsel.ContentLength > 0)
-            {
-                result = string.Format(@"{0}", Guid.NewGuid());
-                WebImage img = new WebImage(gorsel.InputStream);
-                var path = Path.Combine(Server.MapPath("~/admin_src/images/urun/orjinal"), result);
-                img.Save(path);
-                img.Resize(1600, 1600, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/urun/buyuk"), result);
-                img.Save(path);
-                img.Resize(400, 400, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/urun/kucuk"), result);
-                img.Save(path);
-                result += Path.GetExtension(gorsel.FileName);
-                result = result.Replace("jpg", "jpeg");
-            }
+            int yeni_urun_id;
+            yeni_urun_id = Convert.ToInt32(SQL.get("INSERT INTO urunler (kaydeden_kullanici_id, urun_adi, aciklama, stok_kodu, barkod, stok, fiyat) VALUES (" + Session["kullanici_id"] + ", '" + urun_adi + "', '" + aciklama + "', '" + stok_kodu + "', '" + barkod + "', " + stok.ToString().Replace(',', '.') + ", " + fiyat.ToString().Replace(',', '.') + "); SELECT SCOPE_IDENTITY();").Rows[0][0]);
 
-            SQL.set("INSERT INTO urunler (kaydeden_kullanici_id, kategori_id, urun_adi, gorsel, aciklama, fiyat) VALUES (" + Session["kullanici_id"] + ", " + urun_kategori_id + ", '" + urun_adi + "', '" + result + "', '" + aciklama + "', " + fiyat.ToString().Replace(',', '.') + ")");
+            if(urun_kategori_id != null)
+            {
+                for (int i = 0; i < urun_kategori_id.Length; i++)
+                {
+                    SQL.set("INSERT INTO urun_kategorileri (kaydeden_kullanici_id, urun_id, kategori_id) VALUES (" + Session["kullanici_id"] + ", " + yeni_urun_id + ", " + urun_kategori_id[i] + ")");
+                }
+            }
+            if (ozellik_id != null)
+            {
+                for (int i = 0; i < ozellik_id.Length; i++)
+                {
+                    SQL.set("INSERT INTO urun_ozellik (kaydeden_kullanici_id, urun_id, deger_id) VALUES (" + Session["kullanici_id"] + ", " + yeni_urun_id + ", " + ozellik_id[i] + ")");
+                }
+            }
+            if (varyasyon_id != null)
+            {
+                for (int i = 0; i < varyasyon_id.Length; i++)
+                {
+                    SQL.set("INSERT INTO urun_varyasyon (kaydeden_kullanici_id, urun_id, deger_id, tutar, stok) VALUES (" + Session["kullanici_id"] + ", " + yeni_urun_id + ", " + varyasyon_id[i] + ", " + varyasyon_fiyat[i].ToString().Replace(',', '.') + ", " + varyasyon_stok[i].ToString().Replace(',', '.') + ")");
+                }
+            }
+            if (resim_id != null)
+            {
+                for (int i = 0; i < resim_id.Length; i++)
+                {
+                    if (resim_path[i] != null && resim_path[i].Length > 0)
+                    {
+                        result = string.Format(@"{0}", Guid.NewGuid());
+                        byte[] imageBytes = Convert.FromBase64String(resim_path[i].Replace("data:image/jpeg;base64,", ""));
+                        WebImage img = new WebImage(imageBytes);
+                        var path = Path.Combine(Server.MapPath("~/admin_src/images/urun/orjinal"), result);
+                        img.Save(path);
+                        img.Resize(1600, 1600, true, false);
+                        path = Path.Combine(Server.MapPath("~/admin_src/images/urun/buyuk"), result);
+                        img.Save(path);
+                        img.Resize(400, 400, true, false);
+                        path = Path.Combine(Server.MapPath("~/admin_src/images/urun/kucuk"), result);
+                        img.Save(path);
+                        result += Path.GetExtension(img.FileName);
+                        result = result.Replace("jpg", "jpeg");
+                        SQL.set("INSERT INTO urun_resimleri (kaydeden_kullanici_id, urun_id, resim, sira) VALUES (" + Session["kullanici_id"] + ", " + yeni_urun_id + ", '" + result + "', " + resim_sira[i] + ")");
+                    }
+
+                }
+            }
 
             return RedirectToAction("Urun", new { tepki = 1 });
         }
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult urunDuzenle(int urun_id, HttpPostedFileBase gorsel, int urun_kategori_id, string urun_adi, string aciklama, decimal fiyat)
+        public ActionResult urunDuzenle(
+            int urun_id, int[] urun_kategori_id, string barkod, int[] ozellik_id, int[] varyasyon_id, string[] varyasyon_fiyat, string[] varyasyon_stok, string[] resim_path, int[] resim_id, int[] resim_sira,
+            string urun_adi = "", string aciklama = "", string stok_kodu = "", string stok = "", string fiyat = "0")
         {
-            if (urun_adi.Length <= 0)
-                return RedirectToAction("Ürün", new { hata = "Eksik bilgi girdiniz!" });
-
             string result = "";
-            if (gorsel != null && gorsel.ContentLength > 0)
+            string resim_ids = "";
+            SQL.set("UPDATE urunler SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", urun_adi = '" + urun_adi + "', aciklama = '" + aciklama + "', stok_kodu = '" + stok_kodu + "', barkod = '" + barkod + "', stok = " + stok.ToString().Replace(',', '.') + ", fiyat = " + fiyat.ToString().Replace(',', '.') + " WHERE urun_id = " + urun_id);
+
+            SQL.set("UPDATE urun_kategorileri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE urun_id = " + urun_id);
+            SQL.set("UPDATE urun_ozellik SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE urun_id = " + urun_id);
+            SQL.set("UPDATE urun_varyasyon SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE urun_id = " + urun_id);
+
+            if (urun_kategori_id != null)
             {
-                result = string.Format(@"{0}", Guid.NewGuid());
-                WebImage img = new WebImage(gorsel.InputStream);
-                var path = Path.Combine(Server.MapPath("~/admin_src/images/urun/orjinal"), result);
-                img.Save(path);
-                img.Resize(1600, 1600, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/urun/buyuk"), result);
-                img.Save(path);
-                img.Resize(400, 400, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/urun/kucuk"), result);
-                img.Save(path);
-                result += Path.GetExtension(gorsel.FileName);
-                result = result.Replace("jpg", "jpeg");
+                for (int i = 0; i < urun_kategori_id.Length; i++)
+                {
+                    SQL.set("INSERT INTO urun_kategorileri (kaydeden_kullanici_id, urun_id, kategori_id) VALUES (" + Session["kullanici_id"] + ", " + urun_id + ", " + urun_kategori_id[i] + ")");
+                }
+            }
+            if (ozellik_id != null)
+            {
+                for (int i = 0; i < ozellik_id.Length; i++)
+                {
+                    SQL.set("INSERT INTO urun_ozellik (kaydeden_kullanici_id, urun_id, deger_id) VALUES (" + Session["kullanici_id"] + ", " + urun_id + ", " + ozellik_id[i] + ")");
+                }
+            }
+            if (varyasyon_id != null)
+            {
+                for (int i = 0; i < varyasyon_id.Length; i++)
+                {
+                    SQL.set("INSERT INTO urun_varyasyon (kaydeden_kullanici_id, urun_id, deger_id, tutar, stok) VALUES (" + Session["kullanici_id"] + ", " + urun_id + ", " + varyasyon_id[i] + ", " + varyasyon_fiyat[i].ToString().Replace(',', '.') + ", " + varyasyon_stok[i].ToString().Replace(',', '.') + ")");
+                }
+            }
+            if (resim_id != null)
+            {
+                resim_ids = "";
+                for (int i = 0; i < resim_id.Length; i++)
+                {
+                    SQL.set("UPDATE urun_resimleri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), sira = " + resim_sira[i] + " WHERE urun_resim_id = " + resim_id[i]);
+                    resim_ids += resim_id[i] + ",";
+                }
+                SQL.set("UPDATE urun_resimleri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE urun_resim_id NOT IN (" + resim_ids + "0" + ")");
+                for (int i = 0; i < resim_id.Length; i++)
+                {
+                    if (resim_id[i] == 0)
+                    {
+                        if (resim_path[i] != null && resim_path[i].Length > 0)
+                        {
+                            result = string.Format(@"{0}", Guid.NewGuid());
+                            byte[] imageBytes = Convert.FromBase64String(resim_path[i].Replace("data:image/jpeg;base64,", ""));
+                            WebImage img = new WebImage(imageBytes);
+                            var path = Path.Combine(Server.MapPath("~/admin_src/images/urun/orjinal"), result);
+                            img.Save(path);
+                            img.Resize(1600, 1600, true, false);
+                            path = Path.Combine(Server.MapPath("~/admin_src/images/urun/buyuk"), result);
+                            img.Save(path);
+                            img.Resize(400, 400, true, false);
+                            path = Path.Combine(Server.MapPath("~/admin_src/images/urun/kucuk"), result);
+                            img.Save(path);
+                            result += Path.GetExtension(img.FileName);
+                            result = result.Replace("jpg", "jpeg");
+                            SQL.set("INSERT INTO urun_resimleri (kaydeden_kullanici_id, urun_id, resim, sira) VALUES (" + Session["kullanici_id"] + ", " + urun_id + ", '" + result + "', " + resim_sira[i] + ")");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                SQL.set("UPDATE urun_resimleri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE urun_id = " + urun_id);
             }
 
-            SQL.set("UPDATE urunler SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), kategori_id = " + urun_kategori_id + ", urun_adi = '" + urun_adi + "', aciklama = '" + aciklama + "' " + (result.Length <= 0 ? "" : ", gorsel = '" + result + "' ") + ", fiyat = " + fiyat.ToString().Replace(',', '.') + " WHERE urun_id = " + urun_id);
-
-            return RedirectToAction("Urun", new { tepki = 1 });
+            return RedirectToAction("Urun", new { tepki = 2 });
         }
 
         public ActionResult urunSil(int urun_id)
@@ -775,6 +853,266 @@ namespace sotec_web.Controllers
             }
 
             return RedirectToAction("Urun", new { tepki = 1 });
+        }
+
+        public ActionResult UrunDetay(int id = 0)
+        {
+            if (Session["kullanici_id"] == null)
+                return RedirectToAction("Login");
+
+            ViewBag.urun_id = id;
+
+            return View();
+        }
+        #endregion
+
+        #region ÜRÜN VARYASYON
+        public ActionResult UrunVaryasyon()
+        {
+            if (Session["kullanici_id"] == null)
+                return RedirectToAction("Login");
+
+            return View();
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult varyasyonEkle(string varyasyon)
+        {
+            if (varyasyon.Length <= 0)
+                return RedirectToAction("UrunVaryasyon", new { hata = "Eksik bilgi girdiniz!" });
+
+            SQL.set("INSERT INTO urun_varyasyonlari (kaydeden_kullanici_id, varyasyon) VALUES (" + Session["kullanici_id"] + ", '" + varyasyon + "')");
+
+            return RedirectToAction("UrunVaryasyon", new { tepki = 1 });
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult varyasyonDuzenle(int varyasyon_id, string varyasyon)
+        {
+            if (varyasyon.Length <= 0)
+                return RedirectToAction("UrunVaryasyon", new { hata = "Eksik bilgi girdiniz!" });
+
+            SQL.set("UPDATE urun_varyasyonlari SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), varyasyon = '" + varyasyon + "' WHERE urun_varyasyon_id = " + varyasyon_id);
+
+            return RedirectToAction("UrunVaryasyon", new { tepki = 1 });
+        }
+
+        public ActionResult varyasyonSil(int varyasyon_id)
+        {
+            SQL.set("UPDATE urun_varyasyonlari SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE urun_varyasyon_id = " + varyasyon_id);
+            return RedirectToAction("UrunVaryasyon", new { tepki = 3 });
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult varyasyonDil(int[] dil_id, int varyasyon_id, string[] varyasyon)
+        {
+            DataTable dt_varmi;
+            for (int i = 0; i < dil_id.Length; i++)
+            {
+                dt_varmi = SQL.get("SELECT * FROM dil_urun_varyasyonlari WHERE silindi = 0 AND dil_id = " + dil_id[i] + " AND urun_varyasyon_id = " + varyasyon_id);
+                if (dt_varmi.Rows.Count > 0)
+                {
+                    SQL.set("UPDATE dil_urun_varyasyonlari SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), varyasyon = '" + varyasyon[i] + "' WHERE dil_id = " + dil_id[i] + " AND urun_varyasyon_id = " + varyasyon_id);
+                }
+                else
+                {
+                    SQL.set("INSERT INTO dil_urun_varyasyonlari (kaydeden_kullanici_id, dil_id, urun_varyasyon_id, varyasyon) VALUES (" + Session["kullanici_id"] + ", " + dil_id[i] + ", " + varyasyon_id + ", '" + varyasyon[i] + "')");
+                }
+            }
+
+            return RedirectToAction("UrunVaryasyon", new { tepki = 1 });
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult varyasyonDegerEkle(int varyasyon_id, string deger)
+        {
+            if (deger.Length <= 0)
+                return RedirectToAction("UrunVaryasyon", new { hata = "Eksik bilgi girdiniz!" });
+
+            SQL.set("INSERT INTO urun_varyasyon_degerleri (kaydeden_kullanici_id, deger, varyasyon_id) VALUES (" + Session["kullanici_id"] + ", '" + deger + "', " + varyasyon_id + ")");
+
+            return RedirectToAction("UrunVaryasyon", new { tepki = 1 });
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult varyasyonDegerDuzenle(int varyasyon_deger_id, string deger)
+        {
+            if (deger.Length <= 0)
+                return RedirectToAction("UrunVaryasyon", new { hata = "Eksik bilgi girdiniz!" });
+
+            SQL.set("UPDATE urun_varyasyon_degerleri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), deger = '" + deger + "' WHERE urun_varyasyon_deger_id = " + varyasyon_deger_id);
+
+            return RedirectToAction("UrunVaryasyon", new { tepki = 1 });
+        }
+
+        public ActionResult varyasyonDegerSil(int varyasyon_deger_id)
+        {
+            SQL.set("UPDATE urun_varyasyon_degerleri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE urun_varyasyon_deger_id = " + varyasyon_deger_id);
+            return RedirectToAction("UrunVaryasyon", new { tepki = 3 });
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult varyasyonDegerDil(int[] dil_id, int varyasyon_deger_id, string[] deger)
+        {
+            DataTable dt_varmi;
+            for (int i = 0; i < dil_id.Length; i++)
+            {
+                dt_varmi = SQL.get("SELECT * FROM dil_urun_varyasyon_degerleri WHERE silindi = 0 AND dil_id = " + dil_id[i] + " AND urun_varyasyon_deger_id = " + varyasyon_deger_id);
+                if (dt_varmi.Rows.Count > 0)
+                {
+                    SQL.set("UPDATE dil_urun_varyasyon_degerleri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), deger = '" + deger[i] + "' WHERE dil_id = " + dil_id[i] + " AND urun_varyasyon_deger_id = " + varyasyon_deger_id);
+                }
+                else
+                {
+                    SQL.set("INSERT INTO dil_urun_varyasyon_degerleri (kaydeden_kullanici_id, dil_id, urun_varyasyon_deger_id, deger) VALUES (" + Session["kullanici_id"] + ", " + dil_id[i] + ", " + varyasyon_deger_id + ", '" + deger[i] + "')");
+                }
+            }
+
+            return RedirectToAction("UrunVaryasyon", new { tepki = 1 });
+        }
+
+        [HttpPost]
+        public ActionResult varyasyonDegerGetir(int varyasyon_id)
+        {
+            string ret_data = "";
+            DataTable dt = SQL.get("SELECT * FROM urun_varyasyon_degerleri WHERE silindi = 0 AND varyasyon_id = " + varyasyon_id);
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                ret_data += "<option value='" + dt.Rows[i]["urun_varyasyon_deger_id"] + "'>" + dt.Rows[i]["deger"] + "</option>";
+            }
+
+            return Json(new { result = varyasyon_id, message = ret_data });
+        }
+        #endregion
+
+        #region ÜRÜN ÖZELLİK
+        public ActionResult UrunOzellik()
+        {
+            if (Session["kullanici_id"] == null)
+                return RedirectToAction("Login");
+
+            return View();
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult ozellikEkle(string ozellik)
+        {
+            if (ozellik.Length <= 0)
+                return RedirectToAction("UrunOzellik", new { hata = "Eksik bilgi girdiniz!" });
+
+            SQL.set("INSERT INTO urun_ozellikleri (kaydeden_kullanici_id, ozellik) VALUES (" + Session["kullanici_id"] + ", '" + ozellik + "')");
+
+            return RedirectToAction("UrunOzellik", new { tepki = 1 });
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult ozellikDuzenle(int ozellik_id, string ozellik)
+        {
+            if (ozellik.Length <= 0)
+                return RedirectToAction("UrunOzellik", new { hata = "Eksik bilgi girdiniz!" });
+
+            SQL.set("UPDATE urun_ozellikleri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), ozellik = '" + ozellik + "' WHERE urun_ozellik_id = " + ozellik_id);
+
+            return RedirectToAction("UrunOzellik", new { tepki = 1 });
+        }
+
+        public ActionResult ozellikSil(int ozellik_id)
+        {
+            SQL.set("UPDATE urun_ozellikleri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE urun_ozellik_id = " + ozellik_id);
+            return RedirectToAction("UrunOzellik", new { tepki = 3 });
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult ozellikDil(int[] dil_id, int ozellik_id, string[] ozellik)
+        {
+            DataTable dt_varmi;
+            for (int i = 0; i < dil_id.Length; i++)
+            {
+                dt_varmi = SQL.get("SELECT * FROM dil_urun_ozellikleri WHERE silindi = 0 AND dil_id = " + dil_id[i] + " AND urun_ozellik_id = " + ozellik_id);
+                if (dt_varmi.Rows.Count > 0)
+                {
+                    SQL.set("UPDATE dil_urun_ozellikleri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), ozellik = '" + ozellik[i] + "' WHERE dil_id = " + dil_id[i] + " AND urun_ozellik_id = " + ozellik_id);
+                }
+                else
+                {
+                    SQL.set("INSERT INTO dil_urun_ozellikleri (kaydeden_kullanici_id, dil_id, urun_ozellik_id, ozellik) VALUES (" + Session["kullanici_id"] + ", " + dil_id[i] + ", " + ozellik_id + ", '" + ozellik[i] + "')");
+                }
+            }
+
+            return RedirectToAction("UrunOzellik", new { tepki = 1 });
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult ozellikDegerEkle(int ozellik_id, string deger)
+        {
+            if (deger.Length <= 0)
+                return RedirectToAction("UrunOzellik", new { hata = "Eksik bilgi girdiniz!" });
+
+            SQL.set("INSERT INTO urun_ozellik_degerleri (kaydeden_kullanici_id, deger, ozellik_id) VALUES (" + Session["kullanici_id"] + ", '" + deger + "', " + ozellik_id + ")");
+
+            return RedirectToAction("UrunOzellik", new { tepki = 1 });
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult ozellikDegerDuzenle(int ozellik_deger_id, string deger)
+        {
+            if (deger.Length <= 0)
+                return RedirectToAction("UrunOzellik", new { hata = "Eksik bilgi girdiniz!" });
+
+            SQL.set("UPDATE urun_ozellik_degerleri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), deger = '" + deger + "' WHERE urun_ozellik_deger_id = " + ozellik_deger_id);
+
+            return RedirectToAction("UrunOzellik", new { tepki = 1 });
+        }
+
+        public ActionResult ozellikDegerSil(int ozellik_deger_id)
+        {
+            SQL.set("UPDATE urun_ozellik_degerleri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE urun_ozellik_deger_id = " + ozellik_deger_id);
+            return RedirectToAction("UrunOzellik", new { tepki = 3 });
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult ozellikDegerDil(int[] dil_id, int ozellik_deger_id, string[] deger)
+        {
+            DataTable dt_varmi;
+            for (int i = 0; i < dil_id.Length; i++)
+            {
+                dt_varmi = SQL.get("SELECT * FROM dil_urun_ozellik_degerleri WHERE silindi = 0 AND dil_id = " + dil_id[i] + " AND urun_ozellik_deger_id = " + ozellik_deger_id);
+                if (dt_varmi.Rows.Count > 0)
+                {
+                    SQL.set("UPDATE dil_urun_ozellik_degerleri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), deger = '" + deger[i] + "' WHERE dil_id = " + dil_id[i] + " AND urun_ozellik_deger_id = " + ozellik_deger_id);
+                }
+                else
+                {
+                    SQL.set("INSERT INTO dil_urun_ozellik_degerleri (kaydeden_kullanici_id, dil_id, urun_ozellik_deger_id, deger) VALUES (" + Session["kullanici_id"] + ", " + dil_id[i] + ", " + ozellik_deger_id + ", '" + deger[i] + "')");
+                }
+            }
+
+            return RedirectToAction("UrunOzellik", new { tepki = 1 });
+        }
+
+        [HttpPost]
+        public ActionResult ozellikDegerGetir(int ozellik_id)
+        {
+            string ret_data = "";
+            DataTable dt = SQL.get("SELECT * FROM urun_ozellik_degerleri WHERE silindi = 0 AND ozellik_id = " + ozellik_id);
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                ret_data += "<option value='" + dt.Rows[i]["urun_ozellik_deger_id"] + "'>" + dt.Rows[i]["deger"] + "</option>";
+            }
+
+            return Json(new { result = ozellik_id, message = ret_data });
         }
         #endregion
     }

@@ -71,7 +71,14 @@
                         <li class="@(currentAction == "Index" ? "active" : "")"><a href="@Url.Action("Index", "Admin")"><i class="icon-home"></i><span>Genel Bakış</span></a></li>
                         @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1 || Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 5)
                         {
-                            <li class="@(currentAction == "Urun" ? "active" : "")"><a href="@Url.Action("Urun", "Admin")"><i class="icon-puzzle"></i><span>Ürünler</span></a></li>
+                            <li class="@(currentAction == "Urun" ? "active" : "")@(currentAction == "UrunVaryasyon" ? "active" : "")@(currentAction == "UrunOzellik" ? "active" : "")">
+                                <a href="#urun" class="has-arrow"><i class="icon-puzzle"></i><span>Ürünler</span></a>
+                                <ul>
+                                    <li><a href="@Url.Action("Urun", "Admin")">Ürünler</a></li>
+                                    <li><a href="@Url.Action("UrunOzellik", "Admin")">Ürün Özellikleri</a></li>
+                                    <li><a href="@Url.Action("UrunVaryasyon", "Admin")">Ürün Varyasyonları</a></li>
+                                </ul>
+                            </li>
                         }
                         @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1 || Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 5)
                         {

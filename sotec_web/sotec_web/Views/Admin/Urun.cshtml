@@ -6,7 +6,7 @@
     bool first = true;
     DataTable dt_diller_vs;
     DataTable dt_blog_kategori = SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND kategori_tipi_parametre_id = 16");
-    DataTable dt_blog = SQL.get("SELECT u.*, k.ad, k.soyad, uk.kategori FROM urunler u INNER JOIN kullanicilar k ON k.kullanici_id = u.kaydeden_kullanici_id INNER JOIN kategoriler uk ON uk.kategori_id = u.kategori_id WHERE u.silindi = 0");
+    DataTable dt_blog = SQL.get("SELECT u.*, k.ad, k.soyad FROM urunler u INNER JOIN kullanicilar k ON k.kullanici_id = u.kaydeden_kullanici_id WHERE u.silindi = 0");
 }
 @section style
 {
@@ -54,7 +54,7 @@
         <div class="card">
             <div class="header">
                 <div class="pull-right">
-                    <a href="javascript:void(0);" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addcontact"><i class="fa fa-plus"></i> Yeni Ürün</a>
+                    <a href="@Url.Action("UrunDetay", "Admin", new { id = 0 })" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Yeni Ürün</a>
                 </div>
             </div>
             <div class="body">
@@ -73,73 +73,15 @@
                             @foreach (DataRow dr_item in dt_blog.Rows)
                             {
                                 <tr>
-                                    <td>@dr_item["kategori"]</td>
                                     <td>@dr_item["ad"] @dr_item["soyad"]</td>
                                     <td>@dr_item["urun_adi"]</td>
                                     <td>@dr_item["kayit_tarihi"]</td>
                                     <td>
-                                        <a href="javascript:void(0);" class="btn btn-sm btn-default" data-toggle="modal" data-target="#tedarikci_duzenle_@dr_item["urun_id"]"><i class="fa fa-edit"></i></a>
+                                        <a href="@Url.Action("UrunDetay", "Admin", new { id = dr_item["urun_id"] })" class="btn btn-sm btn-default"><i class="fa fa-edit"></i></a>
                                         <a href="javascript:void(0);" class="btn btn-sm btn-default" data-toggle="modal" data-target="#tedarikci_dil_@dr_item["urun_id"]"><i class="fa fa-flag"></i></a>
                                         <button onclick="urun_sil(@dr_item["urun_id"])" class="btn btn-danger" title="Delete" type="button"><i class="fa fa-trash-o"></i></button>
                                     </td>
                                 </tr>
-
-                                <div class="modal fade" id="tedarikci_duzenle_@dr_item["urun_id"]" tabindex="-1" role="dialog">
-                                    <div class="modal-dialog modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <form action="/Admin/urunDuzenle" method="post" enctype="multipart/form-data">
-                                                <div class="modal-header">
-                                                    <h6 class="title" id="defaultModalLabel">Ürün Düzenle</h6>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="row clearfix">
-                                                        <input name="urun_id" type="hidden" value="@dr_item["urun_id"]" />
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label class="control-label">Görsel</label>
-                                                                <input type="file" name="gorsel" class="form-control" accept="image/x-png,image/jpeg" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="form-group">
-                                                                <label class="control-label">Ürün Kategori</label>
-                                                                <select name="urun_kategori_id" class="form-control">
-                                                                    @foreach (DataRow item in dt_blog_kategori.Rows)
-                                                                    {
-                                                                        <option value="@item["kategori_id"]" @(item["kategori_id"].ToString() == dr_item["kategori_id"].ToString() ? "selected" : "")>@item["kategori"]</option>
-                                                                    }
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="form-group">
-                                                                <label class="control-label">Ürün Adı</label>
-                                                                <input type="text" name="urun_adi" class="form-control" placeholder="Ürün Adı" autocomplete="off" value="@dr_item["urun_adi"]" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label class="control-label">Fiyat</label>
-                                                                @Html.TextBox("fiyat", Math.Round(Convert.ToDecimal(dr_item["fiyat"]), 0), new { @type = "number", @class = "form-control", @placeholder = "Fiyat", @autocomplete = "off" })
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label class="control-label">Açıklama</label>
-                                                                <textarea name="aciklama" id="ckeditor_@dr_item["urun_id"]">@dr_item["aciklama"]</textarea>
-                                                                <script>CKEDITOR.replace('ckeditor_@dr_item["urun_id"]');</script>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-primary">Düzenle</button>
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
 
                                 <div class="modal fade" id="tedarikci_dil_@dr_item["urun_id"]" tabindex="-1" role="dialog">
                                     <div class="modal-dialog modal-lg" role="document">
@@ -216,62 +158,6 @@
                     </table>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="addcontact" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <form method="post" action="~/Admin/urunEkle" enctype="multipart/form-data">
-                <div class="modal-header">
-                    <h6 class="title" id="defaultModalLabel">Ürün Ekle</h6>
-                </div>
-                <div class="modal-body">
-                    <div class="row clearfix">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label class="control-label">Görsel</label>
-                                <input type="file" name="gorsel" class="form-control" accept="image/x-png,image/jpeg" />
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label class="control-label">Ürün Kategori</label>
-                                <select name="urun_kategori_id" class="form-control">
-                                    @foreach (DataRow item in dt_blog_kategori.Rows)
-                                    {
-                                        <option value="@item["kategori_id"]">@item["kategori"]</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label class="control-label">Ürün Adı</label>
-                                <input type="text" name="urun_adi" class="form-control" placeholder="Ürün Adı" autocomplete="off" />
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label class="control-label">Fiyat</label>
-                                @Html.TextBox("fiyat", null, new { @type = "number", @class = "form-control", @placeholder = "Fiyat", @autocomplete = "off" })
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label class="control-label">Açıklama</label>
-                                <textarea name="aciklama" id="ckeditor"></textarea>
-                                <script>CKEDITOR.replace('ckeditor');</script>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Ekle</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
-                </div>
-            </form>
         </div>
     </div>
 </div>

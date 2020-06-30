@@ -1,0 +1,378 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    ViewBag.Title = "Ürün Ekle/Düzenle";
+
+    int urun_id = 0;
+
+    try
+    {
+        urun_id = Convert.ToInt32(ViewBag.urun_id);
+    }
+    catch
+    {
+        urun_id = 0;
+    }
+
+    DataTable dt_urun = SQL.get("SELECT * FROM urunler WHERE urun_id = " + urun_id);
+
+    DataTable dt_kategoriler = SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND kategori_tipi_parametre_id = 16");
+    DataTable dt_urun_kategorileri = SQL.get("SELECT * FROM urun_kategorileri WHERE silindi = 0 AND urun_id = " + urun_id);
+    DataTable dt_urun_ozellikleri = SQL.get("SELECT * FROM urun_ozellikleri WHERE silindi = 0");
+    DataTable dt_urun_varyasyonlari = SQL.get("SELECT * FROM urun_varyasyonlari WHERE silindi = 0");
+
+    DataTable dt_urun_ozellik = SQL.get("SELECT uuo.urun_deger_id, uod.deger, uod.urun_ozellik_deger_id, uo.ozellik, uo.urun_ozellik_id FROM urun_ozellik uuo INNER JOIN urun_ozellik_degerleri uod ON uod.silindi = 0 AND uod.urun_ozellik_deger_id = uuo.deger_id INNER JOIN urun_ozellikleri uo ON uo.silindi = 0 AND uo.urun_ozellik_id = uod.ozellik_id WHERE uuo.silindi = 0 AND uuo.urun_id = " + urun_id);
+    DataTable dt_urun_varyasyon = SQL.get("SELECT uuo.urun_deger_id, uod.deger, uod.urun_varyasyon_deger_id, uo.varyasyon, uo.urun_varyasyon_id, uuo.tutar, uuo.stok FROM urun_varyasyon uuo INNER JOIN urun_varyasyon_degerleri uod ON uod.silindi = 0 AND uod.urun_varyasyon_deger_id = uuo.deger_id INNER JOIN urun_varyasyonlari uo ON uo.silindi = 0 AND uo.urun_varyasyon_id = uod.varyasyon_id WHERE uuo.silindi = 0 AND uuo.urun_id = " + urun_id);
+    DataTable dt_urun_resimleri = SQL.get("SELECT * FROM urun_resimleri WHERE silindi = 0 AND urun_id = " + urun_id);
+}
+
+@section style
+{
+    <link rel="stylesheet" href="~/admin_src/vendor/dropify/css/dropify.min.css">
+    <script src="~/admin_src/vendor/ckeditor/ckeditor.js"></script>
+    <link rel="stylesheet" href="~/admin_src/vendor/bootstrap-multiselect/bootstrap-multiselect.css">
+    <link rel="stylesheet" href="~/admin_src/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="~/admin_src/vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css" />
+    <link rel="stylesheet" href="~/admin_src/vendor/multi-select/css/multi-select.css">
+    <link rel="stylesheet" href="~/admin_src/vendor/bootstrap-tagsinput/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="~/admin_src/vendor/nouislider/nouislider.min.css" />
+}
+@section script
+{
+    <script src="~/admin_src/vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script><!-- Bootstrap Colorpicker Js -->
+    <script src="~/admin_src/vendor/jquery-inputmask/jquery.inputmask.bundle.js"></script><!-- Input Mask Plugin Js -->
+    <script src="~/admin_src/vendor/jquery.maskedinput/jquery.maskedinput.min.js"></script>
+    <script src="~/admin_src/vendor/multi-select/js/jquery.multi-select.js"></script><!-- Multi Select Plugin Js -->
+    <script src="~/admin_src/vendor/bootstrap-multiselect/bootstrap-multiselect.js"></script>
+    <script src="~/admin_src/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/admin_src/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script><!-- Bootstrap Tags Input Plugin Js -->
+    <script src="~/admin_src/vendor/nouislider/nouislider.js"></script><!-- noUISlider Plugin Js -->
+    <script src="~/admin_src/assets/js/pages/forms/advanced-form-elements.js"></script>
+
+    <script>
+        var eklenen_ozellik_idler = [];
+        function ozellik_ekle() {
+            var e = document.getElementById("cmb_ozellik");
+            var ozellik_id = e.options[e.selectedIndex].value;
+            var ozellik = e.options[e.selectedIndex].innerHTML;
+
+            if (eklenen_ozellik_idler.indexOf(ozellik_id) >= 0)
+                return;
+
+            $.ajax({
+                url: '/Admin/ozellikDegerGetir?ozellik_id=' + ozellik_id,
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    var tr = document.createElement("tr");
+                    tr.innerHTML =
+                        "<td>" + ozellik + "</td>" +
+                        "<td>" +
+                        "   <select class='form-control' name='ozellik_id[]'>" +
+                        data.message +
+                        "   </select>" +
+                        "</td>" +
+                        "<td><button onclick='ozellik_sil(this)' class='btn btn-danger' type='button' value='" + ozellik_id + "'><i class='fa fa-trash-o'></i></button></td>";
+
+                    var ozellik_rows = document.getElementById("ozellik_rows");
+                    ozellik_rows.appendChild(tr);
+
+                    eklenen_ozellik_idler.push(ozellik_id);
+                }
+            });
+        }
+
+        function ozellik_sil(btn) {
+            var ozellik_id = btn.value;
+            eklenen_ozellik_idler.splice(eklenen_ozellik_idler.indexOf(ozellik_id), 1);
+            var row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+        function varyasyon_ekle() {
+            var e = document.getElementById("cmb_varyasyon");
+            var varyasyon_id = e.options[e.selectedIndex].value;
+            var secenek = e.options[e.selectedIndex].innerHTML;
+
+            $.ajax({
+                url: '/Admin/varyasyonDegerGetir?varyasyon_id=' + varyasyon_id,
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    var tr = document.createElement("tr");
+                    tr.innerHTML =
+                        "<td>" + secenek + "</td>" +
+                        "<td>" +
+                        "   <select class='form-control' name='varyasyon_id[]'>" +
+                        data.message +
+                        "   </select>" +
+                        "</td>" +
+                        "<td><input name='varyasyon_fiyat[]' type='number' class='form-control' value='0' step='0.01' autocomplete='off' required/></td>" +
+                        "<td><input name='varyasyon_stok[]' type='number' class='form-control' value='0' step='0.01' autocomplete='off' required/></td>" +
+                        "<td><button onclick='varyasyon_sil(this)' class='btn btn-danger' type='button' value='" + varyasyon_id + "'><i class='fa fa-trash-o'></i></button></td>";
+
+                    var secenek_rows = document.getElementById("secenek_rows");
+                    secenek_rows.appendChild(tr);
+                }
+            });
+        }
+
+        function varyasyon_sil(btn) {
+            var row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+        $(function () {
+            var imagesPreview = function (input, placeToInsertImagePreview) {
+                if (input.files) {
+                    var filesAmount = input.files.length;
+
+                    for (i = 0; i < filesAmount; i++) {
+                        var reader = new FileReader();
+
+                        reader.onload = function (event) {
+                            var div = document.createElement("div");
+                            div.className = "col-3";
+                            div.innerHTML = "<input type='hidden' name='resim_path[]' value='" + event.target.result + "' /><input type='hidden' name='resim_id[]' value='0' /><img src='" + event.target.result + "' class='gallery-item img-fluid' /><input name='resim_sira[]' type='number' class='form-control' value='0' autocomplete='off' /><button onclick='resim_sil(this)' type='button' class='btn btn-danger btn-block'><i class='fa fa-trash-o'></i></button>";
+                            var gallery = document.getElementById("gallery");
+                            gallery.appendChild(div);
+                            //$($.parseHTML('<img>')).attr('src', event.target.result).appendTo(placeToInsertImagePreview).attr('class', 'gallery-item img-fluid col-md-4');
+                            //$($.parseHTML('<input>')).attr('name', 'resim_path[]').attr('value', event.target.result).appendTo(placeToInsertImagePreview).attr('type', 'hidden');
+                            //$($.parseHTML('<button>')).attr('onclick', 'resim_path[]').attr('value', event.target.result).appendTo(placeToInsertImagePreview).attr('type', 'hidden');
+                        }
+
+                        reader.readAsDataURL(input.files[i]);
+                    }
+                }
+
+            };
+
+            $('#urun_resimleri').on('change', function () {
+                //$('#gallery').empty();
+                imagesPreview(this, 'div.gallery');
+            });
+        });
+
+        function resim_sil(btn) {
+            var row = btn.parentNode;
+            row.parentNode.removeChild(row);
+        }
+    </script>
+}
+<div class="row clearfix">
+    @{ if (Request.Params["hata"] != null)
+        {<div class="alert alert-danger col-md-12" role="alert">@Request.Params["hata"]</div>} }
+    @{ if (Request.Params["tepki"] != null)
+        {
+            if (Request.Params["tepki"].ToString() == "1")
+            { <div class="alert alert-success col-md-12" role="alert">Tebrikler, yeni ürün eklendi...</div> }
+            if (Request.Params["tepki"].ToString() == "2")
+            { <div class="alert alert-success col-md-12" role="alert">Tebrikler, ürün güncellendi...</div> }
+            if (Request.Params["tepki"].ToString() == "3")
+            { <div class="alert alert-info col-md-12" role="alert">Ürün silindi...</div> }
+
+        }
+    }
+    <div class="col-lg-12">
+        <div class="card">
+            <form action="@(urun_id == 0 ? "/Admin/urunEkle" : "/Admin/urunDuzenle")" method="post" enctype="multipart/form-data">
+                <input type='hidden' name='urun_id' value='@urun_id' />
+                <div class="header">
+                    <div class="pull-right">
+                        <button type="submit" class="btn btn-primary">Ürün @(urun_id == 0 ? "Ekle" : "Düzenle (" + urun_id + ")")</button>
+                    </div>
+                </div>
+                <div class="body">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#genel_bilgiler">Genel Bilgiler</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#veri">Veri</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#ozellikler">Özellikler</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#varyasyonlar">Varyasyonlar</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#resimler">Ürün Resimleri</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane show active" id="genel_bilgiler">
+                            <h6>Genel Bilgiler</h6>
+                            <div class="row clearfix">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Ürün Adı</label>
+                                        <input type="text" name="urun_adi" class="form-control" placeholder="Ürün Adı" value="@(urun_id == 0 ? "" : dt_urun.Rows[0]["urun_adi"])" autocomplete="off" required/>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Kategori</label>
+                                        <div class="multiselect_div">
+                                            <select id="multiselect1" name="urun_kategori_id[]" class="multiselect" multiple="multiple" required>
+                                                @foreach (DataRow item in dt_kategoriler.Rows)
+                                                {
+                                                    <option value="@item["kategori_id"]" @(dt_urun_kategorileri.Select("kategori_id = " + item["kategori_id"]).Length > 0 ? "selected" : "")>@item["kategori"]</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Açıklama</label>
+                                        <textarea name="aciklama" id="ckeditor_0">@(urun_id == 0 ? "" : dt_urun.Rows[0]["aciklama"])</textarea>
+                                        <script>CKEDITOR.replace('ckeditor_0');</script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="veri">
+                            <h6>Veri</h6>
+                            <div class="row clearfix">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Stok Kodu</label>
+                                        <input type="text" name="stok_kodu" class="form-control" placeholder="Stok Kodu" value="@(urun_id == 0 ? "" : dt_urun.Rows[0]["stok_kodu"])" autocomplete="off" />
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Barkod</label>
+                                        <input type="text" name="barkod" class="form-control" placeholder="Barkod" value="@(urun_id == 0 ? "" : dt_urun.Rows[0]["barkod"])" autocomplete="off" />
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Stok</label>
+                                        <input type="number" step="0.01" name="stok" class="form-control" placeholder="Stok" value="@(urun_id == 0 ? "0" : dt_urun.Rows[0]["stok"].ToString().Replace(',', '.'))" autocomplete="off" required/>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Fiyat</label>
+                                        <input type="number" step="0.01" name="fiyat" class="form-control" placeholder="Fiyat" value="@(urun_id == 0 ? "0" : dt_urun.Rows[0]["fiyat"].ToString().Replace(',', '.'))" autocomplete="off" required/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="ozellikler">
+                            <h6>Özellikler</h6>
+                            <div class="row clearfix">
+                                <div class="table-responsive">
+                                    <table class="table table-custom table-hover m-b-0 c_list">
+                                        <thead>
+                                            <tr>
+                                                <th>Özellik</th>
+                                                <th>Değer</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="ozellik_rows">
+                                            @foreach (DataRow item in dt_urun_ozellik.Rows)
+                                            {
+                                                <tr>
+                                                    <td>@item["ozellik"]</td>
+                                                    <td>
+                                                        <select class='form-control' name='ozellik_id[]'>
+                                                            @foreach (DataRow dr in SQL.get("SELECT * FROM urun_ozellik_degerleri WHERE silindi = 0 AND ozellik_id = " + item["urun_ozellik_id"]).Rows)
+                                                            {
+                                                                <option value="@dr["urun_ozellik_deger_id"]" @(dr["urun_ozellik_deger_id"].ToString() == item["urun_ozellik_deger_id"].ToString() ? "selected" : "")>@dr["deger"]</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <td><button onclick='ozellik_sil(this)' class='btn btn-danger' type='button' value='@item["urun_ozellik_id"]'><i class='fa fa-trash-o'></i></button></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td>
+                                                    <select id="cmb_ozellik" class="form-control">
+                                                        @foreach (DataRow item in dt_urun_ozellikleri.Rows)
+                                                        {
+                                                            <option value="@item["urun_ozellik_id"]">@item["ozellik"]</option>
+                                                        }
+                                                    </select>
+                                                </td>
+                                                <td colspan="2">
+                                                    <button type="button" onclick="ozellik_ekle()" class="btn btn-primary btn-block"><i class="fa fa-plus"></i> Özellik Ekle</button>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="varyasyonlar">
+                            <h6>Varyasyonlar</h6>
+                            <div class="row clearfix">
+                                <div class="table-responsive">
+                                    <table class="table table-custom table-hover m-b-0 c_list">
+                                        <thead>
+                                            <tr>
+                                                <th>Seçenek</th>
+                                                <th>Değer</th>
+                                                <th>Tutar(+/-)</th>
+                                                <th>Stok</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="secenek_rows">
+                                            @foreach (DataRow item in dt_urun_varyasyon.Rows)
+                                            {
+                                                <tr>
+                                                    <td>@item["varyasyon"]</td>
+                                                    <td>
+                                                        <select class='form-control' name='varyasyon_id[]'>
+                                                            @foreach (DataRow dr in SQL.get("SELECT * FROM urun_varyasyon_degerleri WHERE silindi = 0 AND varyasyon_id = " + item["urun_varyasyon_id"]).Rows)
+                                                            {
+                                                                <option value="@dr["urun_varyasyon_deger_id"]" @(dr["urun_varyasyon_deger_id"].ToString() == item["urun_varyasyon_deger_id"].ToString() ? "selected" : "")>@dr["deger"]</option>
+                                                            }
+                                                        </select>
+                                                    <td><input name='varyasyon_fiyat[]' type='number' class='form-control' value='@item["tutar"].ToString().Replace(',', '.')' step='0.01' autocomplete='off' required /></td>
+                                                    <td><input name='varyasyon_stok[]' type='number' class='form-control' value='@item["stok"].ToString().Replace(',', '.')' step='0.01' autocomplete='off' required /></td>
+                                                    <td><button onclick='varyasyon_sil(this)' class='btn btn-danger' type='button' value='@item["urun_varyasyon_id"]'><i class='fa fa-trash-o'></i></button></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <select id="cmb_varyasyon" class="form-control">
+                                                        @foreach (DataRow item in dt_urun_varyasyonlari.Rows)
+                                                        {
+                                                            <option value="@item["urun_varyasyon_id"]">@item["varyasyon"]</option>
+                                                        }
+                                                    </select>
+                                                </td>
+                                                <td colspan="3">
+                                                    <button type="button" onclick="varyasyon_ekle()" class="btn btn-primary btn-block"><i class="fa fa-plus"></i> Varyasyon Ekle</button>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="resimler">
+                            <h6>Resimler</h6>
+                            <div class="row clearfix">
+                                <input type="file" name="resimler" id="urun_resimleri" class="form-control" accept="image/x-png,image/jpeg" multiple />
+                                <hr />
+                                <div id="gallery" class="row clearfix">
+                                    @foreach (DataRow item in dt_urun_resimleri.Rows)
+                                    {
+                                        <div class="col-3">
+                                            <input type='hidden' name='resim_path[]' value='~/admin_src/images/urun/orjinal/@item["resim"]' />
+                                            <input type='hidden' name='resim_id[]' value='@item["urun_resim_id"]' />
+                                            <img src='~/admin_src/images/urun/orjinal/@item["resim"]' class='gallery-item img-fluid' />
+                                            <input name='resim_sira[]' type='number' class='form-control' value='@item["sira"]' autocomplete='off' required/>
+                                            <button onclick='resim_sil(this)' type='button' class='btn btn-danger btn-block'><i class='fa fa-trash-o'></i></button>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

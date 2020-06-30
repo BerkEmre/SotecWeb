@@ -776,6 +776,10 @@
     <Content Include="Views\Admin\SiteBilgileri.cshtml" />
     <Content Include="Views\Admin\Dil.cshtml" />
     <Content Include="Views\Admin\Urun.cshtml" />
+    <Content Include="Views\Admin\UrunDetay.cshtml" />
+    <Content Include="Views\Admin\UrunOzellik.cshtml" />
+    <Content Include="Views\Admin\UrunVaryasyon.cshtml" />
+    <Content Include="Views\Admin\Tedarikciler.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="admin_src\vendor\bootstrap\css\dist\css\" />
