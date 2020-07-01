@@ -187,7 +187,85 @@ namespace sotec_web.Controllers
                 SQL.set("UPDATE slider SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE slider_id = " + dt_resimler.Rows[i]["slider_id"]);
             }
 
-            return RedirectToAction("Slider", new { tepki = 1 });
+            return RedirectToAction("Slider", new { id = dil_id, tepki = 1 });
+        }
+        #endregion
+
+        #region KARO
+        public ActionResult Karo(int id)
+        {
+            if (Session["kullanici_id"] == null)
+                return RedirectToAction("Login");
+
+            ViewBag.dil_id = id;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult karoGuncelle(int[] karo_id, IEnumerable<HttpPostedFileBase> resim, string[] buton, string[] link, int dil_id)
+        {
+            string result = "";
+            DataTable dt_resimler = SQL.get("SELECT * FROM karolar WHERE silindi = 0");
+
+            for (int i = 0; i < karo_id.Length; i++)
+            {
+                if (karo_id[i] == 0)
+                {
+                    result = "";
+                    if (resim.ElementAt(i) != null && resim.ElementAt(i).ContentLength > 0)
+                    {
+                        result = string.Format(@"{0}", Guid.NewGuid());
+                        WebImage img = new WebImage(resim.ElementAt(i).InputStream);
+                        var path = Path.Combine(Server.MapPath("~/admin_src/images/karo/orjinal"), result);
+                        img.Save(path);
+                        img.Resize(2000, 2000, true, false);
+                        path = Path.Combine(Server.MapPath("~/admin_src/images/karo/buyuk"), result);
+                        img.Save(path);
+                        img.Resize(1000, 1000, true, false);
+                        path = Path.Combine(Server.MapPath("~/admin_src/images/karo/kucuk"), result);
+                        img.Save(path);
+                        result += Path.GetExtension(resim.ElementAt(i).FileName);
+                        result = result.Replace("jpg", "jpeg");
+                    }
+                    SQL.set("INSERT INTO karolar (kaydeden_kullanici_id, resim, buton, link, dil_id) VALUES (" + Session["kullanici_id"] + ", '" + result + "', '" + buton[i] + "', '" + link[i] + "', " + dil_id + ")");
+                }
+                else
+                {
+                    result = "";
+                    if (resim.ElementAt(i) != null && resim.ElementAt(i).ContentLength > 0)
+                    {
+                        result = string.Format(@"{0}", Guid.NewGuid());
+                        WebImage img = new WebImage(resim.ElementAt(i).InputStream);
+                        var path = Path.Combine(Server.MapPath("~/admin_src/images/karo/orjinal"), result);
+                        img.Save(path);
+                        img.Resize(2000, 2000, true, false);
+                        path = Path.Combine(Server.MapPath("~/admin_src/images/karo/buyuk"), result);
+                        img.Save(path);
+                        img.Resize(1000, 1000, true, false);
+                        path = Path.Combine(Server.MapPath("~/admin_src/images/karo/kucuk"), result);
+                        img.Save(path);
+                        result += Path.GetExtension(resim.ElementAt(i).FileName);
+                        result = result.Replace("jpg", "jpeg");
+                    }
+                    SQL.set("UPDATE karolar SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), resim = " + (result.Length <= 0 ? "resim" : "'" + result + "'") + ", buton = '" + buton[i] + "', link = '" + link[i] + "', dil_id = " + dil_id + " WHERE karo_id = " + karo_id[i]);
+                }
+                for (int j = 0; j < dt_resimler.Rows.Count; j++)
+                {
+                    if (Convert.ToInt32(dt_resimler.Rows[j]["karo_id"]) == karo_id[i])
+                    {
+                        dt_resimler.Rows.RemoveAt(j);
+                        dt_resimler.AcceptChanges();
+                    }
+                }
+            }
+
+            for (int i = 0; i < dt_resimler.Rows.Count; i++)
+            {
+                SQL.set("UPDATE karolar SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE karo_id = " + dt_resimler.Rows[i]["karo_id"]);
+            }
+
+            return RedirectToAction("Karo", new { id = dil_id, tepki = 1 });
         }
         #endregion
 
@@ -601,7 +679,7 @@ namespace sotec_web.Controllers
 
             SQL.set(sql);
 
-            return RedirectToAction("SiteBilgileri", new { tepki = 1 });
+            return RedirectToAction("SiteBilgileri", new { id = dil_id, tepki = 1 });
         }
         #endregion
 

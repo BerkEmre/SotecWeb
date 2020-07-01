@@ -118,11 +118,23 @@
                         @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1)
                         {
                             <li class="@(currentAction == "Slider" ? "active" : "")">
-                                <a href="#dil" class="has-arrow"><i class="icon-settings"></i><span>Slider</span></a>
+                                <a href="#dil" class="has-arrow"><i class="icon-directions"></i><span>Slider</span></a>
                                 <ul>
                                     @foreach (DataRow item in dt_diller.Rows)
                                     {
                                         <li><a href="@Url.Action("Slider", "Admin", new { id = item["dil_id"] })">@item["dil"]</a></li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1)
+                        {
+                            <li class="@(currentAction == "Karo" ? "active" : "")">
+                                <a href="#dil" class="has-arrow"><i class="icon-film"></i><span>Karo</span></a>
+                                <ul>
+                                    @foreach (DataRow item in dt_diller.Rows)
+                                    {
+                                        <li><a href="@Url.Action("Karo", "Admin", new { id = item["dil_id"] })">@item["dil"]</a></li>
                                     }
                                 </ul>
                             </li>
