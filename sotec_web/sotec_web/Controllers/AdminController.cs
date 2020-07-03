@@ -184,7 +184,7 @@ namespace sotec_web.Controllers
 
             for (int i = 0; i < dt_resimler.Rows.Count; i++)
             {
-                SQL.set("UPDATE slider SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE slider_id = " + dt_resimler.Rows[i]["slider_id"]);
+                SQL.set("UPDATE slider SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE dil_id = " + dil_id + " AND slider_id = " + dt_resimler.Rows[i]["slider_id"]);
             }
 
             return RedirectToAction("Slider", new { id = dil_id, tepki = 1 });
@@ -775,11 +775,11 @@ namespace sotec_web.Controllers
         [HttpPost]
         public ActionResult urunEkle(
             int[] urun_kategori_id, string barkod, int[] ozellik_id, int[] varyasyon_id, string[] varyasyon_fiyat, string[] varyasyon_stok, string[] resim_path, int[] resim_id, int[] resim_sira,
-            string urun_adi = "", string aciklama = "", string stok_kodu = "", string stok = "", string fiyat = "0")
+            string urun_adi = "", string aciklama = "", string stok_kodu = "", string stok = "", string fiyat = "0", int one_cikan = 0)
         {
             string result = "";
             int yeni_urun_id;
-            yeni_urun_id = Convert.ToInt32(SQL.get("INSERT INTO urunler (kaydeden_kullanici_id, urun_adi, aciklama, stok_kodu, barkod, stok, fiyat) VALUES (" + Session["kullanici_id"] + ", '" + urun_adi + "', '" + aciklama + "', '" + stok_kodu + "', '" + barkod + "', " + stok.ToString().Replace(',', '.') + ", " + fiyat.ToString().Replace(',', '.') + "); SELECT SCOPE_IDENTITY();").Rows[0][0]);
+            yeni_urun_id = Convert.ToInt32(SQL.get("INSERT INTO urunler (kaydeden_kullanici_id, urun_adi, aciklama, stok_kodu, barkod, stok, fiyat, one_cikan) VALUES (" + Session["kullanici_id"] + ", '" + urun_adi + "', '" + aciklama + "', '" + stok_kodu + "', '" + barkod + "', " + stok.ToString().Replace(',', '.') + ", " + fiyat.ToString().Replace(',', '.') + ", " + one_cikan + "); SELECT SCOPE_IDENTITY();").Rows[0][0]);
 
             if(urun_kategori_id != null)
             {
@@ -834,11 +834,11 @@ namespace sotec_web.Controllers
         [HttpPost]
         public ActionResult urunDuzenle(
             int urun_id, int[] urun_kategori_id, string barkod, int[] ozellik_id, int[] varyasyon_id, string[] varyasyon_fiyat, string[] varyasyon_stok, string[] resim_path, int[] resim_id, int[] resim_sira,
-            string urun_adi = "", string aciklama = "", string stok_kodu = "", string stok = "", string fiyat = "0")
+            string urun_adi = "", string aciklama = "", string stok_kodu = "", string stok = "", string fiyat = "0", int one_cikan = 0)
         {
             string result = "";
             string resim_ids = "";
-            SQL.set("UPDATE urunler SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", urun_adi = '" + urun_adi + "', aciklama = '" + aciklama + "', stok_kodu = '" + stok_kodu + "', barkod = '" + barkod + "', stok = " + stok.ToString().Replace(',', '.') + ", fiyat = " + fiyat.ToString().Replace(',', '.') + " WHERE urun_id = " + urun_id);
+            SQL.set("UPDATE urunler SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", urun_adi = '" + urun_adi + "', aciklama = '" + aciklama + "', stok_kodu = '" + stok_kodu + "', barkod = '" + barkod + "', stok = " + stok.ToString().Replace(',', '.') + ", fiyat = " + fiyat.ToString().Replace(',', '.') + ", one_cikan = " + one_cikan + " WHERE urun_id = " + urun_id);
 
             SQL.set("UPDATE urun_kategorileri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE urun_id = " + urun_id);
             SQL.set("UPDATE urun_ozellik SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE urun_id = " + urun_id);

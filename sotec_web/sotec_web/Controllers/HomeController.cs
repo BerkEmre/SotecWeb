@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 
@@ -13,18 +15,20 @@ namespace sotec_web.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult ChangeLanguage(string language, int id = 0)
         {
-            ViewBag.Message = "Your application description page.";
+            if (id != 0)
+            {
+                ViewBag.dil_id = id;
+            }
 
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            HttpCookie cookie;
+            cookie = new HttpCookie("MultiLanguageExample");
+            Thread.CurrentThread.CurrentCulture = new CultureInfo(language);
+            cookie.Value = language;
+            Response.SetCookie(cookie);
+            if (Request.UrlReferrer != null) return Redirect(Request.UrlReferrer.LocalPath);
+            return Redirect("/Home/Index");
         }
     }
 }

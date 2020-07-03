@@ -278,7 +278,7 @@
                                 }
                                 @foreach (DataRow item2 in dt_diller_vs.Rows)
                                 {
-                                    <li class="nav-item"><a class="nav-link @(first == true ? "active show" : "") " data-toggle="tab" href="#dil_@item2["dil_id"]">@item2["dil"]</a></li>
+                                    <li class="nav-item"><a class="nav-link @(first == true ? "active show" : "") " data-toggle="tab" href="#dil_@(item["kategori_id"] + "_" + item2["dil_id"])">@item2["dil"]</a></li>
                                     if (first)
                                     {
                                         first = false;
@@ -294,7 +294,7 @@
                                 @foreach (DataRow item2 in dt_diller_vs.Rows)
                                 {
                                     <input type="hidden" name="dil_id[]" value="@item2["dil_id"]" />
-                                    <div class="tab-pane @(first ? "active show" : "")" id="dil_@item2["dil_id"]">
+                                    <div class="tab-pane @(first ? "active show" : "")" id="dil_@(item["kategori_id"] + "_" + item2["dil_id"])">
                                         <h6>@item2["dil"]</h6>
                                         <div class="row clearfix">
                                             <div class="col-md-12">
