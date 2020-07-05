@@ -1,0 +1,76 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    ViewBag.Title = sotec_web.Resources.Dil.HABERLER;
+
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    int sayfa_no = ViewBag.sayfa_no;
+    int kategori_id = ViewBag.kategori_id;
+
+    int cnt_haber = Convert.ToInt32(SQL.get("SELECT cnt = COUNT(*) FROM haberler b WHERE b.silindi = 0 " + (kategori_id == 0 ? "" : " AND b.kategori_id = " + kategori_id + " ")).Rows[0]["cnt"]);
+    int sayfa_sayisi = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(cnt_haber) / 10));
+
+    DataTable dt_son_haberler = SQL.get("SELECT b.haber_id, b.gorsel, baslik = ISNULL(db.baslik, b.baslik), yazi = ISNULL(db.yazi, b.yazi), ad_soyad = k.ad + ' ' + k.soyad, b.kayit_tarihi, kategori = ISNULL(dk.kategori, kat.kategori), b.kategori_id FROM haberler b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id INNER JOIN kategoriler kat ON kat.kategori_id = b.kategori_id LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = kat.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " LEFT OUTER JOIN dil_haberler db ON db.haber_id = b.haber_id AND db.silindi = 0 AND db.dil_id = " + dr_dil["dil_id"] + " WHERE b.silindi = 0 " + (kategori_id == 0 ? "" : " AND b.kategori_id = " + kategori_id + " ") + " ORDER by b.haber_id DESC OFFSET " + (sayfa_no * 10) + " ROWS FETCH NEXT 10 ROWS ONLY");
+    DataTable dt_haber_kategori = SQL.get("SELECT k.kategori_id, kategori = ISNULL(dk.kategori, k.kategori) FROM kategoriler k LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = k.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " WHERE k.silindi = 0 AND k.kategori_tipi_parametre_id = 17");
+}
+<div class="container-indent">
+    <div class="container container-fluid-custom-mobile-padding">
+        <h1 class="tt-title-subpages noborder">@sotec_web.Resources.Dil.HABERLER</h1>
+        <div class="row">
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <div class="tt-listing-post">
+                    @foreach (DataRow dr_blog_item in dt_son_haberler.Rows)
+                    {
+                        <div class="tt-post">
+                            <div class="tt-post-img">
+                                <a href="@Url.Action("New", "Home", new { id = dr_blog_item["haber_id"] })"><img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/haber/buyuk/@dr_blog_item["gorsel"]" alt=""></a>
+                            </div>
+                            <div class="tt-post-content">
+                                <div class="tt-tag"><a href="@Url.Action("News", new { id = sayfa_no, id2 = dr_blog_item["kategori_id"] })">@dr_blog_item["kategori"]</a></div>
+                                <h2 class="tt-title"><a href="@Url.Action("News", "Home", new { id = dr_blog_item["haber_id"] })">@dr_blog_item["baslik"]</a></h2>
+                                <div class="tt-description">
+                                    @MvcHtmlString.Create(SQL.StripHTML(dr_blog_item["yazi"].ToString().Substring(0, dr_blog_item["yazi"].ToString().Length < 100 ? dr_blog_item["yazi"].ToString().Length : 100)))...
+                                </div>
+                                <div class="tt-meta">
+                                    <div class="tt-autor">
+                                        by <span>@dr_blog_item["ad_soyad"]</span> on @(Convert.ToDateTime(dr_blog_item["kayit_tarihi"]).ToShortDateString())
+                                    </div>
+                                </div>
+                                <div class="tt-btn">
+                                    <a href="@Url.Action("New", "Home", new { id = dr_blog_item["haber_id"] })" class="btn">@sotec_web.Resources.Dil.DEVAMINI_OKU</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="tt-pagination">
+                        <ul>
+                            @for (int i = 0; i < sayfa_sayisi; i++)
+                            {
+                                <li class="@(i == sayfa_no ? "active" : "")"><a href="@Url.Action("News", new { id = i, id2 = kategori_id })">@(i + 1)</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-3 rightColumn">
+                <div class="tt-block-aside">
+                    <h3 class="tt-aside-title">@sotec_web.Resources.Dil.KATEGORİLER</h3>
+                    <div class="tt-aside-content">
+                        <ul class="tt-list-row">
+                            @foreach (DataRow dr_kategori_item in dt_haber_kategori.Rows)
+                            {
+                                <li><a href="@Url.Action("News", "Home", new { id2 = dr_kategori_item["kategori_id"] })">@dr_kategori_item["kategori"]</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

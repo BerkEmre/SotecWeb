@@ -117,20 +117,32 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AD SOYAD" xml:space="preserve">
+    <value>AD SOYAD</value>
+  </data>
   <data name="ADRES" xml:space="preserve">
     <value>ADRES</value>
   </data>
   <data name="ANA SAYFA" xml:space="preserve">
     <value>ANA SAYFA</value>
   </data>
+  <data name="AÇIKLAMA" xml:space="preserve">
+    <value>AÇIKLAMA</value>
+  </data>
   <data name="BLOG" xml:space="preserve">
     <value>BLOG</value>
+  </data>
+  <data name="DEVAMINI OKU" xml:space="preserve">
+    <value>DEVAMINI OKU</value>
   </data>
   <data name="DİLLER" xml:space="preserve">
     <value>DİLLER</value>
   </data>
   <data name="E-MAİL" xml:space="preserve">
     <value>E-MAİL</value>
+  </data>
+  <data name="Ekisk bilgi girdiniz lğtfen tüm alanları doldurun" xml:space="preserve">
+    <value>Ekisk bilgi girdiniz lğtfen tüm alanları doldurun</value>
   </data>
   <data name="FAX" xml:space="preserve">
     <value>FAX</value>
@@ -140,6 +152,9 @@
   </data>
   <data name="GSM" xml:space="preserve">
     <value>GSM</value>
+  </data>
+  <data name="GÖNDER" xml:space="preserve">
+    <value>GÖNDER</value>
   </data>
   <data name="HABERLER" xml:space="preserve">
     <value>HABERLER</value>
@@ -156,17 +171,32 @@
   <data name="KATEGORİLER" xml:space="preserve">
     <value>KATEGORİLER</value>
   </data>
+  <data name="KONU" xml:space="preserve">
+    <value>KONU</value>
+  </data>
   <data name="MAĞAZA" xml:space="preserve">
     <value>MAĞAZA</value>
   </data>
   <data name="MENÜ" xml:space="preserve">
     <value>MENÜ</value>
   </data>
+  <data name="MESAJ" xml:space="preserve">
+    <value>MESAJ</value>
+  </data>
+  <data name="Mesajınız alındı, en kısa sürede size dönüş yapacağız." xml:space="preserve">
+    <value>Mesajınız alındı, en kısa sürede size dönüş yapacağız.</value>
+  </data>
   <data name="SON BLOG YAZILARI" xml:space="preserve">
     <value>SON BLOG YAZILARI</value>
   </data>
+  <data name="STOK KODU" xml:space="preserve">
+    <value>STOK KODU</value>
+  </data>
   <data name="TELEFON" xml:space="preserve">
     <value>TELEFON</value>
+  </data>
+  <data name="TEŞEKKÜRLER!" xml:space="preserve">
+    <value>TEŞEKKÜRLER!</value>
   </data>
   <data name="Tüm Hakları Saklıdır" xml:space="preserve">
     <value>Tüm Hakları Saklıdır</value>

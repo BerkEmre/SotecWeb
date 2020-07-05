@@ -1,0 +1,37 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    int hizmet_id = ViewBag.hizmet_id;
+
+    DataRow dr_hizmet = SQL.get("SELECT b.hizmet_id, b.gorsel, baslik = ISNULL(db.baslik, b.baslik), yazi = ISNULL(db.yazi, b.yazi), ad_soyad = k.ad + ' ' + k.soyad, b.kayit_tarihi FROM hizmetler b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id LEFT OUTER JOIN dil_hizmetler db ON db.hizmet_id = b.hizmet_id AND db.silindi = 0 AND db.dil_id = " + dr_dil["dil_id"] + " WHERE b.silindi = 0 AND b.hizmet_id = " + hizmet_id).Rows[0];
+
+    ViewBag.Title = dr_hizmet["baslik"];
+}
+<div class="container-indent">
+    <div class="container container-fluid-custom-mobile-padding">
+        <div class="row justify-content-center">
+            <div class="col-xs-12 col-md-10 col-lg-8 col-md-auto">
+                <div class="tt-post-single">
+                    <h1 class="tt-title">@dr_hizmet["baslik"]</h1>
+                    <div class="tt-autor">by <span>@dr_hizmet["ad_soyad"]</span> on @(Convert.ToDateTime(dr_hizmet["kayit_tarihi"]).ToShortDateString())</div>
+                    <div class="tt-post-content">
+                        <img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/hizmet/buyuk/@dr_hizmet["gorsel"]" alt="">
+                        <h2 class="tt-title">@dr_hizmet["baslik"]</h2>
+                        <p>
+                            @MvcHtmlString.Create(dr_hizmet["yazi"].ToString())
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

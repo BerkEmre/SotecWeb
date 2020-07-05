@@ -1,0 +1,45 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    ViewBag.Title = sotec_web.Resources.Dil.HİZMETLER;
+
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    DataTable dt_hizmetler = SQL.get("SELECT b.hizmet_id, b.gorsel, baslik = ISNULL(db.baslik, b.baslik), yazi = ISNULL(db.yazi, b.yazi), ad_soyad = k.ad + ' ' + k.soyad, b.kayit_tarihi FROM hizmetler b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id LEFT OUTER JOIN dil_hizmetler db ON db.hizmet_id = b.hizmet_id AND db.silindi = 0 AND db.dil_id = " + dr_dil["dil_id"] + " WHERE b.silindi = 0 ORDER by b.hizmet_id");
+}
+<div class="container-indent">
+    <div class="container">
+        <h1 class="tt-title-subpages noborder">@sotec_web.Resources.Dil.HİZMETLER</h1>
+        <div class="tt-blog-masonry">
+            <div class="tt-blog-init tt-grid-col-3 tt-layout-01-post tt-add-item">
+                @foreach (DataRow dr_hizmet_item in dt_hizmetler.Rows)
+                {
+                    <div class="element-item">
+                        <div class="tt-post">
+                            <div class="tt-post-img">
+                                <a href="@Url.Action("Service", "Home", new { id = dr_hizmet_item["hizmet_id"] })"><img src="/admin_src/images/hizmet/kucuk/@dr_hizmet_item["gorsel"]" alt=""></a>
+                            </div>
+                            <div class="tt-post-content">
+                                <div class="tt-background"></div>
+                                <h2 class="tt-title"><a href="@Url.Action("Service", "Home", new { id = dr_hizmet_item["hizmet_id"] })">@dr_hizmet_item["baslik"]</a></h2>
+                                <div class="tt-description">
+                                    @MvcHtmlString.Create(SQL.StripHTML(dr_hizmet_item["yazi"].ToString().Substring(0, dr_hizmet_item["yazi"].ToString().Length < 100 ? dr_hizmet_item["yazi"].ToString().Length : 100)))...
+                                </div>
+                                <div class="tt-meta">
+                                    <div class="tt-autor">
+                                        by <span>@dr_hizmet_item["ad_soyad"]</span> on @(Convert.ToDateTime(dr_hizmet_item["kayit_tarihi"]).ToShortDateString())
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

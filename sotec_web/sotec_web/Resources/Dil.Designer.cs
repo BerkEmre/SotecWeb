@@ -61,6 +61,24 @@ namespace sotec_web.Resources {
         }
         
         /// <summary>
+        ///   DESCRIPTION benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string AÇIKLAMA {
+            get {
+                return ResourceManager.GetString("AÇIKLAMA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   NAME benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string AD_SOYAD {
+            get {
+                return ResourceManager.GetString("AD SOYAD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   ADRESS benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string ADRES {
@@ -97,6 +115,15 @@ namespace sotec_web.Resources {
         }
         
         /// <summary>
+        ///   READ MORE benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string DEVAMINI_OKU {
+            get {
+                return ResourceManager.GetString("DEVAMINI OKU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   LANGUAGES benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string DİLLER {
@@ -115,6 +142,15 @@ namespace sotec_web.Resources {
         }
         
         /// <summary>
+        ///   Ekisk bilgi girdiniz lğtfen tüm alanları doldurun benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string Ekisk_bilgi_girdiniz_lğtfen_tüm_alanları_doldurun {
+            get {
+                return ResourceManager.GetString("Ekisk bilgi girdiniz lğtfen tüm alanları doldurun", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   FAX benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string FAX {
@@ -129,6 +165,15 @@ namespace sotec_web.Resources {
         public static string GERİ {
             get {
                 return ResourceManager.GetString("GERİ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   SEND benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string GÖNDER {
+            get {
+                return ResourceManager.GetString("GÖNDER", resourceCulture);
             }
         }
         
@@ -196,6 +241,15 @@ namespace sotec_web.Resources {
         }
         
         /// <summary>
+        ///   SUBJECT benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string KONU {
+            get {
+                return ResourceManager.GetString("KONU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   SHOP benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string MAĞAZA {
@@ -210,6 +264,24 @@ namespace sotec_web.Resources {
         public static string MENÜ {
             get {
                 return ResourceManager.GetString("MENÜ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   MESSAGE benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string MESAJ {
+            get {
+                return ResourceManager.GetString("MESAJ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Mesajınız alındı, en kısa sürede size dönüş yapacağız. benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string Mesajınız_alındı__en_kısa_sürede_size_dönüş_yapacağız_ {
+            get {
+                return ResourceManager.GetString("Mesajınız alındı, en kısa sürede size dönüş yapacağız.", resourceCulture);
             }
         }
         
@@ -232,11 +304,29 @@ namespace sotec_web.Resources {
         }
         
         /// <summary>
+        ///   STOCK CODE benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string STOK_KODU {
+            get {
+                return ResourceManager.GetString("STOK KODU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   TELEPHONE benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string TELEFON {
             get {
                 return ResourceManager.GetString("TELEFON", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   TEŞEKKÜRLER! benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string TEŞEKKÜRLER_ {
+            get {
+                return ResourceManager.GetString("TEŞEKKÜRLER!", resourceCulture);
             }
         }
         

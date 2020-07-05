@@ -10,7 +10,7 @@
 
     DataTable dt_slider = SQL.get("SELECT * FROM slider WHERE silindi = 0 AND dil_id = " + dr_dil["dil_id"]);
     DataTable dt_karo = SQL.get("SELECT * FROM karolar WHERE silindi = 0 AND dil_id = " + dr_dil["dil_id"]);
-    DataTable dt_one_cikan_urunler = SQL.get("SELECT u.stok_kodu, u.urun_id, u.fiyat, urun_adi = ISNULL(du.urun_adi, u.urun_adi), aciklama = ISNULL(du.aciklama, u.aciklama), resim = ISNULL((SELECT resim FROM urun_resimleri WHERE silindi = 0 AND urun_id = 9 AND sira = (SELECT MAX(sira) FROM urun_resimleri WHERE silindi = 0 AND urun_id = 9)), '')  FROM urunler u LEFT OUTER JOIN dil_urunler du ON du.urun_id = u.urun_id AND du.silindi = 0 AND du.dil_id = " + dr_dil["dil_id"] + " WHERE u.silindi = 0 AND u.one_cikan = 1");
+    DataTable dt_one_cikan_urunler = SQL.get("SELECT u.stok_kodu, u.urun_id, u.fiyat, urun_adi = ISNULL(du.urun_adi, u.urun_adi), aciklama = ISNULL(du.aciklama, u.aciklama), resim = ISNULL((SELECT resim FROM urun_resimleri WHERE silindi = 0 AND urun_id = 9 AND sira = (SELECT MIN(sira) FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id)), '')  FROM urunler u LEFT OUTER JOIN dil_urunler du ON du.urun_id = u.urun_id AND du.silindi = 0 AND du.dil_id = " + dr_dil["dil_id"] + " WHERE u.silindi = 0 AND u.one_cikan = 1");
     DataTable dt_son_hizmetler = SQL.get("SELECT h.hizmet_id, h.gorsel, baslik = ISNULL(dh.baslik, h.baslik), yazi = ISNULL(dh.yazi, h.yazi) FROM hizmetler h LEFT OUTER JOIN dil_hizmetler dh ON dh.hizmet_id = h.hizmet_id AND dh.silindi = 0 AND dh.dil_id = " + dr_dil["dil_id"] + " WHERE h.silindi = 0");
     DataTable dt_son_bloglar = SQL.get("SELECT TOP 3 b.blog_id, b.gorsel, baslik = ISNULL(db.baslik, b.baslik), yazi = ISNULL(db.yazi, b.yazi), ad_soyad = k.ad + ' ' + k.soyad, b.kayit_tarihi  FROM bloglar b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id LEFT OUTER JOIN dil_bloglar db ON db.blog_id = b.blog_id AND db.silindi = 0 AND db.dil_id = " + dr_dil["dil_id"] + " WHERE b.silindi = 0 ORDER by b.blog_id DESC");
 }
@@ -38,7 +38,7 @@
                                         @MvcHtmlString.Create((dr_slider_item["baslik"].ToString().Length <= 0 ? "" : "<div class='tp-caption1-wd-1 tt-white-color'>" + dr_slider_item["baslik"] + "</div>"))
                                         @MvcHtmlString.Create((dr_slider_item["yazi"].ToString().Length <= 0 ? "" : "<div class='tp-caption1-wd-2 tt-white-color'>" + dr_slider_item["yazi"] + "</div>"))
                                         @MvcHtmlString.Create((dr_slider_item["yazi"].ToString().Length <= 0 ? "" : "<div class='tp-caption1-wd-3 tt-white-color'>" + dr_slider_item["alt_yazi"] + "</div>"))
-                                        @MvcHtmlString.Create((dr_slider_item["yazi"].ToString().Length <= 0 ? "" : "<div class='tp-caption1-wd-4'><a href='" + dr_slider_item["link"] + "' target='_blank' class='btn btn-xl' data-text='" + dr_slider_item["buton"] + "'>" + dr_slider_item["buton"] + "</a></div>"))
+                                        @MvcHtmlString.Create((dr_slider_item["yazi"].ToString().Length <= 0 ? "" : "<div class='tp-caption1-wd-4'><a href='" + dr_slider_item["link"] + "' class='btn btn-xl' data-text='" + dr_slider_item["buton"] + "'>" + dr_slider_item["buton"] + "</a></div>"))
                                     </div>
                                 </li>
                             }
@@ -80,7 +80,7 @@
                     <div class="tt-product thumbprod-center">
                         <div class="tt-image-box">
                             <!--<a href="#" class="tt-btn-quickview" data-toggle="modal" data-target="#ModalquickView" data-tooltip="Quick View" data-tposition="left"></a>-->
-                            <a href="product.html">
+                            <a href="@Url.Action("Product", "Home", new { id = dr_urun_item["urun_id"] })">
                                 <span class="tt-img"><img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/urun/kucuk/@dr_urun_item["resim"]" alt=""></span>
                                 <span class="tt-img-roll-over"><img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/sliders/kucuk/@dr_urun_item["resim"]" alt=""></span>
                             </a>
@@ -286,7 +286,7 @@
                 {
                     <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                         <div class="tt-blog-thumb">
-                            <div class="tt-img"><a href="@Url.Action("Blog", "Home", new { id = dr_blog_item["blog_id"] })" target="_blank"><img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/blog/kucuk/@dr_blog_item["gorsel"]" alt=""></a></div>
+                            <div class="tt-img"><a href="@Url.Action("Blog", "Home", new { id = dr_blog_item["blog_id"] })"><img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/blog/kucuk/@dr_blog_item["gorsel"]" alt=""></a></div>
                             <div class="tt-title-description">
                                 <div class="tt-background"></div>
                                 <div class="tt-tag">

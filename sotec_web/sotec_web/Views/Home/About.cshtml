@@ -1,7 +1,28 @@
-﻿@{
-    ViewBag.Title = "About";
-}
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    ViewBag.Title = sotec_web.Resources.Dil.HAKKIMIZDA;
 
-<p>Use this area to provide additional information.</p>
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    DataRow dr_site_bilgileri = SQL.get("SELECT * FROM site_bilgileri WHERE dil_id = " + dr_dil["dil_id"]).Rows[0];
+}
+<div class="nomargin container-indent">
+    <div class="tt-about-box" style="background-image: url(/wokiee_src/images/custom/about-img-01.jpg);">
+        <img class="img-mobile" src="/wokiee_src/images/custom/about-img-01.jpg" alt="">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <h1 class="tt-title">@sotec_web.Resources.Dil.HAKKIMIZDA</h1>
+                    <p>
+                        @dr_site_bilgileri["hakkimizda"]
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
