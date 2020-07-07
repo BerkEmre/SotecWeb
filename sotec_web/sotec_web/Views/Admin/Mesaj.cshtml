@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Mesaj";
 
-    DataTable dt_mesajlar = SQL.get("SELECT m.*, ad = ISNULL(k.ad, 'GENEL'), k.soyad FROM mesajlar m LEFT OUTER JOIN kullanicilar k ON k.kullanici_id = m.hedef_kullanici_id WHERE m.silindi = 0");
+    DataTable dt_mesajlar = SQL.get("SELECT m.*, ad = ISNULL(k.ad, 'GENEL'), k.soyad FROM mesajlar m LEFT OUTER JOIN kullanicilar k ON k.kullanici_id = m.hedef_kullanici_id WHERE m.silindi = 0 ORDER by mesaj_id DESC");
     DataTable dt_bilgi = SQL.get("SELECT cnt = COUNT(*) FROM mesajlar WHERE silindi = 0 AND durum_parametre_id = 19");
 }
 @section script
@@ -57,9 +57,9 @@
                 {
                     <li class="clearfix">
                         <div class="mail-detail-right">
-                            <h6 class="sub"><a href="app-inbox-detail.html" class="mail-detail-expand">@item["ad_soyad"]</a><span class="badge badge-warning mb-0">@item["ad"] @item["soyad"]</span></h6>
+                            <h6 class="sub"><a href="app-inbox-detail.html" class="mail-detail-expand">@item["ad_soyad"]</a><span class="badge badge-warning mb-0">@item["kaynak"]</span></h6>
                             <p class="dep"><span class="m-r-10">[@item["email"]] | [@item["telefon"]]</span></p>
-                            <p>@item["mesaj"]</p>
+                            <p>@MvcHtmlString.Create(item["mesaj"].ToString())</p>
                             <span class="time">@item["kayit_tarihi"]</span>
                         </div>
                         <div class="hover-action">

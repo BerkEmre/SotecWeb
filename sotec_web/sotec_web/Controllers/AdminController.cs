@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -327,7 +326,7 @@ namespace sotec_web.Controllers
             for (int i = 0; i < dil_id.Length; i++)
             {
                 dt_varmi = SQL.get("SELECT * FROM dil_kategoriler WHERE silindi = 0 AND dil_id = " + dil_id[i] + " AND kategori_id = " + kategori_id);
-                if(dt_varmi.Rows.Count > 0)
+                if (dt_varmi.Rows.Count > 0)
                 {
                     SQL.set("UPDATE dil_kategoriler SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), kategori = '" + kategori[i] + "' WHERE dil_id = " + dil_id[i] + " AND kategori_id = " + kategori_id);
                 }
@@ -666,7 +665,7 @@ namespace sotec_web.Controllers
                 WebImage img = new WebImage(logo.InputStream);
                 var path = Path.Combine(Server.MapPath("~/admin_src/images/site_logo/orjinal"), result);
                 img.Save(path);
-                img.Resize(100, 50, true, false);
+                img.Resize(150, 75, true, false);
                 path = Path.Combine(Server.MapPath("~/admin_src/images/site_logo/"), result);
                 img.Save(path);
                 result += Path.GetExtension(logo.FileName);
@@ -781,7 +780,7 @@ namespace sotec_web.Controllers
             int yeni_urun_id;
             yeni_urun_id = Convert.ToInt32(SQL.get("INSERT INTO urunler (kaydeden_kullanici_id, urun_adi, aciklama, stok_kodu, barkod, stok, fiyat, one_cikan) VALUES (" + Session["kullanici_id"] + ", '" + urun_adi + "', '" + aciklama + "', '" + stok_kodu + "', '" + barkod + "', " + stok.ToString().Replace(',', '.') + ", " + fiyat.ToString().Replace(',', '.') + ", " + one_cikan + "); SELECT SCOPE_IDENTITY();").Rows[0][0]);
 
-            if(urun_kategori_id != null)
+            if (urun_kategori_id != null)
             {
                 for (int i = 0; i < urun_kategori_id.Length; i++)
                 {

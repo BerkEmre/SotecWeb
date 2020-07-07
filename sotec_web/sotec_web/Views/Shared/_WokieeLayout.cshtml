@@ -26,6 +26,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="~/wokiee_src/css/theme.css">
     <link rel="stylesheet" href="~/admin_src/vendor/sweetalert/sweetalert.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-9" />
     @RenderSection("style", false)
 </head>
 <body id="same_product_height" class="loaded">
@@ -155,21 +156,11 @@
                     <div class="tt-col-obj tt-obj-options obj-move-right">
                         <!-- tt-langue and tt-currency -->
                         <div class="tt-desctop-parent-multi tt-parent-box">
-                            <div class="tt-multi-obj tt-dropdown-obj">
-                                <button class="tt-dropdown-toggle" data-tooltip="@sotec_web.Resources.Dil.DİLLER" data-tposition="bottom"><i class="icon-f-79"></i></button>
-                                <div class="tt-dropdown-menu">
-                                    <div class="tt-mobile-add">
-                                        <button class="tt-close">@sotec_web.Resources.Dil.KAPAT</button>
-                                    </div>
-                                    <div class="tt-dropdown-inner">
-                                        <ul>
-                                            @foreach (DataRow dil_item in dt_diller.Rows)
-                                            {
-                                                <li class="@(dr_dil["dil_id"].ToString() == dil_item["dil_id"].ToString() ? "active" : "")"><a href="/Home/ChangeLanguage?language=@dil_item["kisa_kod"]&id=@dil_item["dil_id"]">@dil_item["dil"]</a></li>
-                                            }
-                                        </ul>
-                                    </div>
-                                </div>
+                            <div class="tt-multi-obj">
+                                @foreach (DataRow dil_item in dt_diller.Rows)
+                                {
+                                    <a href="/Home/ChangeLanguage?language=@dil_item["kisa_kod"]&id=@dil_item["dil_id"]"><img style="margin-right: 5px; max-width: 25px;" src="~/admin_src/images/dil/kucuk/@dil_item["icon"]" /> </a>
+                                }
                             </div>
                         </div>
                         <!-- /tt-langue and tt-currency -->
@@ -366,7 +357,6 @@
     <script src="~/wokiee_src/external/form/jquery.validate.min.js"></script>
     <script src="~/wokiee_src/external/form/jquery.form-init.js"></script>
     <script src="~/admin_src/vendor/sweetalert/sweetalert.min.js"></script><!-- SweetAlert Plugin Js -->
-    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/wokiee_src/external/elevatezoom/jquery.elevatezoom.js"></script>
     <script>

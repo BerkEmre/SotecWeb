@@ -142,7 +142,7 @@
     <value>E-MAİL</value>
   </data>
   <data name="Ekisk bilgi girdiniz lğtfen tüm alanları doldurun" xml:space="preserve">
-    <value>Ekisk bilgi girdiniz lğtfen tüm alanları doldurun</value>
+    <value>Eksik bilgi girdiniz lütfen tüm alanları doldurun</value>
   </data>
   <data name="FAX" xml:space="preserve">
     <value>FAX</value>
@@ -186,6 +186,9 @@
   <data name="Mesajınız alındı, en kısa sürede size dönüş yapacağız." xml:space="preserve">
     <value>Mesajınız alındı, en kısa sürede size dönüş yapacağız.</value>
   </data>
+  <data name="MİKTAR" xml:space="preserve">
+    <value>MİKTAR</value>
+  </data>
   <data name="SON BLOG YAZILARI" xml:space="preserve">
     <value>LATEST FROM BLOG</value>
   </data>
@@ -209,6 +212,9 @@
   </data>
   <data name="ÇALIŞMA SAATLERİ" xml:space="preserve">
     <value>HOURS</value>
+  </data>
+  <data name="ÖN SİPARİŞ VER" xml:space="preserve">
+    <value>ÖN SİPARİŞ VER</value>
   </data>
   <data name="ÖNE ÇIKANLAR" xml:space="preserve">
     <value>TRENDING</value>

@@ -17,6 +17,10 @@
     DataTable dt_urun_kategorileri = SQL.get("SELECT uk.kategori_id, kategori = ISNULL(dk.kategori, k.kategori) FROM urun_kategorileri uk INNER JOIN kategoriler k ON k.kategori_id = uk.kategori_id AND k.silindi = 0 LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = k.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " WHERE uk.silindi = 0 AND uk.urun_id = " + urun_id);
     DataTable dt_urun_varyasyon = SQL.get("SELECT uoz.urun_varyasyon_id, varyasyon = ISNULL(duo.varyasyon, uoz.varyasyon) FROM urun_varyasyon uo INNER JOIN urun_varyasyon_degerleri uod ON uod.urun_varyasyon_deger_id = uo.deger_id AND uod.silindi = 0 INNER JOIN urun_varyasyonlari uoz ON uoz.urun_varyasyon_id = uod.varyasyon_id AND uoz.silindi = 0 LEFT OUTER JOIN dil_urun_varyasyonlari duo ON duo.urun_varyasyon_id = uoz.urun_varyasyon_id AND duo.silindi = 0 AND duo.dil_id = " + dr_dil["dil_id"] + " WHERE uo.silindi = 0 AND uo.urun_id = " + urun_id + " GROUP by uoz.urun_varyasyon_id, duo.varyasyon, uoz.varyasyon");
     DataTable dt_urun_ozellik = SQL.get("SELECT uoz.urun_ozellik_id, ozellik = ISNULL(duo.ozellik, uoz.ozellik), deger = ISNULL(duoz.deger, uod.deger) FROM urun_ozellik uo INNER JOIN urun_ozellik_degerleri uod ON uod.urun_ozellik_deger_id = uo.deger_id AND uod.silindi = 0 LEFT OUTER JOIN dil_urun_ozellik_degerleri duoz ON duoz.urun_ozellik_deger_id = uod.urun_ozellik_deger_id AND duoz.silindi = 0 AND duoz.dil_id = " + dr_dil["dil_id"] + " INNER JOIN urun_ozellikleri uoz ON uoz.urun_ozellik_id = uod.ozellik_id AND uoz.silindi = 0 LEFT OUTER JOIN dil_urun_ozellikleri duo ON duo.urun_ozellik_id = uoz.urun_ozellik_id AND duo.silindi = 0 AND duo.dil_id = " + dr_dil["dil_id"] + " WHERE uo.silindi = 0 AND uo.urun_id = " + urun_id);
+
+    DataTable dt_one_cikan_urunler = SQL.get("SELECT u.stok_kodu, u.urun_id, u.fiyat, urun_adi = ISNULL(du.urun_adi, u.urun_adi), aciklama = ISNULL(du.aciklama, u.aciklama), resim = ISNULL((SELECT resim FROM urun_resimleri WHERE silindi = 0 AND urun_id = 9 AND sira = (SELECT MIN(sira) FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id)), '')  FROM urunler u LEFT OUTER JOIN dil_urunler du ON du.urun_id = u.urun_id AND du.silindi = 0 AND du.dil_id = " + dr_dil["dil_id"] + " WHERE u.silindi = 0 AND u.one_cikan = 1");
+}
+@section script { 
 }
 <div class="container-indent">
     <!-- mobile product slider  -->
@@ -130,28 +134,32 @@
                         </div>
                     </div>
                     <div class="tt-collapse-block">
-                        <div class="tt-item">
+                        <div class="tt-item active">
                             <div class="tt-collapse-title">@sotec_web.Resources.Dil.AÇIKLAMA</div>
                             <div class="tt-collapse-content">
                                 @MvcHtmlString.Create(dr_urun["aciklama"].ToString())
                             </div>
                         </div>
-                        <div class="tt-item">
-                            <div class="tt-collapse-title">@sotec_web.Resources.Dil.MESAJ</div>
+                        <div class="tt-item active">
+                            <div class="tt-collapse-title">@sotec_web.Resources.Dil.ÖN_SİPARİŞ_VER</div>
                             <div class="tt-collapse-content">
-                                @using (Ajax.BeginForm("MesajGonder", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divSonuc", OnSuccess = "onAjaxRequestSuccess" }, new { id = "formKapsayici" }))
+                                @using (Ajax.BeginForm("MesajGonder", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "onAjaxRequestSuccess" }, new { id = "formKapsayici" }))
                                 {
-                                    <div class="row text-danger" id="divSonuc"></div>
+                                    <input type="hidden" name="kaynak" value="Ön Sipariş" />
+                                    <input type="hidden" name="on_bilgi" value="@dr_urun["urun_adi"]" />
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <input type="text" name="ad_soyad" class="form-control" id="form-blog-reply-name" placeholder="@sotec_web.Resources.Dil.AD_SOYAD *" required>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" name="email" class="form-control" id="form-blog-reply-email" placeholder="@sotec_web.Resources.Dil.E_MAİL *" required>
+                                                <input type="number" name="on_bilgi1" class="form-control" id="form-blog-reply-name" placeholder="@sotec_web.Resources.Dil.MİKTAR *" required>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" name="telefon" class="form-control" id="form-blog-reply-telefon" placeholder="@sotec_web.Resources.Dil.TELEFON">
+                                                <input type="email" name="email" class="form-control" id="form-blog-reply-email" placeholder="@sotec_web.Resources.Dil.E_MAİL *" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="tel" name="telefon" class="form-control" id="form-blog-reply-telefon" placeholder="@sotec_web.Resources.Dil.TELEFON">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -161,7 +169,7 @@
                                         </div>
                                     </div>
                                     <div class="text-center">
-                                        <button type="submit" id="form-blog-reply-submit" class="btn">@sotec_web.Resources.Dil.GÖNDER</button>
+                                        <button type="submit" id="form-blog-reply-submit" class="btn">@sotec_web.Resources.Dil.ÖN_SİPARİŞ_VER</button>
                                     </div>
                                 }
                             </div>
@@ -169,6 +177,53 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-indent">
+    <div class="container container-fluid-custom-mobile-padding">
+        <div class="tt-block-title text-left">
+            <h3 class="tt-title-small">@sotec_web.Resources.Dil.ÖNE_ÇIKANLAR/h3>
+        </div>
+        <div class="tt-carousel-products row arrow-location-right-top tt-alignment-img tt-layout-product-item slick-animated-show-js">
+            @foreach (DataRow dr_urun_item in dt_one_cikan_urunler.Rows)
+            {
+                <div class="col-2 col-md-4 col-lg-3">
+                    <div class="tt-product thumbprod-center">
+                        <div class="tt-image-box">
+                            @*<a href="#" class="tt-btn-quickview" data-toggle="modal" data-target="#ModalquickView" data-tooltip="Quick View" data-tposition="left"></a>
+                            <a href="#" class="tt-btn-wishlist" data-tooltip="Add to Wishlist" data-tposition="left"></a>
+                            <a href="#" class="tt-btn-compare" data-tooltip="Add to Compare" data-tposition="left"></a>*@
+                            <a href="@Url.Action("Product", "Home", new { id = dr_urun_item["urun_id"] })">
+                                <span class="tt-img"><img src="/admin_src/images/urun/kucuk/@dr_urun_item["resim"]" alt=""></span>
+                                <span class="tt-img-roll-over"><img src="/admin_src/images/urun/kucuk/@dr_urun_item["resim"]" alt=""></span>
+                            </a>
+                        </div>
+                        <div class="tt-description">
+                            <div class="tt-row">
+                                <ul class="tt-add-info">
+                                    <li><a href="@Url.Action("Product", "Home", new { id = dr_urun_item["urun_id"] })">@dr_urun_item["stok_kodu"]</a></li>
+                                </ul>
+                            </div>
+                            <h2 class="tt-title"><a href="@Url.Action("Product", "Home", new { id = dr_urun_item["urun_id"] })">@dr_urun_item["urun_adi"]</a></h2>
+                            <div class="tt-price">
+                                <!--ÜRÜN FİYATI-->
+                            </div>
+                            <div class="tt-product-inside-hover">
+                                <div class="tt-row-btn">
+                                    @*<a href="#" class="tt-btn-addtocart thumbprod-button-bg" data-toggle="modal" data-target="#modalAddToCartProduct">ADD TO CART</a>*@
+                                </div>
+                                <div class="tt-row-btn">
+                                    @*<a href="#" class="tt-btn-quickview" data-toggle="modal" data-target="#ModalquickView"></a>
+                                    <a href="#" class="tt-btn-wishlist"></a>
+                                    <a href="#" class="tt-btn-compare"></a>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>

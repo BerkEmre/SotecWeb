@@ -1,8 +1,6 @@
 ﻿using sotec_firma.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -34,7 +32,7 @@ namespace sotec_web.Controllers
         {
             ViewBag.blog_id = id;
 
-            if(SQL.get("SELECT * FROM bloglar WHERE silindi = 0 AND blog_id = " + id).Rows.Count <= 0)
+            if (SQL.get("SELECT * FROM bloglar WHERE silindi = 0 AND blog_id = " + id).Rows.Count <= 0)
             {
                 return RedirectToAction("Blogs", new { id = 0, id2 = 0 });
             }
@@ -109,16 +107,20 @@ namespace sotec_web.Controllers
             return Redirect("/Home/Index");
         }
 
+        [ValidateInput(false)]
         [HttpPost]
-        public string MesajGonder(string ad_soyad, string email, string mesaj, string telefon, int kullanici_id = 0)
+        public string MesajGonder(string ad_soyad, string email, string mesaj, string telefon, int kullanici_id = 0, string kaynak = "", string on_bilgi = "", string on_bilgi1 = "", string on_bilgi2 = "")
         {
+            if (on_bilgi.Length > 0)
+                mesaj = "<strong>" + on_bilgi + "</br>" + on_bilgi1 + " Adet</br>" + on_bilgi2 + "</strong></br></br>" + mesaj;
+
             if (String.IsNullOrEmpty(ad_soyad) || String.IsNullOrEmpty(email) || String.IsNullOrEmpty(mesaj))
             {
                 return sotec_web.Resources.Dil.Ekisk_bilgi_girdiniz_lğtfen_tüm_alanları_doldurun;
             }
             else
             {
-                SQL.set("INSERT INTO mesajlar (ad_soyad, email, telefon, mesaj, hedef_kullanici_id) VALUES ('" + ad_soyad + "', '" + email + "', '" + telefon + "', '" + mesaj + "', " + kullanici_id + ")");
+                SQL.set("INSERT INTO mesajlar (ad_soyad, email, telefon, mesaj, hedef_kullanici_id, kaynak) VALUES ('" + ad_soyad + "', '" + email + "', '" + telefon + "', '" + mesaj + "', " + kullanici_id + ", '" + kaynak + "')");
                 return Resources.Dil.Mesajınız_alındı__en_kısa_sürede_size_dönüş_yapacağız_;
             }
         }

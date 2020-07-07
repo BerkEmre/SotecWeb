@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css?family=Hind:300,400,500,600");
 /* font */
 /* font icon*/
@@ -11797,7 +11797,7 @@ header .container-fluid {
     .tt-mobile-header .tt-logo-container .tt-logo-alignment .tt-title {
       margin-top: 11px; }
   .tt-mobile-header .tt-logo-container .tt-logo img {
-    max-height: 20px; }
+    max-height: 30px; }
 
 @media (min-width: 481px) {
   .tt-mobile-header .tt-mobile-parent-menu {
@@ -26175,7 +26175,7 @@ input::-ms-clear {
   display: inline-block; }
   .tt-logo img {
     height: auto;
-    max-height: 20px; }
+    max-height: 30px; }
 
 /* tt-box-info */
 .tt-box-info {

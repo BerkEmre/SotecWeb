@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web;
 
 namespace sotec_firma.Helpers
 {
     public static class SQL
     {
-        #if DEBUG
-            static string text = ConfigurationManager.ConnectionStrings["conStr_local"].ConnectionString;
-        #else
+#if DEBUG
+        static string text = ConfigurationManager.ConnectionStrings["conStr_local"].ConnectionString;
+#else
             static string text = ConfigurationManager.ConnectionStrings["conStr_srver"].ConnectionString;
-        #endif
+#endif
         //ConfigurationSettings.AppSettings["connecitonstring"].ToString();//@"Server=DESKTOP-46PJDJK\SQLEXPRESS;Database=sotec_ticaret;User Id=sa;Password=1234;";
         static SqlConnection con = new SqlConnection(@text);
 
@@ -28,10 +25,10 @@ namespace sotec_firma.Helpers
                 con = new SqlConnection(text);
                 SQL.get("SELECT * FROM kullanicilar"); return true;
             }
-            catch 
-            { 
-                con.Close(); 
-                return false; 
+            catch
+            {
+                con.Close();
+                return false;
             }
         }
 

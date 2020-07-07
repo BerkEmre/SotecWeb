@@ -186,6 +186,9 @@
   <data name="Mesajınız alındı, en kısa sürede size dönüş yapacağız." xml:space="preserve">
     <value>Mesajınız alındı, en kısa sürede size dönüş yapacağız.</value>
   </data>
+  <data name="MİKTAR" xml:space="preserve">
+    <value>MİKTAR</value>
+  </data>
   <data name="SON BLOG YAZILARI" xml:space="preserve">
     <value>LATEST FROM BLOG</value>
   </data>
@@ -196,7 +199,7 @@
     <value>TELEPHONE</value>
   </data>
   <data name="TEŞEKKÜRLER!" xml:space="preserve">
-    <value>TEŞEKKÜRLER!</value>
+    <value>THANKS!</value>
   </data>
   <data name="Tüm Hakları Saklıdır" xml:space="preserve">
     <value>All Right Reserved</value>
@@ -209,6 +212,9 @@
   </data>
   <data name="ÇALIŞMA SAATLERİ" xml:space="preserve">
     <value>HOURS</value>
+  </data>
+  <data name="ÖN SİPARİŞ VER" xml:space="preserve">
+    <value>PRE ORDER</value>
   </data>
   <data name="ÖNE ÇIKANLAR" xml:space="preserve">
     <value>TRENDING</value>

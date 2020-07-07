@@ -5,6 +5,7 @@
     DataRow dr_kullanici = SQL.get("SELECT * FROM kullanicilar WHERE kullanici_id = " + Session["kullanici_id"]).Rows[0];
 
     DataTable dt_diller = SQL.get("SELECT * FROM diller WHERE silindi = 0");
+    DataTable dt_bilgi = SQL.get("SELECT cnt = COUNT(*) FROM mesajlar WHERE silindi = 0 AND durum_parametre_id = 19");
 }
 <!doctype html>
 <html lang="tr">
@@ -141,7 +142,7 @@
                         }
                         @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1)
                         {
-                            <li class="@(currentAction == "Mesaj" ? "active" : "")"><a href="@Url.Action("Mesaj", "Admin")"><i class="icon-envelope-letter"></i><span>Mesajlar</span></a></li>
+                            <li class="@(currentAction == "Mesaj" ? "active" : "")"><a href="@Url.Action("Mesaj", "Admin")"><i class="icon-envelope-letter"></i><span>Mesajlar (@dt_bilgi.Rows[0]["cnt"])</span></a></li>
                         }
                         @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1)
                         {

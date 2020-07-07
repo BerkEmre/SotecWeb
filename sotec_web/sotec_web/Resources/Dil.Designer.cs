@@ -142,7 +142,7 @@ namespace sotec_web.Resources {
         }
         
         /// <summary>
-        ///   Ekisk bilgi girdiniz lğtfen tüm alanları doldurun benzeri yerelleştirilmiş bir dize arar.
+        ///   Eksik bilgi girdiniz lütfen tüm alanları doldurun benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string Ekisk_bilgi_girdiniz_lğtfen_tüm_alanları_doldurun {
             get {
@@ -282,6 +282,24 @@ namespace sotec_web.Resources {
         public static string Mesajınız_alındı__en_kısa_sürede_size_dönüş_yapacağız_ {
             get {
                 return ResourceManager.GetString("Mesajınız alındı, en kısa sürede size dönüş yapacağız.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   MİKTAR benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string MİKTAR {
+            get {
+                return ResourceManager.GetString("MİKTAR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   ÖN SİPARİŞ VER benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string ÖN_SİPARİŞ_VER {
+            get {
+                return ResourceManager.GetString("ÖN SİPARİŞ VER", resourceCulture);
             }
         }
         
