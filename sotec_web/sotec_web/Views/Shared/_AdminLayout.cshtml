@@ -1,5 +1,6 @@
 ﻿@using sotec_firma.Helpers
 @using System.Data
+@using System.Configuration
 @{
     string currentAction = Convert.ToString(HttpContext.Current.Request.RequestContext.RouteData.Values["Action"]);
     DataRow dr_kullanici = SQL.get("SELECT * FROM kullanicilar WHERE kullanici_id = " + Session["kullanici_id"]).Rows[0];
@@ -70,7 +71,7 @@
                 <nav id="left-sidebar-nav" class="sidebar-nav">
                     <ul id="main-menu" class="metismenu">
                         <li class="@(currentAction == "Index" ? "active" : "")"><a href="@Url.Action("Index", "Admin")"><i class="icon-home"></i><span>Genel Bakış</span></a></li>
-                        @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1 || Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 5)
+                        @if ((Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1 || Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 5) && (ConfigurationManager.AppSettings["urunler"] == "true"))
                         {
                             <li class="@(currentAction == "Urun" ? "active" : "")@(currentAction == "UrunVaryasyon" ? "active" : "")@(currentAction == "UrunOzellik" ? "active" : "")">
                                 <a href="#urun" class="has-arrow"><i class="icon-puzzle"></i><span>Ürünler</span></a>
@@ -78,29 +79,32 @@
                                     <li><a href="@Url.Action("Urun", "Admin")">Ürünler</a></li>
                                     <li><a href="@Url.Action("UrunOzellik", "Admin")">Ürün Özellikleri</a></li>
                                     <li><a href="@Url.Action("UrunVaryasyon", "Admin")">Ürün Varyasyonları</a></li>
+                                    <li><a href="@Url.Action("Kategori", "Admin", new { id = 16 })">Ürün Kategorileri</a></li>
                                 </ul>
                             </li>
                         }
-                        @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1 || Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 5)
+                        @if ((Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1 || Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 5) && (ConfigurationManager.AppSettings["blog"] == "true"))
                         {
-                            <li class="@(currentAction == "Kategori" ? "active" : "")">
-                                <a href="#haber" class="has-arrow"><i class="icon-list"></i><span>Kategoriler</span></a>
+                            <li class="@(currentAction == "Blog" ? "active" : "")">
+                                <a href="#urun" class="has-arrow"><i class="icon-book-open"></i><span>Blog</span></a>
                                 <ul>
-                                    <li><a href="@Url.Action("Kategori", "Admin", new { id = 18 })">Blog</a></li>
-                                    <li><a href="@Url.Action("Kategori", "Admin", new { id = 17 })">Haber</a></li>
-                                    <li><a href="@Url.Action("Kategori", "Admin", new { id = 16 })">Ürün</a></li>
+                                    <li><a href="@Url.Action("Blog", "Admin")">Blog Yazıları</a></li>
+                                    <li><a href="@Url.Action("Kategori", "Admin", new { id = 18 })">Blog Kategorileri</a></li>
                                 </ul>
                             </li>
                         }
-                        @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1 || Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 5)
-                        {
-                            <li class="@(currentAction == "Blog" ? "active" : "")"><a href="@Url.Action("Blog", "Admin")"><i class="icon-book-open"></i><span>Blog Yazıları</span></a></li>
-                        }
-                        @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1 || Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 5)
+                        @if ((Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1 || Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 5) && (ConfigurationManager.AppSettings["haberler"] == "true"))
                         {
                             <li class="@(currentAction == "Haber" ? "active" : "")"><a href="@Url.Action("Haber", "Admin")"><i class="icon-globe-alt"></i><span>Haberler</span></a></li>
+                            <li class="@(currentAction == "Haber" ? "active" : "")">
+                                <a href="#urun" class="has-arrow"><i class="icon-globe-alt"></i><span>Haberler</span></a>
+                                <ul>
+                                    <li><a href="@Url.Action("Haber", "Admin")">Haber Yazıları</a></li>
+                                    <li><a href="@Url.Action("Kategori", "Admin", new { id = 17 })">Haber</a></li>
+                                </ul>
+                            </li>
                         }
-                        @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1 || Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 5)
+                        @if ((Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1 || Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 5) && (ConfigurationManager.AppSettings["hizmetler"] == "true"))
                         {
                             <li class="@(currentAction == "Hizmet" ? "active" : "")"><a href="@Url.Action("Hizmet", "Admin")"><i class="icon-energy"></i><span>Hizmetler</span></a></li>
                         }
@@ -116,7 +120,7 @@
                                 </ul>
                             </li>
                         }
-                        @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1)
+                        @if ((Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1))
                         {
                             <li class="@(currentAction == "Slider" ? "active" : "")">
                                 <a href="#dil" class="has-arrow"><i class="icon-directions"></i><span>Slider</span></a>
@@ -144,7 +148,7 @@
                         {
                             <li class="@(currentAction == "Mesaj" ? "active" : "")"><a href="@Url.Action("Mesaj", "Admin")"><i class="icon-envelope-letter"></i><span>Mesajlar (@dt_bilgi.Rows[0]["cnt"])</span></a></li>
                         }
-                        @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1)
+                        @if ((Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1) && (ConfigurationManager.AppSettings["multilanguage"] == "true"))
                         {
                             <li class="@(currentAction == "Dil" ? "active" : "")"><a href="@Url.Action("Dil", "Admin")"><i class="icon-bubble"></i><span>Diller</span></a></li>
                         }

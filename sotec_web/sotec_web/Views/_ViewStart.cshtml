@@ -15,6 +15,13 @@
     }
     else
     {
-        Layout = "~/Views/Shared/_WokieeLayout.cshtml";
+        if (currentAction == "ComingSoon")
+        {
+            Layout = "~/Views/Shared/_BlankLayout.cshtml";
+        }
+        else
+        {
+            Layout = "~/Views/Shared/_WokieeLayout.cshtml";
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿@using System.Data
 @using sotec_firma.Helpers
-@{ 
+@using System.Configuration
+@{
     string currentAction = Convert.ToString(HttpContext.Current.Request.RequestContext.RouteData.Values["Action"]);
 
     string lang = Request.Cookies.Get("MultiLanguageExample").Value;
@@ -46,28 +47,46 @@
         <nav class="panel-menu mobile-main-menu">
             <ul>
                 <li><a href="@Url.Action("Index", "Home")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
-                <li>
-                    <a href="@Url.Action("Products", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.MAĞAZA</a>
-                    <ul>
-                        @foreach (DataRow dr_kategori in dt_urun_kategorileri.Rows)
-                        {
-                            <li>
-                                <a href="@Url.Action("Products", "Home", new { id = 0, id2 = dr_kategori["kategori_id"] })">@dr_kategori["kategori"]</a>
-                                <ul>
-                                    @foreach (DataRow dr_alt_kategori in SQL.get("SELECT k.kategori_id, kategori = ISNULL(dk.kategori, k.kategori) FROM kategoriler k LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = k.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " WHERE k.silindi = 0 AND k.ust_kategori_id = " + dr_kategori["kategori_id"]).Rows)
-                                    {
-                                        <li><a href="@Url.Action("Products", "Home", new { id = 0, id2 = dr_alt_kategori["kategori_id"] })">@dr_alt_kategori["kategori"]</a></li>
-                                    }
-                                </ul>
-                            </li>
-                        }
-                    </ul>
-                </li>
-                <li><a href="@Url.Action("Blogs", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.BLOG</a></li>
-                <li><a href="@Url.Action("News", "Home")">@sotec_web.Resources.Dil.HABERLER</a></li>
-                <li><a href="@Url.Action("Services", "Home")">@sotec_web.Resources.Dil.HİZMETLER</a></li>
-                <li><a href="@Url.Action("About", "Home")">@sotec_web.Resources.Dil.HAKKIMIZDA</a></li>
-                <li><a href="@Url.Action("Contact", "Home")">@sotec_web.Resources.Dil.İLETİŞİM</a></li>
+                @if (ConfigurationManager.AppSettings["urunler"] == "true")
+                {
+                    <li>
+                        <a href="@Url.Action("Products", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.MAĞAZA</a>
+                        <ul>
+                            @foreach (DataRow dr_kategori in dt_urun_kategorileri.Rows)
+                            {
+                                <li>
+                                    <a href="@Url.Action("Products", "Home", new { id = 0, id2 = dr_kategori["kategori_id"] })">@dr_kategori["kategori"]</a>
+                                    <ul>
+                                        @foreach (DataRow dr_alt_kategori in SQL.get("SELECT k.kategori_id, kategori = ISNULL(dk.kategori, k.kategori) FROM kategoriler k LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = k.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " WHERE k.silindi = 0 AND k.ust_kategori_id = " + dr_kategori["kategori_id"]).Rows)
+                                        {
+                                            <li><a href="@Url.Action("Products", "Home", new { id = 0, id2 = dr_alt_kategori["kategori_id"] })">@dr_alt_kategori["kategori"]</a></li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
+                @if (ConfigurationManager.AppSettings["blog"] == "true")
+                {
+                    <li><a href="@Url.Action("Blogs", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.BLOG</a></li>
+                }
+                @if (ConfigurationManager.AppSettings["haberler"] == "true")
+                {
+                    <li><a href="@Url.Action("News", "Home")">@sotec_web.Resources.Dil.HABERLER</a></li>
+                }
+                @if (ConfigurationManager.AppSettings["hizmetler"] == "true")
+                {
+                    <li><a href="@Url.Action("Services", "Home")">@sotec_web.Resources.Dil.HİZMETLER</a></li>
+                }
+                @if (ConfigurationManager.AppSettings["hakkimizda"] == "true")
+                {
+                    <li><a href="@Url.Action("About", "Home")">@sotec_web.Resources.Dil.HAKKIMIZDA</a></li>
+                }
+                @if (ConfigurationManager.AppSettings["iletisim"] == "true")
+                {
+                    <li><a href="@Url.Action("Contact", "Home")">@sotec_web.Resources.Dil.İLETİŞİM</a></li>
+                }
             </ul>
             <div class="mm-navbtn-names">
                 <div class="mm-closebtn">@sotec_web.Resources.Dil.KAPAT</div>
@@ -123,30 +142,48 @@
                                 <nav>
                                     <ul>
                                         <li class="dropdown @(currentAction == "Index" ? "active" : "")"><a href="@Url.Action("Index", "Home")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
-                                        <li class="dropdown megamenu @(currentAction == "Products" ? "active" : "")">
-                                            <a href="@Url.Action("Products", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.MAĞAZA</a>
-                                            <div class="dropdown-menu">
-                                                <div class="row tt-col-list">
-                                                    @foreach (DataRow dr_kategori in dt_urun_kategorileri.Rows)
-                                                    {
-                                                        <div class="col">
-                                                            <h6 class="tt-title-submenu"><a href="@Url.Action("Products", "Home", new { id = 0, id2 = dr_kategori["kategori_id"] })">@dr_kategori["kategori"]</a></h6>
-                                                            <ul class="tt-megamenu-submenu">
-                                                                @foreach (DataRow dr_alt_kategori in SQL.get("SELECT k.kategori_id, kategori = ISNULL(dk.kategori, k.kategori) FROM kategoriler k LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = k.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " WHERE k.silindi = 0 AND k.ust_kategori_id = " + dr_kategori["kategori_id"]).Rows)
-                                                                {
-                                                                    <li><a href="@Url.Action("Products", "Home", new { id = 0, id2 = dr_alt_kategori["kategori_id"] })">@dr_alt_kategori["kategori"]</a></li>
-                                                                }
-                                                            </ul>
-                                                        </div>
-                                                    }
+                                        @if (ConfigurationManager.AppSettings["urunler"] == "true")
+                                        {
+                                            <li class="dropdown megamenu @(currentAction == "Products" ? "active" : "")">
+                                                <a href="@Url.Action("Products", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.MAĞAZA</a>
+                                                <div class="dropdown-menu">
+                                                    <div class="row tt-col-list">
+                                                        @foreach (DataRow dr_kategori in dt_urun_kategorileri.Rows)
+                                                        {
+                                                            <div class="col">
+                                                                <h6 class="tt-title-submenu"><a href="@Url.Action("Products", "Home", new { id = 0, id2 = dr_kategori["kategori_id"] })">@dr_kategori["kategori"]</a></h6>
+                                                                <ul class="tt-megamenu-submenu">
+                                                                    @foreach (DataRow dr_alt_kategori in SQL.get("SELECT k.kategori_id, kategori = ISNULL(dk.kategori, k.kategori) FROM kategoriler k LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = k.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " WHERE k.silindi = 0 AND k.ust_kategori_id = " + dr_kategori["kategori_id"]).Rows)
+                                                                    {
+                                                                        <li><a href="@Url.Action("Products", "Home", new { id = 0, id2 = dr_alt_kategori["kategori_id"] })">@dr_alt_kategori["kategori"]</a></li>
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                        }
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>
-                                        <li class="dropdown @(currentAction == "Blogs" ? "active" : "")"><a href="@Url.Action("Blogs", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.BLOG</a></li>
-                                        <li class="dropdown @(currentAction == "News" ? "active" : "")"><a href="@Url.Action("News", "Home")">@sotec_web.Resources.Dil.HABERLER</a></li>
-                                        <li class="dropdown @(currentAction == "Services" ? "active" : "")"><a href="@Url.Action("Services", "Home")">@sotec_web.Resources.Dil.HİZMETLER</a></li>
-                                        <li class="dropdown @(currentAction == "About" ? "active" : "")"><a href="@Url.Action("About", "Home")">@sotec_web.Resources.Dil.HAKKIMIZDA</a></li>
-                                        <li class="dropdown @(currentAction == "Contact" ? "active" : "")"><a href="@Url.Action("Contact", "Home")">@sotec_web.Resources.Dil.İLETİŞİM</a></li>
+                                            </li>
+                                        }
+                                        @if (ConfigurationManager.AppSettings["blog"] == "true")
+                                        {
+                                            <li class="dropdown @(currentAction == "Blogs" ? "active" : "")"><a href="@Url.Action("Blogs", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.BLOG</a></li>
+                                        }
+                                        @if (ConfigurationManager.AppSettings["haberler"] == "true")
+                                        {
+                                            <li class="dropdown @(currentAction == "News" ? "active" : "")"><a href="@Url.Action("News", "Home")">@sotec_web.Resources.Dil.HABERLER</a></li>
+                                        }
+                                        @if (ConfigurationManager.AppSettings["hizmetler"] == "true")
+                                        {
+                                            <li class="dropdown @(currentAction == "Services" ? "active" : "")"><a href="@Url.Action("Services", "Home")">@sotec_web.Resources.Dil.HİZMETLER</a></li>
+                                        }
+                                        @if (ConfigurationManager.AppSettings["hakkimizda"] == "true")
+                                        {
+                                            <li class="dropdown @(currentAction == "About" ? "active" : "")"><a href="@Url.Action("About", "Home")">@sotec_web.Resources.Dil.HAKKIMIZDA</a></li>
+                                        }
+                                        @if (ConfigurationManager.AppSettings["iletisim"] == "true")
+                                        {
+                                            <li class="dropdown @(currentAction == "Contact" ? "active" : "")"><a href="@Url.Action("Contact", "Home")">@sotec_web.Resources.Dil.İLETİŞİM</a></li>
+                                        }
                                     </ul>
                                 </nav>
                             </div>
@@ -156,12 +193,15 @@
                     <div class="tt-col-obj tt-obj-options obj-move-right">
                         <!-- tt-langue and tt-currency -->
                         <div class="tt-desctop-parent-multi tt-parent-box">
-                            <div class="tt-multi-obj">
-                                @foreach (DataRow dil_item in dt_diller.Rows)
-                                {
-                                    <a href="/Home/ChangeLanguage?language=@dil_item["kisa_kod"]&id=@dil_item["dil_id"]"><img style="margin-right: 5px; max-width: 25px;" src="~/admin_src/images/dil/kucuk/@dil_item["icon"]" /> </a>
-                                }
-                            </div>
+                            @if (ConfigurationManager.AppSettings["multilanguage"] == "true")
+                            {
+                                <div class="tt-multi-obj">
+                                    @foreach (DataRow dil_item in dt_diller.Rows)
+                                    {
+                                        <a href="/Home/ChangeLanguage?language=@dil_item["kisa_kod"]&id=@dil_item["dil_id"]"><img style="margin-right: 5px; max-width: 25px;" src="~/admin_src/images/dil/kucuk/@dil_item["icon"]" /> </a>
+                                    }
+                                </div>
+                            }
                         </div>
                         <!-- /tt-langue and tt-currency -->
                     </div>
@@ -205,17 +245,20 @@
                 <div class="row">
                     <div class="col-md-6 col-lg-2 col-xl-3">
                         <div class="tt-mobile-collapse">
-                            <h4 class="tt-collapse-title">
-                                @sotec_web.Resources.Dil.KATEGORİLER
-                            </h4>
-                            <div class="tt-collapse-content">
-                                <ul class="tt-list">
-                                    @foreach (DataRow dr_kategori in dt_urun_kategorileri.Rows)
-                                    {
-                                        <li><a href="@Url.Action("Products", "Home", new { id = 0, id2 = dr_kategori["kategori_id"] })">@dr_kategori["kategori"]</a></li>
-                                    }
-                                </ul>
-                            </div>
+                            @if (ConfigurationManager.AppSettings["urunler"] == "true")
+                            {
+                                <h4 class="tt-collapse-title">
+                                    @sotec_web.Resources.Dil.KATEGORİLER
+                                </h4>
+                                <div class="tt-collapse-content">
+                                    <ul class="tt-list">
+                                        @foreach (DataRow dr_kategori in dt_urun_kategorileri.Rows)
+                                        {
+                                            <li><a href="@Url.Action("Products", "Home", new { id = 0, id2 = dr_kategori["kategori_id"] })">@dr_kategori["kategori"]</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-2 col-xl-3">
@@ -226,12 +269,30 @@
                             <div class="tt-collapse-content">
                                 <ul class="tt-list">
                                     <li><a href="@Url.Action("Index", "Home")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
-                                    <li><a href="@Url.Action("Shop", "Home")">@sotec_web.Resources.Dil.MAĞAZA</a></li>
-                                    <li><a href="@Url.Action("Blogs", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.BLOG</a></li>
-                                    <li><a href="@Url.Action("News", "Home")">@sotec_web.Resources.Dil.HABERLER</a></li>
-                                    <li><a href="@Url.Action("Services", "Home")">@sotec_web.Resources.Dil.HİZMETLER</a></li>
-                                    <li><a href="@Url.Action("About", "Home")">@sotec_web.Resources.Dil.HAKKIMIZDA</a></li>
-                                    <li><a href="@Url.Action("Contact", "Home")">@sotec_web.Resources.Dil.İLETİŞİM</a></li>
+                                    @if (ConfigurationManager.AppSettings["urunler"] == "true")
+                                    {
+                                        <li><a href="@Url.Action("Products", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.MAĞAZA</a></li>
+                                    }
+                                    @if (ConfigurationManager.AppSettings["blog"] == "true")
+                                    {
+                                        <li><a href="@Url.Action("Blogs", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.BLOG</a></li>
+                                    }
+                                    @if (ConfigurationManager.AppSettings["haberler"] == "true")
+                                    {
+                                        <li><a href="@Url.Action("News", "Home")">@sotec_web.Resources.Dil.HABERLER</a></li>
+                                    }
+                                    @if (ConfigurationManager.AppSettings["hizmetler"] == "true")
+                                    {
+                                        <li><a href="@Url.Action("Services", "Home")">@sotec_web.Resources.Dil.HİZMETLER</a></li>
+                                    }
+                                    @if (ConfigurationManager.AppSettings["hakkimizda"] == "true")
+                                    {
+                                        <li><a href="@Url.Action("About", "Home")">@sotec_web.Resources.Dil.HAKKIMIZDA</a></li>
+                                    }
+                                    @if (ConfigurationManager.AppSettings["iletisim"] == "true")
+                                    {
+                                        <li><a href="@Url.Action("Contact", "Home")">@sotec_web.Resources.Dil.İLETİŞİM</a></li>
+                                    }
                                 </ul>
                             </div>
                         </div>

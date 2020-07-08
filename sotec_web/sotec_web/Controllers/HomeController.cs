@@ -9,6 +9,10 @@ namespace sotec_web.Controllers
 {
     public class HomeController : Controller
     {
+        public ActionResult ComingSoon()
+        {
+            return View();
+        }
         public ActionResult Index()
         {
             return View();

@@ -138,13 +138,13 @@ namespace sotec_web.Controllers
                     {
                         result = string.Format(@"{0}", Guid.NewGuid());
                         WebImage img = new WebImage(resim.ElementAt(i).InputStream);
-                        var path = Path.Combine(Server.MapPath("~/admin_src/images/sliders/orjinal"), result);
+                        var path = Path.Combine("~/admin_src/images/sliders/orjinal", result);
                         img.Save(path);
                         img.Resize(2000, 2000, true, false);
-                        path = Path.Combine(Server.MapPath("~/admin_src/images/sliders/buyuk"), result);
+                        path = Path.Combine("~/admin_src/images/sliders/buyuk", result);
                         img.Save(path);
                         img.Resize(1000, 1000, true, false);
-                        path = Path.Combine(Server.MapPath("~/admin_src/images/sliders/kucuk"), result);
+                        path = Path.Combine("~/admin_src/images/sliders/kucuk", result);
                         img.Save(path);
                         result += Path.GetExtension(resim.ElementAt(i).FileName);
                         result = result.Replace("jpg", "jpeg");
@@ -158,13 +158,13 @@ namespace sotec_web.Controllers
                     {
                         result = string.Format(@"{0}", Guid.NewGuid());
                         WebImage img = new WebImage(resim.ElementAt(i).InputStream);
-                        var path = Path.Combine(Server.MapPath("~/admin_src/images/sliders/orjinal"), result);
+                        var path = Path.Combine("~/admin_src/images/sliders/orjinal", result);
                         img.Save(path);
                         img.Resize(2000, 2000, true, false);
-                        path = Path.Combine(Server.MapPath("~/admin_src/images/sliders/buyuk"), result);
+                        path = Path.Combine("~/admin_src/images/sliders/buyuk", result);
                         img.Save(path);
                         img.Resize(1000, 1000, true, false);
-                        path = Path.Combine(Server.MapPath("~/admin_src/images/sliders/kucuk"), result);
+                        path = Path.Combine("~/admin_src/images/sliders/kucuk", result);
                         img.Save(path);
                         result += Path.GetExtension(resim.ElementAt(i).FileName);
                         result = result.Replace("jpg", "jpeg");
@@ -216,13 +216,13 @@ namespace sotec_web.Controllers
                     {
                         result = string.Format(@"{0}", Guid.NewGuid());
                         WebImage img = new WebImage(resim.ElementAt(i).InputStream);
-                        var path = Path.Combine(Server.MapPath("~/admin_src/images/karo/orjinal"), result);
+                        var path = Path.Combine("~/admin_src/images/karo/orjinal", result);
                         img.Save(path);
                         img.Resize(2000, 2000, true, false);
-                        path = Path.Combine(Server.MapPath("~/admin_src/images/karo/buyuk"), result);
+                        path = Path.Combine("~/admin_src/images/karo/buyuk", result);
                         img.Save(path);
                         img.Resize(1000, 1000, true, false);
-                        path = Path.Combine(Server.MapPath("~/admin_src/images/karo/kucuk"), result);
+                        path = Path.Combine("~/admin_src/images/karo/kucuk", result);
                         img.Save(path);
                         result += Path.GetExtension(resim.ElementAt(i).FileName);
                         result = result.Replace("jpg", "jpeg");
@@ -236,13 +236,13 @@ namespace sotec_web.Controllers
                     {
                         result = string.Format(@"{0}", Guid.NewGuid());
                         WebImage img = new WebImage(resim.ElementAt(i).InputStream);
-                        var path = Path.Combine(Server.MapPath("~/admin_src/images/karo/orjinal"), result);
+                        var path = Path.Combine("~/admin_src/images/karo/orjinal", result);
                         img.Save(path);
                         img.Resize(2000, 2000, true, false);
-                        path = Path.Combine(Server.MapPath("~/admin_src/images/karo/buyuk"), result);
+                        path = Path.Combine("~/admin_src/images/karo/buyuk", result);
                         img.Save(path);
                         img.Resize(1000, 1000, true, false);
-                        path = Path.Combine(Server.MapPath("~/admin_src/images/karo/kucuk"), result);
+                        path = Path.Combine("~/admin_src/images/karo/kucuk", result);
                         img.Save(path);
                         result += Path.GetExtension(resim.ElementAt(i).FileName);
                         result = result.Replace("jpg", "jpeg");
@@ -360,13 +360,13 @@ namespace sotec_web.Controllers
             {
                 result = string.Format(@"{0}", Guid.NewGuid());
                 WebImage img = new WebImage(gorsel.InputStream);
-                var path = Path.Combine(Server.MapPath("~/admin_src/images/blog/orjinal"), result);
+                var path = Path.Combine("~/admin_src/images/blog/orjinal", result);
                 img.Save(path);
                 img.Resize(1600, 1600, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/blog/buyuk"), result);
+                path = Path.Combine("~/admin_src/images/blog/buyuk", result);
                 img.Save(path);
                 img.Resize(400, 400, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/blog/kucuk"), result);
+                path = Path.Combine("~/admin_src/images/blog/kucuk", result);
                 img.Save(path);
                 result += Path.GetExtension(gorsel.FileName);
                 result = result.Replace("jpg", "jpeg");
@@ -389,13 +389,13 @@ namespace sotec_web.Controllers
             {
                 result = string.Format(@"{0}", Guid.NewGuid());
                 WebImage img = new WebImage(gorsel.InputStream);
-                var path = Path.Combine(Server.MapPath("~/admin_src/images/blog/orjinal"), result);
+                var path = Path.Combine("~/admin_src/images/blog/orjinal", result);
                 img.Save(path);
                 img.Resize(1600, 1600, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/blog/buyuk"), result);
+                path = Path.Combine("~/admin_src/images/blog/buyuk", result);
                 img.Save(path);
                 img.Resize(400, 400, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/blog/kucuk"), result);
+                path = Path.Combine("~/admin_src/images/blog/kucuk", result);
                 img.Save(path);
                 result += Path.GetExtension(gorsel.FileName);
                 result = result.Replace("jpg", "jpeg");
@@ -455,13 +455,13 @@ namespace sotec_web.Controllers
             {
                 result = string.Format(@"{0}", Guid.NewGuid());
                 WebImage img = new WebImage(gorsel.InputStream);
-                var path = Path.Combine(Server.MapPath("~/admin_src/images/haber/orjinal"), result);
+                var path = Path.Combine("~/admin_src/images/haber/orjinal", result);
                 img.Save(path);
                 img.Resize(1600, 1600, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/haber/buyuk"), result);
+                path = Path.Combine("~/admin_src/images/haber/buyuk", result);
                 img.Save(path);
                 img.Resize(400, 400, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/haber/kucuk"), result);
+                path = Path.Combine("~/admin_src/images/haber/kucuk", result);
                 img.Save(path);
                 result += Path.GetExtension(gorsel.FileName);
                 result = result.Replace("jpg", "jpeg");
@@ -484,13 +484,13 @@ namespace sotec_web.Controllers
             {
                 result = string.Format(@"{0}", Guid.NewGuid());
                 WebImage img = new WebImage(gorsel.InputStream);
-                var path = Path.Combine(Server.MapPath("~/admin_src/images/haber/orjinal"), result);
+                var path = Path.Combine("~/admin_src/images/haber/orjinal", result);
                 img.Save(path);
                 img.Resize(1600, 1600, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/haber/buyuk"), result);
+                path = Path.Combine("~/admin_src/images/haber/buyuk", result);
                 img.Save(path);
                 img.Resize(400, 400, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/haber/kucuk"), result);
+                path = Path.Combine("~/admin_src/images/haber/kucuk", result);
                 img.Save(path);
                 result += Path.GetExtension(gorsel.FileName);
                 result = result.Replace("jpg", "jpeg");
@@ -550,13 +550,13 @@ namespace sotec_web.Controllers
             {
                 result = string.Format(@"{0}", Guid.NewGuid());
                 WebImage img = new WebImage(gorsel.InputStream);
-                var path = Path.Combine(Server.MapPath("~/admin_src/images/hizmet/orjinal"), result);
+                var path = Path.Combine("~/admin_src/images/hizmet/orjinal", result);
                 img.Save(path);
                 img.Resize(1600, 1600, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/hizmet/buyuk"), result);
+                path = Path.Combine("~/admin_src/images/hizmet/buyuk", result);
                 img.Save(path);
                 img.Resize(400, 400, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/hizmet/kucuk"), result);
+                path = Path.Combine("~/admin_src/images/hizmet/kucuk", result);
                 img.Save(path);
                 result += Path.GetExtension(gorsel.FileName);
                 result = result.Replace("jpg", "jpeg");
@@ -579,13 +579,13 @@ namespace sotec_web.Controllers
             {
                 result = string.Format(@"{0}", Guid.NewGuid());
                 WebImage img = new WebImage(gorsel.InputStream);
-                var path = Path.Combine(Server.MapPath("~/admin_src/images/hizmet/orjinal"), result);
+                var path = Path.Combine("~/admin_src/images/hizmet/orjinal", result);
                 img.Save(path);
                 img.Resize(1600, 1600, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/hizmet/buyuk"), result);
+                path = Path.Combine("~/admin_src/images/hizmet/buyuk", result);
                 img.Save(path);
                 img.Resize(400, 400, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/hizmet/kucuk"), result);
+                path = Path.Combine("~/admin_src/images/hizmet/kucuk", result);
                 img.Save(path);
                 result += Path.GetExtension(gorsel.FileName);
                 result = result.Replace("jpg", "jpeg");
@@ -663,10 +663,10 @@ namespace sotec_web.Controllers
             {
                 result = string.Format(@"{0}", Guid.NewGuid());
                 WebImage img = new WebImage(logo.InputStream);
-                var path = Path.Combine(Server.MapPath("~/admin_src/images/site_logo/orjinal"), result);
+                var path = Path.Combine("~/admin_src/images/site_logo/orjinal", result);
                 img.Save(path);
                 img.Resize(150, 75, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/site_logo/"), result);
+                path = Path.Combine("~/admin_src/images/site_logo/", result);
                 img.Save(path);
                 result += Path.GetExtension(logo.FileName);
                 result = result.Replace("jpg", "jpeg");
@@ -705,13 +705,13 @@ namespace sotec_web.Controllers
             {
                 result = string.Format(@"{0}", Guid.NewGuid());
                 WebImage img = new WebImage(ikon.InputStream);
-                var path = Path.Combine(Server.MapPath("~/admin_src/images/dil/orjinal"), result);
+                var path = Path.Combine("~/admin_src/images/dil/orjinal", result);
                 img.Save(path);
                 img.Resize(250, 250, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/dil/buyuk"), result);
+                path = Path.Combine("~/admin_src/images/dil/buyuk", result);
                 img.Save(path);
                 img.Resize(40, 40, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/dil/kucuk"), result);
+                path = Path.Combine("~/admin_src/images/dil/kucuk", result);
                 img.Save(path);
                 result += Path.GetExtension(ikon.FileName);
                 result = result.Replace("jpg", "jpeg");
@@ -737,13 +737,13 @@ namespace sotec_web.Controllers
             {
                 result = string.Format(@"{0}", Guid.NewGuid());
                 WebImage img = new WebImage(ikon.InputStream);
-                var path = Path.Combine(Server.MapPath("~/admin_src/images/dil/orjinal"), result);
+                var path = Path.Combine("~/admin_src/images/dil/orjinal", result);
                 img.Save(path);
                 img.Resize(250, 250, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/dil/buyuk"), result);
+                path = Path.Combine("~/admin_src/images/dil/buyuk", result);
                 img.Save(path);
                 img.Resize(40, 40, true, false);
-                path = Path.Combine(Server.MapPath("~/admin_src/images/dil/kucuk"), result);
+                path = Path.Combine("~/admin_src/images/dil/kucuk", result);
                 img.Save(path);
                 result += Path.GetExtension(ikon.FileName);
                 result = result.Replace("jpg", "jpeg");
@@ -810,13 +810,13 @@ namespace sotec_web.Controllers
                         result = string.Format(@"{0}", Guid.NewGuid());
                         byte[] imageBytes = Convert.FromBase64String(resim_path[i].Replace("data:image/jpeg;base64,", ""));
                         WebImage img = new WebImage(imageBytes);
-                        var path = Path.Combine(Server.MapPath("~/admin_src/images/urun/orjinal"), result);
+                        var path = Path.Combine("~/admin_src/images/urun/orjinal", result);
                         img.Save(path);
                         img.Resize(1600, 1600, true, false);
-                        path = Path.Combine(Server.MapPath("~/admin_src/images/urun/buyuk"), result);
+                        path = Path.Combine("~/admin_src/images/urun/buyuk", result);
                         img.Save(path);
                         img.Resize(400, 400, true, false);
-                        path = Path.Combine(Server.MapPath("~/admin_src/images/urun/kucuk"), result);
+                        path = Path.Combine("~/admin_src/images/urun/kucuk", result);
                         img.Save(path);
                         result += Path.GetExtension(img.FileName);
                         result = result.Replace("jpg", "jpeg");
@@ -882,13 +882,13 @@ namespace sotec_web.Controllers
                             result = string.Format(@"{0}", Guid.NewGuid());
                             byte[] imageBytes = Convert.FromBase64String(resim_path[i].Replace("data:image/jpeg;base64,", ""));
                             WebImage img = new WebImage(imageBytes);
-                            var path = Path.Combine(Server.MapPath("~/admin_src/images/urun/orjinal"), result);
+                            var path = Path.Combine("~/admin_src/images/urun/orjinal", result);
                             img.Save(path);
                             img.Resize(1600, 1600, true, false);
-                            path = Path.Combine(Server.MapPath("~/admin_src/images/urun/buyuk"), result);
+                            path = Path.Combine("~/admin_src/images/urun/buyuk", result);
                             img.Save(path);
                             img.Resize(400, 400, true, false);
-                            path = Path.Combine(Server.MapPath("~/admin_src/images/urun/kucuk"), result);
+                            path = Path.Combine("~/admin_src/images/urun/kucuk", result);
                             img.Save(path);
                             result += Path.GetExtension(img.FileName);
                             result = result.Replace("jpg", "jpeg");

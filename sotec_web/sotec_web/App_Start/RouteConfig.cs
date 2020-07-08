@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Configuration;
+using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace sotec_web
@@ -12,7 +13,7 @@ namespace sotec_web
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}/{id2}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional, id2 = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = (ConfigurationManager.AppSettings["yapim_asamasinda_modu"] == "true" ? "ComingSoon" : "Index"), id = UrlParameter.Optional, id2 = UrlParameter.Optional }
             );
         }
     }

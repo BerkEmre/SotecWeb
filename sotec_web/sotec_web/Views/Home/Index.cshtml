@@ -1,5 +1,6 @@
 ﻿@using System.Data
 @using sotec_firma.Helpers
+@using System.Configuration
 @{
     ViewBag.Title = "";
 
@@ -68,177 +69,180 @@
         </div>
     </div>
 </div>
-<div class="container-indent">
-    <div class="container container-fluid-custom-mobile-padding">
-        <div class="tt-block-title">
-            <h1 class="tt-title">@sotec_web.Resources.Dil.ÖNE_ÇIKANLAR</h1>
-        </div>
-        <div class="row tt-layout-product-item">
-            @foreach (DataRow dr_urun_item in dt_one_cikan_urunler.Rows)
-            {
-                <div class="col-6 col-md-4 col-lg-3">
-                    <div class="tt-product thumbprod-center">
-                        <div class="tt-image-box">
-                            <!--<a href="#" class="tt-btn-quickview" data-toggle="modal" data-target="#ModalquickView" data-tooltip="Quick View" data-tposition="left"></a>-->
-                            <a href="@Url.Action("Product", "Home", new { id = dr_urun_item["urun_id"] })">
-                                <span class="tt-img"><img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/urun/kucuk/@dr_urun_item["resim"]" alt=""></span>
-                                <span class="tt-img-roll-over"><img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/sliders/kucuk/@dr_urun_item["resim"]" alt=""></span>
-                            </a>
-                        </div>
-                        <div class="tt-description">
-                            <div class="tt-row">
-                                <ul class="tt-add-info">
-                                    <li><a href="@Url.Action("Product", "Home", new { id = dr_urun_item["urun_id"] })">@dr_urun_item["stok_kodu"]</a></li>
-                                </ul>
+@if (ConfigurationManager.AppSettings["urunler"] == "true")
+{
+    <div class="container-indent">
+        <div class="container container-fluid-custom-mobile-padding">
+            <div class="tt-block-title">
+                <h1 class="tt-title">@sotec_web.Resources.Dil.ÖNE_ÇIKANLAR</h1>
+            </div>
+            <div class="row tt-layout-product-item">
+                @foreach (DataRow dr_urun_item in dt_one_cikan_urunler.Rows)
+                {
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="tt-product thumbprod-center">
+                            <div class="tt-image-box">
+                                <!--<a href="#" class="tt-btn-quickview" data-toggle="modal" data-target="#ModalquickView" data-tooltip="Quick View" data-tposition="left"></a>-->
+                                <a href="@Url.Action("Product", "Home", new { id = dr_urun_item["urun_id"] })">
+                                    <span class="tt-img"><img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/urun/kucuk/@dr_urun_item["resim"]" alt=""></span>
+                                    <span class="tt-img-roll-over"><img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/sliders/kucuk/@dr_urun_item["resim"]" alt=""></span>
+                                </a>
                             </div>
-                            <h2 class="tt-title"><a href="@Url.Action("Product", "Home", new { id = dr_urun_item["urun_id"] })">@dr_urun_item["urun_adi"]</a></h2>
-                            <div class="tt-price">
-                                <!--PARA YAZILABİLİR BURAYA-->
-                            </div>
-                            <div class="tt-product-inside-hover">
-                                <div class="tt-row-btn">
-                                    <!--<a href="#" class="tt-btn-addtocart thumbprod-button-bg" data-toggle="modal" data-target="#modalAddToCartProduct">ADD TO CART</a>-->
+                            <div class="tt-description">
+                                <div class="tt-row">
+                                    <ul class="tt-add-info">
+                                        <li><a href="@Url.Action("Product", "Home", new { id = dr_urun_item["urun_id"] })">@dr_urun_item["stok_kodu"]</a></li>
+                                    </ul>
                                 </div>
-                                <div class="tt-row-btn">
-                                    <!--<a href="#" class="tt-btn-quickview" data-toggle="modal" data-target="#ModalquickView"></a>-->
+                                <h2 class="tt-title"><a href="@Url.Action("Product", "Home", new { id = dr_urun_item["urun_id"] })">@dr_urun_item["urun_adi"]</a></h2>
+                                <div class="tt-price">
+                                    <!--PARA YAZILABİLİR BURAYA-->
+                                </div>
+                                <div class="tt-product-inside-hover">
+                                    <div class="tt-row-btn">
+                                        <!--<a href="#" class="tt-btn-addtocart thumbprod-button-bg" data-toggle="modal" data-target="#modalAddToCartProduct">ADD TO CART</a>-->
+                                    </div>
+                                    <div class="tt-row-btn">
+                                        <!--<a href="#" class="tt-btn-quickview" data-toggle="modal" data-target="#ModalquickView"></a>-->
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- modal (quickViewModal)
-                    <div class="modal  fade" id="ModalquickView" tabindex="-1" role="dialog" aria-label="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content ">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="icon icon-clear"></span></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="tt-modal-quickview desctope">
-                                        <div class="row">
-                                            <div class="col-12 col-md-5 col-lg-6">
-                                                <div class="tt-mobile-product-slider arrow-location-center">
-                                                    <div><img src="images/loader.svg" data-src="images/product/product-01.jpg" alt=""></div>
-                                                    <div><img src="images/loader.svg" data-src="images/product/product-01-02.jpg" alt=""></div>
-                                                    <div><img src="images/loader.svg" data-src="images/product/product-01-03.jpg" alt=""></div>
-                                                    <div><img src="images/loader.svg" data-src="images/product/product-01-04.jpg" alt=""></div>
-                                                    <div>
-                                                        <div class="tt-video-block">
-                                                            <a href="#" class="link-video"></a>
-                                                            <video class="movie" src="video/video.mp4" poster="video/video_img.jpg"></video>
+                    <!-- modal (quickViewModal)
+                        <div class="modal  fade" id="ModalquickView" tabindex="-1" role="dialog" aria-label="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content ">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="icon icon-clear"></span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="tt-modal-quickview desctope">
+                                            <div class="row">
+                                                <div class="col-12 col-md-5 col-lg-6">
+                                                    <div class="tt-mobile-product-slider arrow-location-center">
+                                                        <div><img src="images/loader.svg" data-src="images/product/product-01.jpg" alt=""></div>
+                                                        <div><img src="images/loader.svg" data-src="images/product/product-01-02.jpg" alt=""></div>
+                                                        <div><img src="images/loader.svg" data-src="images/product/product-01-03.jpg" alt=""></div>
+                                                        <div><img src="images/loader.svg" data-src="images/product/product-01-04.jpg" alt=""></div>
+                                                        <div>
+                                                            <div class="tt-video-block">
+                                                                <a href="#" class="link-video"></a>
+                                                                <video class="movie" src="video/video.mp4" poster="video/video_img.jpg"></video>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-12 col-md-7 col-lg-6">
-                                                <div class="tt-product-single-info">
-                                                    <div class="tt-add-info">
-                                                        <ul>
-                                                            <li><span>SKU:</span> 001</li>
-                                                            <li><span>Availability:</span> 40 in Stock</li>
-                                                        </ul>
-                                                    </div>
-                                                    <h2 class="tt-title">Cotton Blend Fleece Hoodie</h2>
-                                                    <div class="tt-price">
-                                                        <span class="new-price">$29</span>
-                                                        <span class="old-price"></span>
-                                                    </div>
-                                                    <div class="tt-review">
-                                                        <div class="tt-rating">
-                                                            <i class="icon-star"></i>
-                                                            <i class="icon-star"></i>
-                                                            <i class="icon-star"></i>
-                                                            <i class="icon-star-half"></i>
-                                                            <i class="icon-star-empty"></i>
-                                                        </div>
-                                                        <a href="#">(1 Customer Review)</a>
-                                                    </div>
-                                                    <div class="tt-wrapper">
-                                                        Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
-                                                    </div>
-                                                    <div class="tt-swatches-container">
-                                                        <div class="tt-wrapper">
-                                                            <div class="tt-title-options">SIZE</div>
-                                                            <form class="form-default">
-                                                                <div class="form-group">
-                                                                    <select class="form-control">
-                                                                        <option>21</option>
-                                                                        <option>25</option>
-                                                                        <option>36</option>
-                                                                    </select>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                        <div class="tt-wrapper">
-                                                            <div class="tt-title-options">COLOR</div>
-                                                            <form class="form-default">
-                                                                <div class="form-group">
-                                                                    <select class="form-control">
-                                                                        <option>Red</option>
-                                                                        <option>Green</option>
-                                                                        <option>Brown</option>
-                                                                    </select>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                        <div class="tt-wrapper">
-                                                            <div class="tt-title-options">TEXTURE:</div>
-                                                            <ul class="tt-options-swatch options-large">
-                                                                <li>
-                                                                    <a class="options-color" href="#">
-                                                                        <span class="swatch-img">
-                                                                            <img src="images/loader.svg" data-src="images/custom/texture-img-01.jpg" alt="">
-                                                                        </span>
-                                                                        <span class="swatch-label color-black"></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="active">
-                                                                    <a class="options-color" href="#">
-                                                                        <span class="swatch-img">
-                                                                            <img src="images/loader.svg" data-src="images/custom/texture-img-02.jpg" alt="">
-                                                                        </span>
-                                                                        <span class="swatch-label color-black"></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="options-color" href="#">
-                                                                        <span class="swatch-img">
-                                                                            <img src="images/loader.svg" data-src="images/custom/texture-img-03.jpg" alt="">
-                                                                        </span>
-                                                                        <span class="swatch-label color-black"></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="options-color" href="#">
-                                                                        <span class="swatch-img">
-                                                                            <img src="images/loader.svg" data-src="images/custom/texture-img-04.jpg" alt="">
-                                                                        </span>
-                                                                        <span class="swatch-label color-black"></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="options-color" href="#">
-                                                                        <span class="swatch-img">
-                                                                            <img src="images/loader.svg" data-src="images/custom/texture-img-05.jpg" alt="">
-                                                                        </span>
-                                                                        <span class="swatch-label color-black"></span>
-                                                                    </a>
-                                                                </li>
+                                                <div class="col-12 col-md-7 col-lg-6">
+                                                    <div class="tt-product-single-info">
+                                                        <div class="tt-add-info">
+                                                            <ul>
+                                                                <li><span>SKU:</span> 001</li>
+                                                                <li><span>Availability:</span> 40 in Stock</li>
                                                             </ul>
                                                         </div>
-                                                    </div>
-                                                    <div class="tt-wrapper">
-                                                        <div class="tt-row-custom-01">
-                                                            <div class="col-item">
-                                                                <div class="tt-input-counter style-01">
-                                                                    <span class="minus-btn"></span>
-                                                                    <input type="text" value="1" size="5">
-                                                                    <span class="plus-btn"></span>
-                                                                </div>
+                                                        <h2 class="tt-title">Cotton Blend Fleece Hoodie</h2>
+                                                        <div class="tt-price">
+                                                            <span class="new-price">$29</span>
+                                                            <span class="old-price"></span>
+                                                        </div>
+                                                        <div class="tt-review">
+                                                            <div class="tt-rating">
+                                                                <i class="icon-star"></i>
+                                                                <i class="icon-star"></i>
+                                                                <i class="icon-star"></i>
+                                                                <i class="icon-star-half"></i>
+                                                                <i class="icon-star-empty"></i>
                                                             </div>
-                                                            <div class="col-item">
-                                                                <a href="#" class="btn btn-lg"><i class="icon-f-39"></i>ADD TO CART</a>
+                                                            <a href="#">(1 Customer Review)</a>
+                                                        </div>
+                                                        <div class="tt-wrapper">
+                                                            Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+                                                        </div>
+                                                        <div class="tt-swatches-container">
+                                                            <div class="tt-wrapper">
+                                                                <div class="tt-title-options">SIZE</div>
+                                                                <form class="form-default">
+                                                                    <div class="form-group">
+                                                                        <select class="form-control">
+                                                                            <option>21</option>
+                                                                            <option>25</option>
+                                                                            <option>36</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="tt-wrapper">
+                                                                <div class="tt-title-options">COLOR</div>
+                                                                <form class="form-default">
+                                                                    <div class="form-group">
+                                                                        <select class="form-control">
+                                                                            <option>Red</option>
+                                                                            <option>Green</option>
+                                                                            <option>Brown</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="tt-wrapper">
+                                                                <div class="tt-title-options">TEXTURE:</div>
+                                                                <ul class="tt-options-swatch options-large">
+                                                                    <li>
+                                                                        <a class="options-color" href="#">
+                                                                            <span class="swatch-img">
+                                                                                <img src="images/loader.svg" data-src="images/custom/texture-img-01.jpg" alt="">
+                                                                            </span>
+                                                                            <span class="swatch-label color-black"></span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="active">
+                                                                        <a class="options-color" href="#">
+                                                                            <span class="swatch-img">
+                                                                                <img src="images/loader.svg" data-src="images/custom/texture-img-02.jpg" alt="">
+                                                                            </span>
+                                                                            <span class="swatch-label color-black"></span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="options-color" href="#">
+                                                                            <span class="swatch-img">
+                                                                                <img src="images/loader.svg" data-src="images/custom/texture-img-03.jpg" alt="">
+                                                                            </span>
+                                                                            <span class="swatch-label color-black"></span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="options-color" href="#">
+                                                                            <span class="swatch-img">
+                                                                                <img src="images/loader.svg" data-src="images/custom/texture-img-04.jpg" alt="">
+                                                                            </span>
+                                                                            <span class="swatch-label color-black"></span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="options-color" href="#">
+                                                                            <span class="swatch-img">
+                                                                                <img src="images/loader.svg" data-src="images/custom/texture-img-05.jpg" alt="">
+                                                                            </span>
+                                                                            <span class="swatch-label color-black"></span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tt-wrapper">
+                                                            <div class="tt-row-custom-01">
+                                                                <div class="col-item">
+                                                                    <div class="tt-input-counter style-01">
+                                                                        <span class="minus-btn"></span>
+                                                                        <input type="text" value="1" size="5">
+                                                                        <span class="plus-btn"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-item">
+                                                                    <a href="#" class="btn btn-lg"><i class="icon-f-39"></i>ADD TO CART</a>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -248,68 +252,73 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div> -->
-            }
+                        </div> -->
+                }
+            </div>
         </div>
     </div>
-</div>
-<div class="container-indent">
-    <div class="container-fluid-custom">
-        <div class="row tt-layout-promo-box">
-            @foreach (DataRow dr_hizmet_item in dt_son_hizmetler.Rows)
-            {
-                <div class="col-sm-6 col-md-4">
-                    <a href="@Url.Action("Service", "Home", new { id = dr_hizmet_item["hizmet_id"] })" class="tt-promo-box">
-                        <img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/hizmet/kucuk/@dr_hizmet_item["gorsel"]" alt="">
-                        <div class="tt-description">
-                            <div class="tt-description-wrapper">
-                                <div class="tt-background"></div>
-                                <div class="tt-title-large">@dr_hizmet_item["baslik"]</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            }
-        </div>
-    </div>
-</div>
-
-<div class="container-indent">
-    <div class="container">
-        <div class="tt-block-title">
-            <h2 class="tt-title">@sotec_web.Resources.Dil.SON_BLOG_YAZILARI</h2>
-        </div>
-        <div class="tt-blog-thumb-list">
-            <div class="row clearfix">
-                @foreach (DataRow dr_blog_item in dt_son_bloglar.Rows)
+}
+@if (ConfigurationManager.AppSettings["hizmetler"] == "true")
+{
+    <div class="container-indent">
+        <div class="container-fluid-custom">
+            <div class="row tt-layout-promo-box">
+                @foreach (DataRow dr_hizmet_item in dt_son_hizmetler.Rows)
                 {
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-4">
-                        <div class="tt-blog-thumb">
-                            <div class="tt-img"><a href="@Url.Action("Blog", "Home", new { id = dr_blog_item["blog_id"] })"><img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/blog/kucuk/@dr_blog_item["gorsel"]" alt=""></a></div>
-                            <div class="tt-title-description">
-                                <div class="tt-background"></div>
-                                <div class="tt-tag">
-                                    <!--<a href="blog-single-post.html">FASHION</a>-->
-                                </div>
-                                <div class="tt-title">
-                                    <a href="@Url.Action("Blog", "Home", new { id = dr_blog_item["blog_id"] })">@dr_blog_item["baslik"]</a>
-                                </div>
-                                <p>
-                                    @MvcHtmlString.Create(SQL.StripHTML(dr_blog_item["yazi"].ToString().Substring(0, dr_blog_item["yazi"].ToString().Length < 100 ? dr_blog_item["yazi"].ToString().Length : 100)))...
-                                </p>
-                                <div class="tt-meta">
-                                    <div class="tt-autor">
-                                        by @dr_blog_item["ad_soyad"] on @(Convert.ToDateTime(dr_blog_item["kayit_tarihi"]).ToShortDateString()) 
-                                    </div>
-                                    <div class="tt-comments">
-                                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <a href="@Url.Action("Service", "Home", new { id = dr_hizmet_item["hizmet_id"] })" class="tt-promo-box">
+                            <img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/hizmet/kucuk/@dr_hizmet_item["gorsel"]" alt="">
+                            <div class="tt-description">
+                                <div class="tt-description-wrapper">
+                                    <div class="tt-background"></div>
+                                    <div class="tt-title-large">@dr_hizmet_item["baslik"]</div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 }
             </div>
         </div>
     </div>
-</div>
+}
+@if (ConfigurationManager.AppSettings["blog"] == "true")
+{
+    <div class="container-indent">
+        <div class="container">
+            <div class="tt-block-title">
+                <h2 class="tt-title">@sotec_web.Resources.Dil.SON_BLOG_YAZILARI</h2>
+            </div>
+            <div class="tt-blog-thumb-list">
+                <div class="row clearfix">
+                    @foreach (DataRow dr_blog_item in dt_son_bloglar.Rows)
+                    {
+                        <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                            <div class="tt-blog-thumb">
+                                <div class="tt-img"><a href="@Url.Action("Blog", "Home", new { id = dr_blog_item["blog_id"] })"><img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/blog/kucuk/@dr_blog_item["gorsel"]" alt=""></a></div>
+                                <div class="tt-title-description">
+                                    <div class="tt-background"></div>
+                                    <div class="tt-tag">
+                                        <!--<a href="blog-single-post.html">FASHION</a>-->
+                                    </div>
+                                    <div class="tt-title">
+                                        <a href="@Url.Action("Blog", "Home", new { id = dr_blog_item["blog_id"] })">@dr_blog_item["baslik"]</a>
+                                    </div>
+                                    <p>
+                                        @MvcHtmlString.Create(SQL.StripHTML(dr_blog_item["yazi"].ToString().Substring(0, dr_blog_item["yazi"].ToString().Length < 100 ? dr_blog_item["yazi"].ToString().Length : 100)))...
+                                    </p>
+                                    <div class="tt-meta">
+                                        <div class="tt-autor">
+                                            by @dr_blog_item["ad_soyad"] on @(Convert.ToDateTime(dr_blog_item["kayit_tarihi"]).ToShortDateString())
+                                        </div>
+                                        <div class="tt-comments">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
