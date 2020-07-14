@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = sotec_web.Resources.Dil.GİRİŞ_YAP;
+}
+<div class="container-indent">
+    <div class="container">
+        <h1 class="tt-title-subpages noborder">@sotec_web.Resources.Dil.GİRİŞ_YAP</h1>
+        <div class="tt-login-form">
+            <div class="row">
+                <div class="col-xs-12 col-md-6">
+                    <div class="tt-item">
+                        <h2 class="tt-title">@sotec_web.Resources.Dil.YENİ_KULLANICI</h2>
+                        <div class="form-group">
+                            <a href="@Url.Action("Register", "Home")" class="btn btn-top btn-border">@sotec_web.Resources.Dil.KAYIT_OL</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="tt-item">
+                        <h2 class="tt-title">@sotec_web.Resources.Dil.GİRİŞ_YAP</h2>
+                        <div class="form-default form-top">
+                            @using (Html.BeginForm("kullaniciGiris", "Home", FormMethod.Post))
+                            {
+                                <label class="text-danger">@Request.Params["hata"]</label>
+                                <div class="form-group">
+                                    <label for="loginInputName">@sotec_web.Resources.Dil.E_MAİL *</label>
+                                    <input type="text" name="email" class="form-control" id="loginInputName" placeholder="@sotec_web.Resources.Dil.E_MAİL">
+                                </div>
+                                <div class="form-group">
+                                    <label for="loginInputEmail">@sotec_web.Resources.Dil.ŞİFRE *</label>
+                                    <input type="password" name="sifre" class="form-control" id="loginInputEmail" placeholder="@sotec_web.Resources.Dil.ŞİFRE">
+                                </div>
+                                <div class="row">
+                                    <div class="col-auto mr-auto">
+                                        <div class="form-group">
+                                            <button class="btn btn-border" type="submit">@sotec_web.Resources.Dil.GİRİŞ_YAP</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto align-self-end">
+                                        <div class="form-group">
+                                            <ul class="additional-links">
+                                                <li><a href="@Url.Action("LostPass", "Home")">@sotec_web.Resources.Dil.Şifremi_Ununttum</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

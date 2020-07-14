@@ -1,0 +1,199 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@using System.Configuration
+@{
+    ViewBag.Title = sotec_web.Resources.Dil.SEPET;
+
+    string currentAction = Convert.ToString(HttpContext.Current.Request.RequestContext.RouteData.Values["Action"]);
+
+
+    int kullanici_id = Convert.ToInt32(Session["kullanici_id"]);
+    DataRow dr_kullanici = null;
+    if (kullanici_id != 0) { dr_kullanici = SQL.get("SELECT * FROM kullanicilar WHERE kullanici_id = " + kullanici_id).Rows[0]; }
+
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    List<sotec_web.Models.SepetKalem> sepetKalem = new List<sotec_web.Models.SepetKalem>();
+    if (Session["sepetKalem"] != null)
+    {
+        sepetKalem = (List<sotec_web.Models.SepetKalem>)Session["sepetKalem"];
+    }
+    DataRow dr_urun_itm;
+    DataRow dr_urun_dgr;
+}
+<div class="container-indent">
+    <div class="container">
+        <h1 class="tt-title-subpages noborder">@sotec_web.Resources.Dil.SEPET</h1>
+        <div class="row">
+            <div class="col-sm-12 col-xl-8">
+                <div class="tt-shopcart-table">
+                    <table>
+                        <tbody>
+                            @{ decimal toplam = 0; }
+                            @foreach (sotec_web.Models.SepetKalem sk in sepetKalem)
+                            {
+                                { dr_urun_itm = SQL.get("SELECT u.urun_id, u.stok_kodu, u.fiyat, urun_adi = ISNULL(du.urun_adi, u.urun_adi), aciklama = ISNULL(du.aciklama, u.aciklama), resim = ISNULL((SELECT TOP 1 resim FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id AND sira = (SELECT MIN(sira) FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id)), '') FROM urunler u LEFT OUTER JOIN dil_urunler du ON du.urun_id = u.urun_id AND du.silindi = 0 AND du.dil_id = " + dr_dil["dil_id"] + " WHERE u.urun_id = " + sk.urun_id).Rows[0]; }
+                                { toplam += (Convert.ToDecimal(dr_urun_itm["fiyat"]) * sk.miktar); }
+                                <tr>
+                                    <td>
+                                        <a href="@Url.Action("sepetSil2", "Home", new { id = sk.sepet_id })" class="tt-btn-close"></a>
+                                    </td>
+                                    <td>
+                                        <div class="tt-product-img">
+                                            <img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/urun/kucuk/@dr_urun_itm["resim"]" alt="">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h2 class="tt-title">
+                                            <a href="@Url.Action("Product", "Home", new { id = sk.urun_id })">@dr_urun_itm["urun_adi"]</a>
+                                        </h2>
+                                        <ul class="tt-add-info">
+                                            @foreach (int deger_id in sk.deger_id)
+                                            {
+                                                { dr_urun_dgr = SQL.get("SELECT deger = ISNULL(duvd.deger, uvd.deger) FROM urun_varyasyon_degerleri uvd LEFT OUTER JOIN dil_urun_varyasyon_degerleri duvd ON duvd.urun_varyasyon_deger_id = uvd.urun_varyasyon_deger_id AND duvd.silindi = 0 AND duvd.dil_id = " + dr_dil["dil_id"] + " WHERE uvd.urun_varyasyon_deger_id = " + deger_id).Rows[0]; }
+                                                <li>@dr_urun_dgr["deger"]</li>
+                                            }
+                                        </ul>
+                                        <ul class="tt-list-parameters">
+                                            <li>
+                                                <div class="tt-price">
+                                                    @dr_urun_itm["fiyat"] ₺
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="detach-quantity-mobile"></div>
+                                            </li>
+                                            <li>
+                                                <div class="tt-price subtotal">
+                                                    @(Convert.ToDecimal(dr_urun_itm["fiyat"]) * sk.miktar) ₺
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <div class="tt-price">
+                                            @dr_urun_itm["fiyat"] ₺
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="detach-quantity-desctope">
+                                            <div class="tt-input-counter style-01">
+                                                <span class="minus-btn"></span>
+                                                <input type="text" value="@sk.miktar" size="5">
+                                                <span class="plus-btn"></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="tt-price subtotal">
+                                            @(Convert.ToDecimal(dr_urun_itm["fiyat"]) * sk.miktar) ₺
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="tt-shopcart-btn">
+                        <div class="col-left">
+                            <a class="btn-link" href="@Url.Action("Products", "Home")"><i class="icon-e-19"></i>@sotec_web.Resources.Dil.ALIŞVERİŞE_DEVAM_ET</a>
+                        </div>
+                        <div class="col-right">
+                            <a class="btn-link" href="@Url.Action("sepetTemizle", "Home")"><i class="icon-h-02"></i>@sotec_web.Resources.Dil.TEMİZLE</a>
+                            <a class="btn-link" href="@Url.Action("Cart", "Home")"><i class="icon-h-48"></i>@sotec_web.Resources.Dil.YENİLE</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-xl-4">
+                <div class="tt-shopcart-wrapper">
+                    <div class="tt-shopcart-box">
+                        <a href="#" class="btn btn-border">GİRİŞ YAP</a>
+                        <p class="text-center">
+                            yada<br />üye olmadan devam et
+                        </p>
+                        <hr />
+                        <h4 class="tt-title text-center">
+                            ADRES BİLGİLERİ
+                        </h4>
+                        <p>Enter your destination to get a shipping estimate.</p>
+                        <div class="form-default">
+                            <div class="form-group">
+                                <label for="address_country">COUNTRY <sup>*</sup></label>
+                                <select id="address_country" class="form-control">
+                                    <option>Austria</option>
+                                    <option>Belgium</option>
+                                    <option>Cyprus</option>
+                                    <option>Croatia</option>
+                                    <option>Czech Republic</option>
+                                    <option>Denmark</option>
+                                    <option>Finland</option>
+                                    <option>France</option>
+                                    <option>Germany</option>
+                                    <option>Greece</option>
+                                    <option>Hungary</option>
+                                    <option>Ireland</option>
+                                    <option>France</option>
+                                    <option>Italy</option>
+                                    <option>Luxembourg</option>
+                                    <option>Netherlands</option>
+                                    <option>Poland</option>
+                                    <option>Portugal</option>
+                                    <option>Slovakia</option>
+                                    <option>Slovenia</option>
+                                    <option>Spain</option>
+                                    <option>United Kingdom</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="address_province">STATE/PROVINCE <sup>*</sup></label>
+                                <select id="address_province" class="form-control">
+                                    <option>State/Province</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="address_zip">ZIP/POSTAL CODE <sup>*</sup></label>
+                                <input type="text" name="name" class="form-control" id="address_zip" placeholder="Zip/Postal Code">
+                            </div>
+                            <p>
+                                There is one shipping rate available for Alabama, Tanzania, United Republic Of.
+                            </p>
+                            <ul class="tt-list-dot list-dot-large">
+                                <li><a href="#">International Shipping at $20.00</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tt-shopcart-box">
+                        <h4 class="tt-title">
+                            NOTE
+                        </h4>
+                        <p>Add special instructions for your order...</p>
+                        <div class="form-default">
+                            <textarea class="form-control" rows="7"></textarea>
+                        </div>
+                    </div>
+                    <div class="tt-shopcart-box tt-boredr-large">
+                        <table class="tt-shopcart-table01">
+                            <tbody>
+                                <tr>
+                                    <th>SUBTOTAL</th>
+                                    <td>$324</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>GRAND TOTAL</th>
+                                    <td>$324</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <a href="#" class="btn btn-lg"><span class="icon icon-check_circle"></span>@sotec_web.Resources.Dil.ÖDEMEYE_GEÇ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -6,6 +6,10 @@
 
     string lang = Request.Cookies.Get("MultiLanguageExample").Value;
 
+    int kullanici_id = Convert.ToInt32(Session["kullanici_id"]);
+    DataRow dr_kullanici = null;
+    if (kullanici_id != 0) { dr_kullanici = SQL.get("SELECT * FROM kullanicilar WHERE kullanici_id = " + kullanici_id).Rows[0]; }
+
     DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
     if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
     DataRow dr_dil = dt_dil.Rows[0];
@@ -14,6 +18,12 @@
 
     DataTable dt_urun_kategorileri = SQL.get("SELECT k.kategori_id, kategori = ISNULL(dk.kategori, k.kategori) FROM kategoriler k LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = k.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " WHERE k.silindi = 0 AND k.ust_kategori_id = 0 AND k.kategori_tipi_parametre_id = 16");
     DataTable dt_diller = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND dil_durumu_parametre_id = 27");
+
+    List<sotec_web.Models.SepetKalem> sepetKalem = new List<sotec_web.Models.SepetKalem>();
+    if (Session["sepetKalem"] != null)
+    {
+        sepetKalem = (List<sotec_web.Models.SepetKalem>)Session["sepetKalem"];
+    }
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +37,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="~/wokiee_src/css/theme.css">
     <link rel="stylesheet" href="~/admin_src/vendor/sweetalert/sweetalert.css" />
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-9" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     @RenderSection("style", false)
 </head>
 <body id="same_product_height" class="loaded">
@@ -191,6 +201,59 @@
                         <!-- /tt-menu -->
                     </div>
                     <div class="tt-col-obj tt-obj-options obj-move-right">
+                        @if (ConfigurationManager.AppSettings["eticaret"] == "true")
+                        {
+                            <!-- tt-cart -->
+                            <div class="tt-desctop-parent-cart tt-parent-box">
+                                <div class="tt-cart tt-dropdown-obj" data-tooltip="@sotec_web.Resources.Dil.SEPET" data-tposition="bottom">
+                                    <button class="tt-dropdown-toggle">
+                                        <i class="icon-f-39"></i>
+                                        <span class="tt-badge-cart sepet_sayisi">@sepetKalem.Count</span>
+                                    </button>
+                                    <div class="tt-dropdown-menu">
+                                        <div class="tt-mobile-add">
+                                            <h6 class="tt-title">@sotec_web.Resources.Dil.SEPET</h6>
+                                            <button class="tt-close">@sotec_web.Resources.Dil.KAPAT</button>
+                                        </div>
+                                        <div class="tt-dropdown-inner">
+                                            <div class="tt-cart-layout sepet_div" id="sepet_div">
+                                                @Html.Partial("_sepetDropDown")
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /tt-cart -->
+                            <!-- tt-account -->
+                            <div class="tt-desctop-parent-account tt-parent-box">
+                                <div class="tt-account tt-dropdown-obj">
+                                    <button class="tt-dropdown-toggle" data-tooltip="@sotec_web.Resources.Dil.HESAP" data-tposition="bottom"><i class="icon-f-94"></i></button>
+                                    <div class="tt-dropdown-menu">
+                                        <div class="tt-mobile-add">
+                                            <button class="tt-close">@sotec_web.Resources.Dil.KAPAT</button>
+                                        </div>
+                                        <div class="tt-dropdown-inner">
+                                            <ul>
+                                                @if (dr_kullanici == null)
+                                                {
+                                                    <li><a href="@Url.Action("SignIn", "Home")"><i class="icon-f-76"></i>@sotec_web.Resources.Dil.GİRİŞ_YAP</a></li>
+                                                    <li><a href="@Url.Action("Register", "Home")"><i class="icon-f-94"></i>@sotec_web.Resources.Dil.KAYIT_OL</a></li>
+                                                }
+                                                else
+                                                {
+                                                    <li><a href="@Url.Action("Acount", "Home")"><i class="icon-f-94"></i>@sotec_web.Resources.Dil.HESAP (@dr_kullanici["ad"] @dr_kullanici["soyad"])</a></li>
+                                                    @*<li><a href="@Url.Action("Wishlist", "Home")"><i class="icon-n-072"></i>@sotec_web.Resources.Dil.İSTEK_LİSTESİ</a></li>*@
+                                                    @*<li><a href="compare.html"><i class="icon-n-08"></i>Compare</a></li>*@
+                                                    @*<li><a href="page404.html"><i class="icon-f-68"></i>Check Out</a></li>*@
+                                                    <li><a href="@Url.Action("SignOut", "Home")"><i class="icon-f-77"></i>@sotec_web.Resources.Dil.ÇIKIŞ_YAP</a></li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <!-- /tt-account -->
                         <!-- tt-langue and tt-currency -->
                         <div class="tt-desctop-parent-multi tt-parent-box">
                             @if (ConfigurationManager.AppSettings["multilanguage"] == "true")
@@ -198,7 +261,7 @@
                                 <div class="tt-multi-obj">
                                     @foreach (DataRow dil_item in dt_diller.Rows)
                                     {
-                                        <a href="/Home/ChangeLanguage?language=@dil_item["kisa_kod"]&id=@dil_item["dil_id"]"><img style="margin-right: 5px; max-width: 25px;" src="~/admin_src/images/dil/kucuk/@dil_item["icon"]" /> </a>
+                                        <a href="/Home/ChangeLanguage?language=@dil_item["kisa_kod"]&id=@dil_item["dil_id"]"><img style="margin: 10px; max-width: 25px;" src="~/admin_src/images/dil/kucuk/@dil_item["icon"]" /> </a>
                                     }
                                 </div>
                             }
@@ -439,6 +502,32 @@
                     confirmButtonText: 'Tamam'
                 }
             );
+        }
+
+        var onSepeteEkleSuccess = function (result) {
+            $(".sepet_div").each(function () {
+                $(this).html(result);
+            });
+            $(".sepet_sayisi").each(function () {
+                $(this).html($('.sepet_item').length);
+            });
+            swal(
+                {
+                    icon: 'success',
+                    title: '@sotec_web.Resources.Dil.Ürün_Sepete_Eklendi___',
+                    text: "",
+                    confirmButtonText: '@sotec_web.Resources.Dil.ALIŞVERİŞE_DEVAM_ET'
+                }
+            );
+        }
+
+        var onSepetSilSuccess = function (result) {
+            $(".sepet_div").each(function () {
+                $(this).html(result);
+            });
+            $(".sepet_sayisi").each(function () {
+                $(this).html($('.sepet_item').length);
+            });
         }
     </script>
     @RenderSection("script", false)

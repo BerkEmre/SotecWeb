@@ -1,0 +1,91 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    ViewBag.Title = sotec_web.Resources.Dil.HESAP;
+
+    int kullanici_id = Convert.ToInt32(Session["kullanici_id"]);
+    DataRow dr_kullanici = null;
+    if (kullanici_id != 0) { dr_kullanici = SQL.get("SELECT * FROM kullanicilar WHERE kullanici_id = " + kullanici_id).Rows[0]; }
+}
+<div class="container-indent">
+    <div class="container container-fluid-custom-mobile-padding">
+        <h1 class="tt-title-subpages noborder">@sotec_web.Resources.Dil.HESAP</h1>
+        <div class="tt-shopping-layout">
+            <h2 class="tt-title-border">@sotec_web.Resources.Dil.HESAP</h2>
+            <div class="tt-wrapper">
+                <h3 class="tt-title">@sotec_web.Resources.Dil.SİPARİŞLER</h3>
+                <div class="tt-table-responsive">
+                    <table class="tt-table-shop-01">
+                        <thead>
+                            <tr>
+                                <th>@sotec_web.Resources.Dil.SİPARİŞ</th>
+                                <th>@sotec_web.Resources.Dil.TARİH</th>
+                                <th>@sotec_web.Resources.Dil.DURUM</th>
+                                <th>@sotec_web.Resources.Dil.KARGO</th>
+                                <th>@sotec_web.Resources.Dil.TOPLAM</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="shopping_order.html">#001</a></td>
+                                <td>November 20. 2016</td>
+                                <td>Processing</td>
+                                <td>Processing</td>
+                                <td>$40 fot 1 item</td>
+                            </tr>
+                            <tr>
+                                <td><a href="shopping_order.html">#001</a></td>
+                                <td>November 20. 2016</td>
+                                <td>Processing</td>
+                                <td>Processing</td>
+                                <td>$40 fot 1 item</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tt-wrapper">
+                <h3 class="tt-title">@sotec_web.Resources.Dil.HESAP_DETAYLARI</h3>
+                <a href="@Url.Action("Adress", "Home")" class="btn btn-border">@sotec_web.Resources.Dil.ADRESLERİ_DÜZENLE</a>
+                <div class="tt-table-responsive">
+                    <form action="/Home/kullaniciDuzenle" enctype="multipart/form-data" method="post">
+                        <input type="hidden" name="kullanici_id" value="@dr_kullanici["kullanici_id"]" />
+                        <label class="text-danger">@Request.Params["hata"]</label>
+                        <table class="tt-table-shop-02">
+                            <tbody>
+                                <tr>
+                                    <td>@sotec_web.Resources.Dil.AD:</td>
+                                    <td><input type="text" name="ad" class="form-control" id="ad" placeholder="@sotec_web.Resources.Dil.AD" value="@dr_kullanici["ad"]" autocomplete="off" required></td>
+                                </tr>
+                                <tr>
+                                    <td>@sotec_web.Resources.Dil.SOYAD:</td>
+                                    <td><input type="text" name="soyad" class="form-control" id="soyad" placeholder="@sotec_web.Resources.Dil.SOYAD" value="@dr_kullanici["soyad"]" autocomplete="off" required></td>
+                                </tr>
+                                <tr>
+                                    <td>@sotec_web.Resources.Dil.E_MAİL:</td>
+                                    <td><input type="email" name="email" class="form-control" id="email" placeholder="@sotec_web.Resources.Dil.E_MAİL" value="@dr_kullanici["email"]" autocomplete="off" disabled required></td>
+                                </tr>
+                                <tr>
+                                    <td>@sotec_web.Resources.Dil.TELEFON:</td>
+                                    <td><input type="tel" name="telefon" class="form-control" id="telefon" placeholder="@sotec_web.Resources.Dil.TELEFON" value="@dr_kullanici["telefon"]" autocomplete="off" required></td>
+                                </tr>
+                                <tr>
+                                    <td>@sotec_web.Resources.Dil.ESKİ_ŞİFRE:</td>
+                                    <td><input type="password" name="eski_sifre" class="form-control" id="sifre" placeholder="@sotec_web.Resources.Dil.ESKİ_ŞİFRE" value="" autocomplete="off" required></td>
+                                </tr>
+                                <tr>
+                                    <td>@sotec_web.Resources.Dil.YENİ_ŞİFRE:</td>
+                                    <td><input type="password" name="yeni_sifre" class="form-control" id="sifre" placeholder="@sotec_web.Resources.Dil.YENİ_ŞİFRE" value="" autocomplete="off" required></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><button class="btn btn-border" type="submit">@sotec_web.Resources.Dil.GÜNCELLE</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

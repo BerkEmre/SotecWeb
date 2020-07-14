@@ -11,7 +11,7 @@
 
     DataTable dt_slider = SQL.get("SELECT * FROM slider WHERE silindi = 0 AND dil_id = " + dr_dil["dil_id"]);
     DataTable dt_karo = SQL.get("SELECT * FROM karolar WHERE silindi = 0 AND dil_id = " + dr_dil["dil_id"]);
-    DataTable dt_one_cikan_urunler = SQL.get("SELECT u.stok_kodu, u.urun_id, u.fiyat, urun_adi = ISNULL(du.urun_adi, u.urun_adi), aciklama = ISNULL(du.aciklama, u.aciklama), resim = ISNULL((SELECT resim FROM urun_resimleri WHERE silindi = 0 AND urun_id = 9 AND sira = (SELECT MIN(sira) FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id)), '')  FROM urunler u LEFT OUTER JOIN dil_urunler du ON du.urun_id = u.urun_id AND du.silindi = 0 AND du.dil_id = " + dr_dil["dil_id"] + " WHERE u.silindi = 0 AND u.one_cikan = 1");
+    DataTable dt_one_cikan_urunler = SQL.get("SELECT u.stok_kodu, u.urun_id, u.fiyat, urun_adi = ISNULL(du.urun_adi, u.urun_adi), aciklama = ISNULL(du.aciklama, u.aciklama), resim = ISNULL((SELECT TOP 1 resim FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id AND sira = (SELECT MIN(sira) FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id)), '')  FROM urunler u LEFT OUTER JOIN dil_urunler du ON du.urun_id = u.urun_id AND du.silindi = 0 AND du.dil_id = " + dr_dil["dil_id"] + " WHERE u.silindi = 0 AND u.one_cikan = 1");
     DataTable dt_son_hizmetler = SQL.get("SELECT h.hizmet_id, h.gorsel, baslik = ISNULL(dh.baslik, h.baslik), yazi = ISNULL(dh.yazi, h.yazi) FROM hizmetler h LEFT OUTER JOIN dil_hizmetler dh ON dh.hizmet_id = h.hizmet_id AND dh.silindi = 0 AND dh.dil_id = " + dr_dil["dil_id"] + " WHERE h.silindi = 0");
     DataTable dt_son_bloglar = SQL.get("SELECT TOP 3 b.blog_id, b.gorsel, baslik = ISNULL(db.baslik, b.baslik), yazi = ISNULL(db.yazi, b.yazi), ad_soyad = k.ad + ' ' + k.soyad, b.kayit_tarihi  FROM bloglar b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id LEFT OUTER JOIN dil_bloglar db ON db.blog_id = b.blog_id AND db.silindi = 0 AND db.dil_id = " + dr_dil["dil_id"] + " WHERE b.silindi = 0 ORDER by b.blog_id DESC");
 }
@@ -85,7 +85,7 @@
                                 <!--<a href="#" class="tt-btn-quickview" data-toggle="modal" data-target="#ModalquickView" data-tooltip="Quick View" data-tposition="left"></a>-->
                                 <a href="@Url.Action("Product", "Home", new { id = dr_urun_item["urun_id"] })">
                                     <span class="tt-img"><img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/urun/kucuk/@dr_urun_item["resim"]" alt=""></span>
-                                    <span class="tt-img-roll-over"><img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/sliders/kucuk/@dr_urun_item["resim"]" alt=""></span>
+                                    <span class="tt-img-roll-over"><img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/urun/kucuk/@dr_urun_item["resim"]" alt=""></span>
                                 </a>
                             </div>
                             <div class="tt-description">
@@ -100,7 +100,7 @@
                                 </div>
                                 <div class="tt-product-inside-hover">
                                     <div class="tt-row-btn">
-                                        <!--<a href="#" class="tt-btn-addtocart thumbprod-button-bg" data-toggle="modal" data-target="#modalAddToCartProduct">ADD TO CART</a>-->
+                                        @if (ConfigurationManager.AppSettings["eticaret"] == "true") { <a href="@Url.Action("Product", "Home", new { id = dr_urun_item["urun_id"] })" class="tt-btn-addtocart thumbprod-button-bg">@sotec_web.Resources.Dil.SATIN_AL</a> }
                                     </div>
                                     <div class="tt-row-btn">
                                         <!--<a href="#" class="tt-btn-quickview" data-toggle="modal" data-target="#ModalquickView"></a>-->

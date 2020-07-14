@@ -1,0 +1,78 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@using System.Configuration
+@{
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    DataRow dr_site_bilgileri = SQL.get("SELECT * FROM site_bilgileri WHERE dil_id = " + dr_dil["dil_id"]).Rows[0];
+
+    DataTable dt_urun_kategorileri = SQL.get("SELECT k.kategori_id, kategori = ISNULL(dk.kategori, k.kategori) FROM kategoriler k LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = k.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " WHERE k.silindi = 0 AND k.ust_kategori_id = 0 AND k.kategori_tipi_parametre_id = 16");
+    DataTable dt_diller = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND dil_durumu_parametre_id = 27");
+
+    List<sotec_web.Models.SepetKalem> sepetKalem = new List<sotec_web.Models.SepetKalem>();
+    if (Session["sepetKalem"] != null)
+    {
+        sepetKalem = (List<sotec_web.Models.SepetKalem>)Session["sepetKalem"];
+    }
+    DataRow dr_urun_itm;
+    DataRow dr_urun_dgr;
+}
+
+@if (sepetKalem.Count <= 0)
+{
+    <a href="#" class="tt-cart-empty">
+        <i class="icon-f-39"></i>
+        <p>@sotec_web.Resources.Dil.Sepetinizde_Hiç_Ürün_Yok</p>
+    </a>
+}
+else
+{
+    <div class="tt-cart-content">
+        <div class="tt-cart-list">
+            @{ decimal toplam = 0; }
+            @foreach (sotec_web.Models.SepetKalem sk in sepetKalem)
+            {
+                { dr_urun_itm = SQL.get("SELECT u.urun_id, u.stok_kodu, u.fiyat, urun_adi = ISNULL(du.urun_adi, u.urun_adi), aciklama = ISNULL(du.aciklama, u.aciklama), resim = ISNULL((SELECT TOP 1 resim FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id AND sira = (SELECT MIN(sira) FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id)), '') FROM urunler u LEFT OUTER JOIN dil_urunler du ON du.urun_id = u.urun_id AND du.silindi = 0 AND du.dil_id = " + dr_dil["dil_id"] + " WHERE u.urun_id = " + sk.urun_id).Rows[0]; }
+                { toplam += (Convert.ToDecimal(dr_urun_itm["fiyat"]) * sk.miktar); }
+                <div class="tt-item sepet_item">
+                    <a href="@Url.Action("Product", "Home", new { id = sk.urun_id })">
+                        <div class="tt-item-img">
+                            <img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/urun/kucuk/@dr_urun_itm["resim"]" alt="">
+                        </div>
+                        <div class="tt-item-descriptions">
+                            <h2 class="tt-title">@dr_urun_itm["urun_adi"]</h2>
+                            <ul class="tt-add-info">
+                                @foreach (int deger_id in sk.deger_id)
+                                {
+                                    { dr_urun_dgr = SQL.get("SELECT deger = ISNULL(duvd.deger, uvd.deger) FROM urun_varyasyon_degerleri uvd LEFT OUTER JOIN dil_urun_varyasyon_degerleri duvd ON duvd.urun_varyasyon_deger_id = uvd.urun_varyasyon_deger_id AND duvd.silindi = 0 AND duvd.dil_id = " + dr_dil["dil_id"] + " WHERE uvd.urun_varyasyon_deger_id = " + deger_id).Rows[0]; }
+                                    <li>@dr_urun_dgr["deger"]</li>
+                                }
+                            </ul>
+                            <div class="tt-quantity">@sk.miktar X</div> <div class="tt-price">@dr_urun_itm["fiyat"] ₺</div>
+                        </div>
+                    </a>
+                    <div class="tt-item-close">
+                        @using (Ajax.BeginForm("sepetSil", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "onSepetSilSuccess" }, new { id = "formSepetSil" }))
+                        {
+                            <input type="hidden" name="sepet_id" value="@sk.sepet_id" />
+                            <button type="submit" class="tt-btn-close"></button>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="tt-cart-total-row">
+            <div class="tt-cart-total-title">@sotec_web.Resources.Dil.TOPLAM:</div>
+            <div class="tt-cart-total-price">@toplam ₺</div>
+        </div>
+        <div class="tt-cart-btn">
+            <div class="tt-item">
+                <a href="@Url.Action("Cart", "Home")" class="btn tt-hidden-mobile">@sotec_web.Resources.Dil.SEPETE_GİT</a>
+                <a href="shopping_cart_02.html" class="btn btn-border tt-hidden-desctope">@sotec_web.Resources.Dil.SEPETE_GİT</a>
+            </div>
+        </div>
+    </div>
+}

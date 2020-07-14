@@ -95,7 +95,6 @@
                         }
                         @if ((Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1 || Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 5) && (ConfigurationManager.AppSettings["haberler"] == "true"))
                         {
-                            <li class="@(currentAction == "Haber" ? "active" : "")"><a href="@Url.Action("Haber", "Admin")"><i class="icon-globe-alt"></i><span>Haberler</span></a></li>
                             <li class="@(currentAction == "Haber" ? "active" : "")">
                                 <a href="#urun" class="has-arrow"><i class="icon-globe-alt"></i><span>Haberler</span></a>
                                 <ul>

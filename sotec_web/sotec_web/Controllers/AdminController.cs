@@ -12,6 +12,10 @@ namespace sotec_web.Controllers
 {
     public class AdminController : Controller
     {
+        public ActionResult ComingSoon()
+        {
+            return RedirectToAction("Index", "Admin");
+        }
         public ActionResult Index()
         {
             if (Session["kullanici_id"] == null)
@@ -774,7 +778,7 @@ namespace sotec_web.Controllers
         [HttpPost]
         public ActionResult urunEkle(
             int[] urun_kategori_id, string barkod, int[] ozellik_id, int[] varyasyon_id, string[] varyasyon_fiyat, string[] varyasyon_stok, string[] resim_path, int[] resim_id, int[] resim_sira,
-            string urun_adi = "", string aciklama = "", string stok_kodu = "", string stok = "", string fiyat = "0", int one_cikan = 0)
+            string urun_adi = "", string aciklama = "", string stok_kodu = "", string stok = "0", string fiyat = "0", int one_cikan = 0)
         {
             string result = "";
             int yeni_urun_id;

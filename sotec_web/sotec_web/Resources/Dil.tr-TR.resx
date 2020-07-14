@@ -117,11 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AD" xml:space="preserve">
+    <value>AD</value>
+  </data>
   <data name="AD SOYAD" xml:space="preserve">
     <value>AD SOYAD</value>
   </data>
   <data name="ADRES" xml:space="preserve">
     <value>ADRES</value>
+  </data>
+  <data name="ADRES ADI" xml:space="preserve">
+    <value>ADRES ADI</value>
+  </data>
+  <data name="ADRESLERİ DÜZENLE" xml:space="preserve">
+    <value>ADRESLERİ DÜZENLE</value>
+  </data>
+  <data name="ALIŞVERİŞE DEVAM ET" xml:space="preserve">
+    <value>ALIŞVERİŞE DEVAM ET</value>
+  </data>
+  <data name="ALT TOPLAM" xml:space="preserve">
+    <value>ALT TOPLAM</value>
   </data>
   <data name="ANA SAYFA" xml:space="preserve">
     <value>ANA SAYFA</value>
@@ -129,11 +144,23 @@
   <data name="AÇIKLAMA" xml:space="preserve">
     <value>AÇIKLAMA</value>
   </data>
+  <data name="BEKLEMEDE" xml:space="preserve">
+    <value>BEKLEMEDE</value>
+  </data>
   <data name="BLOG" xml:space="preserve">
     <value>BLOG</value>
   </data>
+  <data name="CADDE" xml:space="preserve">
+    <value>CADDE</value>
+  </data>
   <data name="DEVAMINI OKU" xml:space="preserve">
     <value>DEVAMINI OKU</value>
+  </data>
+  <data name="DURUM" xml:space="preserve">
+    <value>DURUM</value>
+  </data>
+  <data name="DÜZENLE" xml:space="preserve">
+    <value>DÜZENLE</value>
   </data>
   <data name="DİLLER" xml:space="preserve">
     <value>DİLLER</value>
@@ -144,8 +171,23 @@
   <data name="Ekisk bilgi girdiniz lğtfen tüm alanları doldurun" xml:space="preserve">
     <value>Ekisk bilgi girdiniz lğtfen tüm alanları doldurun</value>
   </data>
+  <data name="EMİN MİSİNİZ?" xml:space="preserve">
+    <value>EMİN MİSİNİZ?</value>
+  </data>
+  <data name="ESKİ ŞİFRE" xml:space="preserve">
+    <value>ESKİ ŞİFRE</value>
+  </data>
+  <data name="EVET" xml:space="preserve">
+    <value>EVET</value>
+  </data>
   <data name="FAX" xml:space="preserve">
     <value>FAX</value>
+  </data>
+  <data name="FİYAT" xml:space="preserve">
+    <value>FİYAT</value>
+  </data>
+  <data name="GENEL TOPLAM" xml:space="preserve">
+    <value>GENEL TOPLAM</value>
   </data>
   <data name="GERİ" xml:space="preserve">
     <value>GERİ</value>
@@ -156,11 +198,29 @@
   <data name="GÖNDER" xml:space="preserve">
     <value>GÖNDER</value>
   </data>
+  <data name="GÜNCELLE" xml:space="preserve">
+    <value>GÜNCELLE</value>
+  </data>
+  <data name="GİRİŞ YAP" xml:space="preserve">
+    <value>GİRİŞ YAP</value>
+  </data>
   <data name="HABERLER" xml:space="preserve">
     <value>HABERLER</value>
   </data>
   <data name="HAKKIMIZDA" xml:space="preserve">
     <value>HAKKIMIZDA</value>
+  </data>
+  <data name="HAYIR" xml:space="preserve">
+    <value>HAYIR</value>
+  </data>
+  <data name="HAZIRLANIYOR" xml:space="preserve">
+    <value>HAZIRLANIYOR</value>
+  </data>
+  <data name="HESAP" xml:space="preserve">
+    <value>HESAP</value>
+  </data>
+  <data name="HESAP DETAYLARI" xml:space="preserve">
+    <value>HESAP DETAYLARI</value>
   </data>
   <data name="HİZMETLER" xml:space="preserve">
     <value>HİZMETLER</value>
@@ -168,11 +228,26 @@
   <data name="KAPAT" xml:space="preserve">
     <value>KAPAT</value>
   </data>
+  <data name="KARGO" xml:space="preserve">
+    <value>KARGO</value>
+  </data>
+  <data name="KARGODA" xml:space="preserve">
+    <value>KARGODA</value>
+  </data>
   <data name="KATEGORİLER" xml:space="preserve">
     <value>KATEGORİLER</value>
   </data>
+  <data name="KAYDET" xml:space="preserve">
+    <value>KAYDET</value>
+  </data>
+  <data name="KAYIT OL" xml:space="preserve">
+    <value>KAYIT OL</value>
+  </data>
   <data name="KONU" xml:space="preserve">
     <value>KONU</value>
+  </data>
+  <data name="MAHALLE" xml:space="preserve">
+    <value>MAHALLE</value>
   </data>
   <data name="MAĞAZA" xml:space="preserve">
     <value>MAĞAZA</value>
@@ -189,17 +264,65 @@
   <data name="MİKTAR" xml:space="preserve">
     <value>MİKTAR</value>
   </data>
+  <data name="POSTA KODU" xml:space="preserve">
+    <value>POSTA KODU</value>
+  </data>
+  <data name="SATIN AL" xml:space="preserve">
+    <value>SATIN AL</value>
+  </data>
+  <data name="SEMT" xml:space="preserve">
+    <value>SEMT</value>
+  </data>
+  <data name="SEPET" xml:space="preserve">
+    <value>SEPET</value>
+  </data>
+  <data name="SEPETE EKLE" xml:space="preserve">
+    <value>SEPETE EKLE</value>
+  </data>
+  <data name="SEPETE GİT" xml:space="preserve">
+    <value>SEPETE GİT</value>
+  </data>
+  <data name="Sepetinizde Hiç Ürün Yok" xml:space="preserve">
+    <value>Sepetinizde Hiç Ürün Yok</value>
+  </data>
+  <data name="SOKAK" xml:space="preserve">
+    <value>SOKAK</value>
+  </data>
   <data name="SON BLOG YAZILARI" xml:space="preserve">
     <value>SON BLOG YAZILARI</value>
+  </data>
+  <data name="SOYAD" xml:space="preserve">
+    <value>SOYAD</value>
   </data>
   <data name="STOK KODU" xml:space="preserve">
     <value>STOK KODU</value>
   </data>
+  <data name="SİL" xml:space="preserve">
+    <value>SİL</value>
+  </data>
+  <data name="SİPARİŞ" xml:space="preserve">
+    <value>SİPARİŞ</value>
+  </data>
+  <data name="SİPARİŞLER" xml:space="preserve">
+    <value>SİPARİŞLER</value>
+  </data>
+  <data name="TAMAMLANDI" xml:space="preserve">
+    <value>TAMAMLANDI</value>
+  </data>
+  <data name="TARİH" xml:space="preserve">
+    <value>TARİH</value>
+  </data>
   <data name="TELEFON" xml:space="preserve">
     <value>TELEFON</value>
   </data>
+  <data name="TEMİZLE" xml:space="preserve">
+    <value>TEMİZLE</value>
+  </data>
   <data name="TEŞEKKÜRLER!" xml:space="preserve">
-    <value>TEŞEKKURLER!</value>
+    <value>TESEKKURLER!</value>
+  </data>
+  <data name="TOPLAM" xml:space="preserve">
+    <value>TOPLAM</value>
   </data>
   <data name="Tüm Hakları Saklıdır" xml:space="preserve">
     <value>Tüm Hakları Saklıdır</value>
@@ -207,11 +330,29 @@
   <data name="WHATSAPP" xml:space="preserve">
     <value>WHATSAPP</value>
   </data>
+  <data name="YENİ ADRES EKLE" xml:space="preserve">
+    <value>YENİ ADRES EKLE</value>
+  </data>
+  <data name="YENİ KULLANICI" xml:space="preserve">
+    <value>YENİ KULLANICI</value>
+  </data>
+  <data name="YENİ ŞİFRE" xml:space="preserve">
+    <value>YENİ ŞİFRE</value>
+  </data>
+  <data name="YENİLE" xml:space="preserve">
+    <value>YENİLE</value>
+  </data>
   <data name="YUKARI" xml:space="preserve">
     <value>YUKARI</value>
   </data>
   <data name="ÇALIŞMA SAATLERİ" xml:space="preserve">
     <value>ÇALIŞMA SAATLERİ</value>
+  </data>
+  <data name="ÇIKIŞ YAP" xml:space="preserve">
+    <value>ÇIKIŞ YAP</value>
+  </data>
+  <data name="ÖDEMEYE GEÇ" xml:space="preserve">
+    <value>ÖDEMEYE GEÇ</value>
   </data>
   <data name="ÖN SİPARİŞ VER" xml:space="preserve">
     <value>ÖN SİPARİŞ VER</value>
@@ -219,7 +360,31 @@
   <data name="ÖNE ÇIKANLAR" xml:space="preserve">
     <value>ÖNE ÇIKANLAR</value>
   </data>
+  <data name="ÜLKE" xml:space="preserve">
+    <value>ÜLKE</value>
+  </data>
+  <data name="Ürün Sepete Eklendi..." xml:space="preserve">
+    <value>Urun Sepete Eklendi</value>
+  </data>
+  <data name="Ürün Sepetten Silindi" xml:space="preserve">
+    <value>Urun Sepetten Silindi</value>
+  </data>
   <data name="İLETİŞİM" xml:space="preserve">
     <value>İLETİŞİM</value>
+  </data>
+  <data name="İPTAL EDİLDİ" xml:space="preserve">
+    <value>İPTAL EDİLDİ</value>
+  </data>
+  <data name="İSTEK LİSTESİ" xml:space="preserve">
+    <value>İSTEK LİSTESİ</value>
+  </data>
+  <data name="ŞEHİR" xml:space="preserve">
+    <value>ŞEHİR</value>
+  </data>
+  <data name="Şifremi Ununttum" xml:space="preserve">
+    <value>Şifremi Ununttum</value>
+  </data>
+  <data name="ŞİFRE" xml:space="preserve">
+    <value>ŞİFRE</value>
   </data>
 </root>
