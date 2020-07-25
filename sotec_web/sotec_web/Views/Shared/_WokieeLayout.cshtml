@@ -40,7 +40,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     @RenderSection("style", false)
 </head>
-<body id="same_product_height" class="loaded">
+<body class="loaded">
     <div id="loader-wrapper">
         <div id="loader">
             <div class="dot"></div>
@@ -484,9 +484,9 @@
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/wokiee_src/external/elevatezoom/jquery.elevatezoom.js"></script>
     <script>
-        $(window).load(function () {
-            initializeOwl(false);
-        });
+        //$(window).load(function () {
+        //    initializeOwl(false);
+        //});
 
         var onAjaxRequestSuccess = function (result) {
             $("#form-blog-reply-name").val("");
@@ -505,16 +505,32 @@
         }
 
         var onSepeteEkleSuccess = function (result) {
+            var oldu_mu = 0;
+
+            var mesaj = "";
+
             $(".sepet_div").each(function () {
                 $(this).html(result);
             });
             $(".sepet_sayisi").each(function () {
+                var sepettekiler = $(this).html();
+                var yeniler = $('.sepet_item').length;
+
+                if (sepettekiler == yeniler) oldu_mu = 1;
                 $(this).html($('.sepet_item').length);
             });
+
+            if (oldu_mu == 0) {
+                mesaj = '@sotec_web.Resources.Dil.Ürün_Sepete_Eklendi___';
+            }
+            else {
+                mesaj = '@sotec_web.Resources.Dil.STOKTA_YOK';
+            }
+
             swal(
                 {
                     icon: 'success',
-                    title: '@sotec_web.Resources.Dil.Ürün_Sepete_Eklendi___',
+                    title: mesaj,
                     text: "",
                     confirmButtonText: '@sotec_web.Resources.Dil.ALIŞVERİŞE_DEVAM_ET'
                 }

@@ -52,6 +52,8 @@
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -130,6 +132,56 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Connected Services\n11Api_CategoryService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\n11Api_CityService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\n11Api_OrderService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\n11Api_ProductSellingService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\n11Api_ProductService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\n11Api_ProductStockService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\n11Api_SettlementService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\n11Api_ShipmentCompanyService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\n11Api_ShipmentService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\n11Api_TicketService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -550,6 +602,184 @@
     <Content Include="admin_src\vendor\to-markdown\to-markdown.js" />
     <Content Include="admin_src\vendor\toastr\toastr.js" />
     <Content Include="admin_src\vendor\toastr\toastr.min.css" />
+    <None Include="Connected Services\n11Api_CategoryService\CategoryService.wsdl" />
+    <Content Include="Connected Services\n11Api_CategoryService\sotec_web.n11Api_CategoryService.GetCategoryAttributesIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CategoryService\sotec_web.n11Api_CategoryService.GetCategoryAttributesIdResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CategoryService\sotec_web.n11Api_CategoryService.GetCategoryAttributesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CategoryService\sotec_web.n11Api_CategoryService.GetCategoryAttributesResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CategoryService\sotec_web.n11Api_CategoryService.GetCategoryAttributeValueResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CategoryService\sotec_web.n11Api_CategoryService.GetCategoryAttributeValueResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CategoryService\sotec_web.n11Api_CategoryService.GetParentCategoryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CategoryService\sotec_web.n11Api_CategoryService.GetParentCategoryResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CategoryService\sotec_web.n11Api_CategoryService.GetSubCategoriesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CategoryService\sotec_web.n11Api_CategoryService.GetSubCategoriesResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CategoryService\sotec_web.n11Api_CategoryService.GetTopLevelCategoriesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CategoryService\sotec_web.n11Api_CategoryService.GetTopLevelCategoriesResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\n11Api_CityService\configuration91.svcinfo" />
+    <None Include="Connected Services\n11Api_CityService\configuration.svcinfo" />
+    <None Include="Connected Services\n11Api_CityService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\n11Api_CategoryService\configuration91.svcinfo" />
+    <None Include="Connected Services\n11Api_CategoryService\configuration.svcinfo" />
+    <None Include="Connected Services\n11Api_CategoryService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\n11Api_OrderService\OrderService.wsdl" />
+    <Content Include="Connected Services\n11Api_OrderService\sotec_web.n11Api_OrderService.ComplementaryItemDetailResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_OrderService\sotec_web.n11Api_OrderService.ComplementaryItemDetailResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_OrderService\sotec_web.n11Api_OrderService.DetailedOrderListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_OrderService\sotec_web.n11Api_OrderService.DetailedOrderListResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_OrderService\sotec_web.n11Api_OrderService.MakeOrderItemShipmentResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_OrderService\sotec_web.n11Api_OrderService.MakeOrderItemShipmentResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_OrderService\sotec_web.n11Api_OrderService.OrderDetailResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_OrderService\sotec_web.n11Api_OrderService.OrderDetailResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_OrderService\sotec_web.n11Api_OrderService.OrderItemAcceptResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_OrderService\sotec_web.n11Api_OrderService.OrderItemAcceptResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_OrderService\sotec_web.n11Api_OrderService.OrderItemRejectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_OrderService\sotec_web.n11Api_OrderService.OrderItemRejectResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_OrderService\sotec_web.n11Api_OrderService.OrderListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_OrderService\sotec_web.n11Api_OrderService.OrderListResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\n11Api_ProductSellingService\ProductSellingService.wsdl" />
+    <None Include="Connected Services\n11Api_OrderService\configuration91.svcinfo" />
+    <None Include="Connected Services\n11Api_OrderService\configuration.svcinfo" />
+    <None Include="Connected Services\n11Api_OrderService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <Content Include="Connected Services\n11Api_ProductSellingService\sotec_web.n11Api_ProductSellingService.StartSellingProductByProductIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductSellingService\sotec_web.n11Api_ProductSellingService.StartSellingProductByProductIdResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductSellingService\sotec_web.n11Api_ProductSellingService.StartSellingProductBySellerCodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductSellingService\sotec_web.n11Api_ProductSellingService.StartSellingProductBySellerCodeResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductSellingService\sotec_web.n11Api_ProductSellingService.StopSellingProductByProductIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductSellingService\sotec_web.n11Api_ProductSellingService.StopSellingProductByProductIdResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductSellingService\sotec_web.n11Api_ProductSellingService.StopSellingProductBySellerCodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductSellingService\sotec_web.n11Api_ProductSellingService.StopSellingProductBySellerCodeResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\n11Api_ProductService\configuration91.svcinfo" />
+    <None Include="Connected Services\n11Api_ProductService\configuration.svcinfo" />
+    <None Include="Connected Services\n11Api_ProductService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\n11Api_ProductSellingService\configuration91.svcinfo" />
+    <None Include="Connected Services\n11Api_ProductSellingService\configuration.svcinfo" />
+    <None Include="Connected Services\n11Api_ProductSellingService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\n11Api_ProductStockService\configuration91.svcinfo" />
+    <None Include="Connected Services\n11Api_ProductStockService\configuration.svcinfo" />
+    <None Include="Connected Services\n11Api_ProductStockService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\n11Api_SettlementService\SettlementService.wsdl" />
+    <Content Include="Connected Services\n11Api_SettlementService\sotec_web.n11Api_SettlementService.GetSettlementDetailResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_SettlementService\sotec_web.n11Api_SettlementService.GetSettlementDetailResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_SettlementService\sotec_web.n11Api_SettlementService.GetSettlementListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_SettlementService\sotec_web.n11Api_SettlementService.GetSettlementListResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\n11Api_ShipmentCompanyService\configuration91.svcinfo" />
+    <None Include="Connected Services\n11Api_ShipmentCompanyService\configuration.svcinfo" />
+    <None Include="Connected Services\n11Api_ShipmentCompanyService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\n11Api_ShipmentService\configuration91.svcinfo" />
+    <None Include="Connected Services\n11Api_ShipmentService\configuration.svcinfo" />
+    <None Include="Connected Services\n11Api_ShipmentService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\n11Api_SettlementService\configuration91.svcinfo" />
+    <None Include="Connected Services\n11Api_SettlementService\configuration.svcinfo" />
+    <None Include="Connected Services\n11Api_SettlementService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\n11Api_TicketService\configuration91.svcinfo" />
+    <None Include="Connected Services\n11Api_TicketService\configuration.svcinfo" />
+    <None Include="Connected Services\n11Api_TicketService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -723,6 +953,253 @@
     <Content Include="wokiee_src\font\style.css" />
     <Content Include="wokiee_src\js\main.js" />
     <Content Include="wokiee_src\js\map-init.js" />
+    <None Include="Connected Services\n11Api_CityService\CityService.wsdl" />
+    <Content Include="Connected Services\n11Api_CityService\sotec_web.n11Api_CityService.GetCitiesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CityService\sotec_web.n11Api_CityService.GetCitiesResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CityService\sotec_web.n11Api_CityService.GetCityResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CityService\sotec_web.n11Api_CityService.GetCityResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CityService\sotec_web.n11Api_CityService.GetDistrictResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CityService\sotec_web.n11Api_CityService.GetDistrictResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CityService\sotec_web.n11Api_CityService.GetNeighborhoodsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_CityService\sotec_web.n11Api_CityService.GetNeighborhoodsResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\n11Api_ProductService\ProductService.wsdl" />
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.AdaptUnificationProductsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.AdaptUnificationProductsResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.DeleteProductByIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.DeleteProductByIdResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.DeleteProductBySellerCodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.DeleteProductBySellerCodeResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.GetProductByProductIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.GetProductByProductIdResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.GetProductBySellerCodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.GetProductBySellerCodeResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.GetProductListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.GetProductListResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.GetProductQuestionDetailResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.GetProductQuestionDetailResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.GetProductQuestionListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.GetProductQuestionListResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.ProductApprovalStatusResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.ProductApprovalStatusResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.SaveProductAnswerResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.SaveProductAnswerResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.SaveProductResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.SaveProductResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.SearchProductsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.SearchProductsResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.UpdateDiscountValueByProductIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.UpdateDiscountValueByProductIdResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.UpdateDiscountValueBySellerCodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.UpdateDiscountValueBySellerCodeResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.UpdateProductBasicResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.UpdateProductBasicResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.UpdateProductPriceByIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.UpdateProductPriceByIdResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.UpdateProductPriceBySellerCodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.UpdateProductPriceBySellerCodeResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.UpdateProductsByPimsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductService\sotec_web.n11Api_ProductService.UpdateProductsByPimsResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\n11Api_ProductStockService\ProductStockService.wsdl" />
+    <Content Include="Connected Services\n11Api_ProductStockService\sotec_web.n11Api_ProductStockService.DeleteAndUpdateStockByStockAttributesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductStockService\sotec_web.n11Api_ProductStockService.DeleteAndUpdateStockByStockAttributesResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductStockService\sotec_web.n11Api_ProductStockService.GetProductStockByProductIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductStockService\sotec_web.n11Api_ProductStockService.GetProductStockByProductIdResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductStockService\sotec_web.n11Api_ProductStockService.GetProductStockByProductSellerCodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductStockService\sotec_web.n11Api_ProductStockService.GetProductStockByProductSellerCodeResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductStockService\sotec_web.n11Api_ProductStockService.IncreaseStockByStockAttributesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductStockService\sotec_web.n11Api_ProductStockService.IncreaseStockByStockAttributesResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductStockService\sotec_web.n11Api_ProductStockService.IncreaseStockByStockIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductStockService\sotec_web.n11Api_ProductStockService.IncreaseStockByStockIdResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductStockService\sotec_web.n11Api_ProductStockService.IncreaseStockByStockSellerCodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductStockService\sotec_web.n11Api_ProductStockService.IncreaseStockByStockSellerCodeResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductStockService\sotec_web.n11Api_ProductStockService.UpdateStockByStockIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductStockService\sotec_web.n11Api_ProductStockService.UpdateStockByStockIdResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductStockService\sotec_web.n11Api_ProductStockService.UpdateStockByStockSellerCodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ProductStockService\sotec_web.n11Api_ProductStockService.UpdateStockByStockSellerCodeResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\n11Api_ShipmentCompanyService\ShipmentCompanyService.wsdl" />
+    <Content Include="Connected Services\n11Api_ShipmentCompanyService\sotec_web.n11Api_ShipmentCompanyService.GetShipmentCompaniesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ShipmentCompanyService\sotec_web.n11Api_ShipmentCompanyService.GetShipmentCompaniesResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\n11Api_ShipmentService\ShipmentService.wsdl" />
+    <Content Include="Connected Services\n11Api_ShipmentService\sotec_web.n11Api_ShipmentService.CreateOrUpdateShipmentTemplateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ShipmentService\sotec_web.n11Api_ShipmentService.CreateOrUpdateShipmentTemplateResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ShipmentService\sotec_web.n11Api_ShipmentService.GetShipmentTemplateListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ShipmentService\sotec_web.n11Api_ShipmentService.GetShipmentTemplateListResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ShipmentService\sotec_web.n11Api_ShipmentService.GetShipmentTemplateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_ShipmentService\sotec_web.n11Api_ShipmentService.GetShipmentTemplateResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_TicketService\sotec_web.n11Api_TicketService.TicketAnswerResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_TicketService\sotec_web.n11Api_TicketService.TicketAnswerResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_TicketService\sotec_web.n11Api_TicketService.TicketCreateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_TicketService\sotec_web.n11Api_TicketService.TicketCreateResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_TicketService\sotec_web.n11Api_TicketService.TicketListingAssignedToSellerResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_TicketService\sotec_web.n11Api_TicketService.TicketListingAssignedToSellerResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_TicketService\sotec_web.n11Api_TicketService.TicketListingBelongsToSellerResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_TicketService\sotec_web.n11Api_TicketService.TicketListingBelongsToSellerResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_TicketService\sotec_web.n11Api_TicketService.TicketReadResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_TicketService\sotec_web.n11Api_TicketService.TicketReadResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_TicketService\sotec_web.n11Api_TicketService.TicketReasonsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\n11Api_TicketService\sotec_web.n11Api_TicketService.TicketReasonsResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\n11Api_TicketService\TicketService.wsdl" />
+    <None Include="Properties\PublishProfiles\aysemtuhafiye.com.pubxml" />
     <None Include="Properties\PublishProfiles\kuzeyguneygida.com.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -924,6 +1401,11 @@
     <Content Include="Views\Home\AddAdress.cshtml" />
     <Content Include="Views\Home\_sepetDropDown.cshtml" />
     <Content Include="Views\Home\Cart.cshtml" />
+    <Content Include="Views\Home\Pay.cshtml" />
+    <Content Include="Views\Home\Order.cshtml" />
+    <Content Include="Views\Admin\Siparisler.cshtml" />
+    <Content Include="Views\Admin\Siparis.cshtml" />
+    <Content Include="Views\Admin\N11.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="admin_src\images\blog\buyuk\" />
@@ -966,11 +1448,27 @@
     <EmbeddedResource Include="Resources\Dil.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Dil.en-US.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Dil.tr-TR.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Dil.tr-TR.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\n11Api_CategoryService\" />
+    <WCFMetadataStorage Include="Connected Services\n11Api_CityService\" />
+    <WCFMetadataStorage Include="Connected Services\n11Api_OrderService\" />
+    <WCFMetadataStorage Include="Connected Services\n11Api_ProductSellingService\" />
+    <WCFMetadataStorage Include="Connected Services\n11Api_ProductService\" />
+    <WCFMetadataStorage Include="Connected Services\n11Api_ProductStockService\" />
+    <WCFMetadataStorage Include="Connected Services\n11Api_SettlementService\" />
+    <WCFMetadataStorage Include="Connected Services\n11Api_ShipmentCompanyService\" />
+    <WCFMetadataStorage Include="Connected Services\n11Api_ShipmentService\" />
+    <WCFMetadataStorage Include="Connected Services\n11Api_TicketService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

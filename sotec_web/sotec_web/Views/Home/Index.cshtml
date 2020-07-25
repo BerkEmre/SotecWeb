@@ -11,7 +11,7 @@
 
     DataTable dt_slider = SQL.get("SELECT * FROM slider WHERE silindi = 0 AND dil_id = " + dr_dil["dil_id"]);
     DataTable dt_karo = SQL.get("SELECT * FROM karolar WHERE silindi = 0 AND dil_id = " + dr_dil["dil_id"]);
-    DataTable dt_one_cikan_urunler = SQL.get("SELECT u.stok_kodu, u.urun_id, u.fiyat, urun_adi = ISNULL(du.urun_adi, u.urun_adi), aciklama = ISNULL(du.aciklama, u.aciklama), resim = ISNULL((SELECT TOP 1 resim FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id AND sira = (SELECT MIN(sira) FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id)), '')  FROM urunler u LEFT OUTER JOIN dil_urunler du ON du.urun_id = u.urun_id AND du.silindi = 0 AND du.dil_id = " + dr_dil["dil_id"] + " WHERE u.silindi = 0 AND u.one_cikan = 1");
+    DataTable dt_one_cikan_urunler = SQL.get("SELECT u.stok_kodu, u.urun_id, u.fiyat, urun_adi = ISNULL(du.urun_adi, u.urun_adi), aciklama = ISNULL(du.aciklama, u.aciklama), resim = ISNULL((SELECT TOP 1 ur1.resim FROM urun_resimleri ur1 WHERE ur1.silindi = 0 AND ur1.urun_id = u.urun_id AND sira = (SELECT MIN(ur2.sira) FROM urun_resimleri ur2 WHERE ur2.silindi = 0 AND ur2.urun_id = u.urun_id)), '')  FROM urunler u LEFT OUTER JOIN dil_urunler du ON du.urun_id = u.urun_id AND du.silindi = 0 AND du.dil_id = " + dr_dil["dil_id"] + " WHERE u.silindi = 0 AND u.one_cikan = 1");
     DataTable dt_son_hizmetler = SQL.get("SELECT h.hizmet_id, h.gorsel, baslik = ISNULL(dh.baslik, h.baslik), yazi = ISNULL(dh.yazi, h.yazi) FROM hizmetler h LEFT OUTER JOIN dil_hizmetler dh ON dh.hizmet_id = h.hizmet_id AND dh.silindi = 0 AND dh.dil_id = " + dr_dil["dil_id"] + " WHERE h.silindi = 0");
     DataTable dt_son_bloglar = SQL.get("SELECT TOP 3 b.blog_id, b.gorsel, baslik = ISNULL(db.baslik, b.baslik), yazi = ISNULL(db.yazi, b.yazi), ad_soyad = k.ad + ' ' + k.soyad, b.kayit_tarihi  FROM bloglar b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id LEFT OUTER JOIN dil_bloglar db ON db.blog_id = b.blog_id AND db.silindi = 0 AND db.dil_id = " + dr_dil["dil_id"] + " WHERE b.silindi = 0 ORDER by b.blog_id DESC");
 }
@@ -96,7 +96,7 @@
                                 </div>
                                 <h2 class="tt-title"><a href="@Url.Action("Product", "Home", new { id = dr_urun_item["urun_id"] })">@dr_urun_item["urun_adi"]</a></h2>
                                 <div class="tt-price">
-                                    <!--PARA YAZILABİLİR BURAYA-->
+                                    @if (ConfigurationManager.AppSettings["eticaret"] == "true") {@dr_urun_item["fiyat"] } else { <br />}
                                 </div>
                                 <div class="tt-product-inside-hover">
                                     <div class="tt-row-btn">

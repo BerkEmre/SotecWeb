@@ -210,6 +210,9 @@
   <data name="HAKKIMIZDA" xml:space="preserve">
     <value>ABOUT</value>
   </data>
+  <data name="HAVALE" xml:space="preserve">
+    <value>TRANSFER</value>
+  </data>
   <data name="HAYIR" xml:space="preserve">
     <value>NO</value>
   </data>
@@ -227,6 +230,9 @@
   </data>
   <data name="KAPAT" xml:space="preserve">
     <value>CLOSE</value>
+  </data>
+  <data name="KAPIDA ÖDEME" xml:space="preserve">
+    <value>PAY AT THE DOOR</value>
   </data>
   <data name="KARGO" xml:space="preserve">
     <value>CARGO</value>
@@ -246,11 +252,17 @@
   <data name="KONU" xml:space="preserve">
     <value>SUBJECT</value>
   </data>
+  <data name="KREDİ KARTI" xml:space="preserve">
+    <value>CREDİT CART</value>
+  </data>
   <data name="MAHALLE" xml:space="preserve">
     <value>NEIGHBORHOOD</value>
   </data>
   <data name="MAĞAZA" xml:space="preserve">
     <value>SHOP</value>
+  </data>
+  <data name="MAĞAZADAN TESLİM" xml:space="preserve">
+    <value>DELIVERY FROM THE STORE</value>
   </data>
   <data name="MENÜ" xml:space="preserve">
     <value>MENU</value>
@@ -263,6 +275,9 @@
   </data>
   <data name="MİKTAR" xml:space="preserve">
     <value>MİKTAR</value>
+  </data>
+  <data name="not" xml:space="preserve">
+    <value>NOTE</value>
   </data>
   <data name="POSTA KODU" xml:space="preserve">
     <value>POST CODE</value>
@@ -285,6 +300,18 @@
   <data name="Sepetinizde Hiç Ürün Yok" xml:space="preserve">
     <value>No Products in the Cart</value>
   </data>
+  <data name="SEÇİNİZ" xml:space="preserve">
+    <value>CHOOSE</value>
+  </data>
+  <data name="Siparişiniz bize ulaşmıştır" xml:space="preserve">
+    <value>We have received your order, check your order's account or check by mail, have a nice shopping.</value>
+  </data>
+  <data name="Siparişiniz bize ulaşmıştır HAVALE" xml:space="preserve">
+    <value>We have received your order, you can make your payment to the account number below with your order number, have a nice shopping.</value>
+  </data>
+  <data name="Siparişiniz bize ulaşmıştır MAĞAZA" xml:space="preserve">
+    <value>We have received your order, you can receive your order from our store, have a nice shopping.</value>
+  </data>
   <data name="SOKAK" xml:space="preserve">
     <value>STREET</value>
   </data>
@@ -296,6 +323,9 @@
   </data>
   <data name="STOK KODU" xml:space="preserve">
     <value>STOCK CODE</value>
+  </data>
+  <data name="STOKTA YOK" xml:space="preserve">
+    <value>OUT OF STOCK</value>
   </data>
   <data name="SİL" xml:space="preserve">
     <value>DELETE</value>
@@ -330,6 +360,9 @@
   <data name="WHATSAPP" xml:space="preserve">
     <value>WHATSAPP</value>
   </data>
+  <data name="yada" xml:space="preserve">
+    <value>or</value>
+  </data>
   <data name="YENİ ADRES EKLE" xml:space="preserve">
     <value>ADD NEW ADRESS</value>
   </data>
@@ -351,6 +384,12 @@
   <data name="ÇIKIŞ YAP" xml:space="preserve">
     <value>SIGN OUT</value>
   </data>
+  <data name="ÖDEME" xml:space="preserve">
+    <value>PAY</value>
+  </data>
+  <data name="ÖDEME TİPİ" xml:space="preserve">
+    <value>PAYMENT METHOD</value>
+  </data>
   <data name="ÖDEMEYE GEÇ" xml:space="preserve">
     <value>PROCEED TO CHECKOUT</value>
   </data>
@@ -368,6 +407,9 @@
   </data>
   <data name="Ürün Sepetten Silindi" xml:space="preserve">
     <value>Product Removed from Cart</value>
+  </data>
+  <data name="üye olmadan devam et" xml:space="preserve">
+    <value>continue with</value>
   </data>
   <data name="İLETİŞİM" xml:space="preserve">
     <value>CONTACT</value>

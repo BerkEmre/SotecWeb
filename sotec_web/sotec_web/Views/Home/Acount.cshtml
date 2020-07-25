@@ -6,6 +6,8 @@
     int kullanici_id = Convert.ToInt32(Session["kullanici_id"]);
     DataRow dr_kullanici = null;
     if (kullanici_id != 0) { dr_kullanici = SQL.get("SELECT * FROM kullanicilar WHERE kullanici_id = " + kullanici_id).Rows[0]; }
+
+    DataTable dt_siparisler = SQL.get("SELECT TOP 25 s.kargo_no, s.siparis_id, s.kayit_tarihi, s.siparis_durumu_parametre_id, s.odeme_tipi_parametre_id, toplam = ISNULL((SELECT SUM(sk.miktar * sk.birim_fiyat) FROM siparis_kalemleri sk WHERE sk.silindi = 0 AND sk.siparis_id = s.siparis_id), 0) FROM siparisler s WHERE s.silindi = 0 AND s.kullanici_id = " + dr_kullanici["kullanici_id"] + " ORDER by s.siparis_id DESC");
 }
 <div class="container-indent">
     <div class="container container-fluid-custom-mobile-padding">
@@ -21,25 +23,64 @@
                                 <th>@sotec_web.Resources.Dil.SİPARİŞ</th>
                                 <th>@sotec_web.Resources.Dil.TARİH</th>
                                 <th>@sotec_web.Resources.Dil.DURUM</th>
+                                <th>@sotec_web.Resources.Dil.ÖDEME_TİPİ</th>
                                 <th>@sotec_web.Resources.Dil.KARGO</th>
                                 <th>@sotec_web.Resources.Dil.TOPLAM</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach (DataRow dr_siparis in dt_siparisler.Rows)
+                            {
                             <tr>
-                                <td><a href="shopping_order.html">#001</a></td>
-                                <td>November 20. 2016</td>
-                                <td>Processing</td>
-                                <td>Processing</td>
-                                <td>$40 fot 1 item</td>
+                                <td><a href="@Url.Action("Order", "Home", new { id = dr_siparis["siparis_id"]})">#@dr_siparis["siparis_id"]</a></td>
+                                <td>@dr_siparis["kayit_tarihi"]</td>
+                                <td>
+                                    @switch (Convert.ToInt32(dr_siparis["siparis_durumu_parametre_id"]))
+                                    {
+                                        case 33:
+                                            @sotec_web.Resources.Dil.BEKLEMEDE;
+                                            break;
+                                        case 34:
+                                            @sotec_web.Resources.Dil.HAZIRLANIYOR;
+                                            break;
+                                        case 36:
+                                            @sotec_web.Resources.Dil.KARGODA;
+                                            break;
+                                        case 37:
+                                            @sotec_web.Resources.Dil.TAMAMLANDI;
+                                            break;
+                                        case 38:
+                                            @sotec_web.Resources.Dil.İPTAL_EDİLDİ;
+                                            break;
+                                        default:
+                                            @sotec_web.Resources.Dil.BEKLEMEDE;
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    @switch (Convert.ToInt32(dr_siparis["odeme_tipi_parametre_id"]))
+                                    {
+                                        case 29:
+                                            @sotec_web.Resources.Dil.KREDİ_KARTI;
+                                            break;
+                                        case 30:
+                                            @sotec_web.Resources.Dil.KAPIDA_ÖDEME;
+                                            break;
+                                        case 31:
+                                            @sotec_web.Resources.Dil.MAĞAZADAN_TESLİM;
+                                            break;
+                                        case 32:
+                                            @sotec_web.Resources.Dil.HAVALE;
+                                            break;
+                                        default:
+                                            @sotec_web.Resources.Dil.KREDİ_KARTI;
+                                            break;
+                                    }
+                                </td>
+                                <td>@dr_siparis["kargo_no"]</td>
+                                <td>@Convert.ToDecimal(dr_siparis["toplam"]).ToString("n2") ₺</td>
                             </tr>
-                            <tr>
-                                <td><a href="shopping_order.html">#001</a></td>
-                                <td>November 20. 2016</td>
-                                <td>Processing</td>
-                                <td>Processing</td>
-                                <td>$40 fot 1 item</td>
-                            </tr>
+                            }
                         </tbody>
                     </table>
                 </div>

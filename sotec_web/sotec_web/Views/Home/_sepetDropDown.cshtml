@@ -19,6 +19,8 @@
     }
     DataRow dr_urun_itm;
     DataRow dr_urun_dgr;
+
+    decimal fiyat = 0;
 }
 
 @if (sepetKalem.Count <= 0)
@@ -36,7 +38,7 @@ else
             @foreach (sotec_web.Models.SepetKalem sk in sepetKalem)
             {
                 { dr_urun_itm = SQL.get("SELECT u.urun_id, u.stok_kodu, u.fiyat, urun_adi = ISNULL(du.urun_adi, u.urun_adi), aciklama = ISNULL(du.aciklama, u.aciklama), resim = ISNULL((SELECT TOP 1 resim FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id AND sira = (SELECT MIN(sira) FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id)), '') FROM urunler u LEFT OUTER JOIN dil_urunler du ON du.urun_id = u.urun_id AND du.silindi = 0 AND du.dil_id = " + dr_dil["dil_id"] + " WHERE u.urun_id = " + sk.urun_id).Rows[0]; }
-                { toplam += (Convert.ToDecimal(dr_urun_itm["fiyat"]) * sk.miktar); }
+                
                 <div class="tt-item sepet_item">
                     <a href="@Url.Action("Product", "Home", new { id = sk.urun_id })">
                         <div class="tt-item-img">
@@ -45,13 +47,21 @@ else
                         <div class="tt-item-descriptions">
                             <h2 class="tt-title">@dr_urun_itm["urun_adi"]</h2>
                             <ul class="tt-add-info">
-                                @foreach (int deger_id in sk.deger_id)
+                                @{ fiyat = Convert.ToDecimal(dr_urun_itm["fiyat"]); }
+                                @if (sk.deger_id != null)
                                 {
-                                    { dr_urun_dgr = SQL.get("SELECT deger = ISNULL(duvd.deger, uvd.deger) FROM urun_varyasyon_degerleri uvd LEFT OUTER JOIN dil_urun_varyasyon_degerleri duvd ON duvd.urun_varyasyon_deger_id = uvd.urun_varyasyon_deger_id AND duvd.silindi = 0 AND duvd.dil_id = " + dr_dil["dil_id"] + " WHERE uvd.urun_varyasyon_deger_id = " + deger_id).Rows[0]; }
-                                    <li>@dr_urun_dgr["deger"]</li>
+                                    foreach (int deger_id in sk.deger_id)
+                                    {
+                                        {
+                                            fiyat += Convert.ToDecimal(SQL.get("SELECT tutar FROM urun_varyasyon WHERE silindi = 0 AND urun_id = " + dr_urun_itm["urun_id"] + " AND deger_id = " + deger_id).Rows[0]["tutar"]);
+                                            dr_urun_dgr = SQL.get("SELECT deger = ISNULL(duvd.deger, uvd.deger) FROM urun_varyasyon_degerleri uvd LEFT OUTER JOIN dil_urun_varyasyon_degerleri duvd ON duvd.urun_varyasyon_deger_id = uvd.urun_varyasyon_deger_id AND duvd.silindi = 0 AND duvd.dil_id = " + dr_dil["dil_id"] + " WHERE uvd.urun_varyasyon_deger_id = " + deger_id).Rows[0]; 
+                                        }
+                                        <li>@dr_urun_dgr["deger"]</li>
+                                    }
                                 }
+
                             </ul>
-                            <div class="tt-quantity">@sk.miktar X</div> <div class="tt-price">@dr_urun_itm["fiyat"] ₺</div>
+                            <div class="tt-quantity">@sk.miktar X</div> <div class="tt-price">@fiyat.ToString("n2") ₺</div>
                         </div>
                     </a>
                     <div class="tt-item-close">
@@ -62,11 +72,12 @@ else
                         }
                     </div>
                 </div>
+                { toplam += fiyat * sk.miktar; }
             }
         </div>
         <div class="tt-cart-total-row">
             <div class="tt-cart-total-title">@sotec_web.Resources.Dil.TOPLAM:</div>
-            <div class="tt-cart-total-price">@toplam ₺</div>
+            <div class="tt-cart-total-price">@toplam.ToString("n2") ₺</div>
         </div>
         <div class="tt-cart-btn">
             <div class="tt-item">

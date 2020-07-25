@@ -1,0 +1,171 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    ViewBag.Title = "Siparisler";
+
+    string ad_soyad = ViewBag.ad_soyad;
+    int siparis_durumu_parametre_id = ViewBag.siparis_durumu_parametre_id;
+    int odeme_tipi_parametre_id = ViewBag.odeme_tipi_parametre_id;
+    int siparis_id = ViewBag.siparis_id;
+
+    DataTable dt_siparisler = SQL.get(
+        "SELECT TOP 500 " +
+        "   s.siparis_id, " +
+        "   s.ad_soyad, " +
+        "   s.kayit_tarihi," +
+        "   odeme_tipi = p2.deger," +
+        "   durum = p1.deger, " +
+        "   s.kargo_no, " +
+        "   toplam = ISNULL((SELECT SUM(sk.miktar * sk.birim_fiyat) FROM siparis_kalemleri sk WHERE sk.silindi = 0 AND sk.siparis_id = s.siparis_id), 0) " +
+        "FROM " +
+        "   siparisler s " +
+        "   INNER JOIN parametreler p1 ON p1.parametre_id = s.siparis_durumu_parametre_id " +
+        "   INNER JOIN parametreler p2 ON p2.parametre_id = s.odeme_tipi_parametre_id " +
+        "WHERE " +
+        "   s.silindi = 0 " +
+        "   AND (" + siparis_id + " = 0 OR s.siparis_id = " + siparis_id + ") " +
+        "   AND ('" + ad_soyad + "' = '' OR s.ad_soyad LIKE '%" + ad_soyad + "%') " +
+        "   AND (" + siparis_durumu_parametre_id + " = 0 OR s.siparis_durumu_parametre_id = " + siparis_durumu_parametre_id + ") " +
+        "   AND (" + odeme_tipi_parametre_id + " = 0 OR s.odeme_tipi_parametre_id = " + odeme_tipi_parametre_id + ") " +
+        "ORDER by s.siparis_id DESC");
+}
+@section style
+{
+    <link rel="stylesheet" href="~/admin_src/vendor/jquery-datatable/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/admin_src/vendor/jquery-datatable/fixedeader/dataTables.fixedcolumns.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/admin_src/vendor/jquery-datatable/fixedeader/dataTables.fixedheader.bootstrap4.min.css">
+}
+@section script
+{
+    <script src="~/admin_src/assets/bundles/datatablescripts.bundle.js"></script>
+    <script src="~/admin_src/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+    <script src="~/admin_src/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+    <script src="~/admin_src/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+    <script src="~/admin_src/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
+    <script src="~/admin_src/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
+    <script>
+        $(function () {
+            $('.js-basic-example').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Turkish.json"
+                },
+                "order": [[0, "desc"]]
+            });
+        });
+    </script>
+}
+<div class="row clearfix">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="header">
+                <h2>Sipariş Arama</h2>
+            </div>
+            <div class="body">
+                <div class="demo-masked-input">
+                    <form method="post" action="/Admin/Siparisler">
+                        <div class="row clearfix">
+                            <div class="col-lg-3 col-md-6">
+                                <b>Ad Soyad</b>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="icon-user"></i></span>
+                                    </div>
+                                    <input type="text" name="ad_soyad" class="form-control" placeholder="Hepsi" value="@ad_soyad">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <b>Sipariş Durumu</b>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="icon-paper-plane"></i></span>
+                                    </div>
+                                    <select name="siparis_durumu_parametre_id" class="form-control">
+                                        <option value="0" @(siparis_durumu_parametre_id == 0 ? "selected" : "")>Hepsi</option>
+                                        <option value="33" @(siparis_durumu_parametre_id == 33 ? "selected" : "")>Ödeme Bekliyor</option>
+                                        <option value="34" @(siparis_durumu_parametre_id == 34 ? "selected" : "")>Hazırlanıyor</option>
+                                        <option value="36" @(siparis_durumu_parametre_id == 36 ? "selected" : "")>Kargoya Verildi</option>
+                                        <option value="37" @(siparis_durumu_parametre_id == 37 ? "selected" : "")>Tamamlandı</option>
+                                        <option value="38" @(siparis_durumu_parametre_id == 38 ? "selected" : "")>İptal Edildi</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <b>Ödeme Tipi</b>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="icon-wallet"></i></span>
+                                    </div>
+                                    <select name="odeme_tipi_parametre_id" class="form-control">
+                                        <option value="0" @(odeme_tipi_parametre_id == 0 ? "selected" : "")>Hepsi</option>
+                                        <option value="29" @(odeme_tipi_parametre_id == 29 ? "selected" : "")>Kredi Kartı</option>
+                                        <option value="32" @(odeme_tipi_parametre_id == 32 ? "selected" : "")>Havale</option>
+                                        <option value="30" @(odeme_tipi_parametre_id == 30 ? "selected" : "")>Kapıda Ödeme</option>
+                                        <option value="31" @(odeme_tipi_parametre_id == 31 ? "selected" : "")>Mağazadan Teslim</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <b>Sipariş Numarası</b>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="icon-tag"></i></span>
+                                    </div>
+                                    <input name="siparis_id" type="number" class="form-control" placeholder="Hepsi">
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 align-right">
+                                <button type="submit" class="btn btn-primary">Sipariş Ara</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="header">
+                <h2>Siparişler</h2>
+                <ul class="header-dropdown dropdown dropdown-animated scale-left">
+                    <li><a href="javascript:void(0);" class="full-screen"><i class="icon-size-fullscreen"></i></a></li>
+                </ul>
+            </div>
+            <div class="body">
+                <div class="table-responsive m-t-20">
+                    <table class="table table-bordered table-hover js-basic-example dataTable table-custom">
+                        <thead>
+                            <tr>
+                                <th>Sipariş No</th>
+                                <th>Tarih</th>
+                                <th>Ad Soyad</th>
+                                <th>Sipariş Durumu</th>
+                                <th>Ödeme Tipi</th>
+                                <th>Kargo No</th>
+                                <th>Tutar</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (DataRow row in dt_siparisler.Rows)
+                            {
+                                <tr>
+                                    <td>@row["siparis_id"]</td>
+                                    <td>@row["kayit_tarihi"]</td>
+                                    <td>@row["ad_soyad"]</td>
+                                    <td>@row["durum"]</td>
+                                    <td>@row["odeme_tipi"]</td>
+                                    <td>@row["kargo_no"]</td>
+                                    <td>@Convert.ToDecimal(row["toplam"]).ToString("n2") ₺</td>
+                                    <td class="text-center">
+                                        <a href="@Url.Action("Siparis", "Admin", new { id = row["siparis_id"] })" class="btn btn-success" title="İncele" type="button"><i class="fa fa-search"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,5 +1,10 @@
 $(function () {
-    $('.js-basic-example').DataTable();
+    $('.js-basic-example').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Turkish.json",
+            "order": [[0, "desc"]]
+        }
+    });
 
     //Exportable table
     $('.js-exportable').DataTable({
@@ -44,7 +49,7 @@ $(document).ready(function() {
             { "data": "office" },
             { "data": "salary" }
         ],
-        "order": [[1, 'asc']]
+        "order": [[0, 'desc']]
     } );
      
     // Add event listener for opening and closing details

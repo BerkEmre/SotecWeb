@@ -1,0 +1,133 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    ViewBag.Title = sotec_web.Resources.Dil.ÖDEME;
+
+    int siparis_id = ViewBag.siparis_id;
+
+    string currentAction = Convert.ToString(HttpContext.Current.Request.RequestContext.RouteData.Values["Action"]);
+
+    int kullanici_id = Convert.ToInt32(Session["kullanici_id"]);
+    DataRow dr_kullanici = null;
+    if (kullanici_id != 0) { dr_kullanici = SQL.get("SELECT * FROM kullanicilar WHERE kullanici_id = " + kullanici_id).Rows[0]; }
+
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    DataTable dt_siparis = SQL.get("SELECT * FROM siparisler WHERE siparis_id = " + siparis_id);
+    DataTable dt_siparis_kalem = SQL.get("SELECT * FROM siparis_kalemleri sk WHERE sk.silindi = 0 AND siparis_id = " + siparis_id);
+
+    DataRow dr_site_bilgileri = SQL.get("SELECT * FROM site_bilgileri WHERE dil_id = " + dr_dil["dil_id"]).Rows[0];
+
+    int odeme_tipi_parametre_id = Convert.ToInt32(dt_siparis.Rows[0]["odeme_tipi_parametre_id"]);
+
+    decimal fiyat = 0, miktar = 0;
+    DataRow dr_urun_itm;
+    DataRow dr_urun_dgr;
+}
+<div class="container-indent">
+    <div class="container">
+        <h1 class="tt-title-subpages noborder">@sotec_web.Resources.Dil.ÖDEME</h1>
+        <div class="tt-shopcart-table-02">
+            <table>
+                <tbody>
+                    @foreach (DataRow dr_sip_kalem in dt_siparis_kalem.Rows)
+                    {
+                        { dr_urun_itm = SQL.get("SELECT u.urun_id, u.stok_kodu, u.stok, u.fiyat, urun_adi = ISNULL(du.urun_adi, u.urun_adi), aciklama = ISNULL(du.aciklama, u.aciklama), resim = ISNULL((SELECT TOP 1 resim FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id AND sira = (SELECT MIN(sira) FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id)), '') FROM urunler u LEFT OUTER JOIN dil_urunler du ON du.urun_id = u.urun_id AND du.silindi = 0 AND du.dil_id = " + dr_dil["dil_id"] + " WHERE u.urun_id = " + dr_sip_kalem["urun_id"]).Rows[0]; }
+
+                        <tr>
+                            <td>
+                                <div class="tt-product-img">
+                                    <img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/urun/kucuk/@dr_urun_itm["resim"]" alt="">
+                                </div>
+                            </td>
+                            <td>
+                                <h2 class="tt-title">
+                                    @{ fiyat = Convert.ToDecimal(dr_sip_kalem["birim_fiyat"]); miktar = Convert.ToDecimal(dr_sip_kalem["miktar"]);  }
+                                    <a href="#">@dr_urun_itm["urun_adi"]</a>
+                                </h2>
+                                <ul class="tt-list-description">
+                                    @foreach (DataRow deger_id in SQL.get("SELECT deger_id FROM siparis_kalem_degerleri WHERE silindi = 0 AND siparis_kalem_id = " + dr_sip_kalem["siparis_kalem_id"]).Rows)
+                                    {
+                                        {
+                                            dr_urun_dgr = SQL.get("SELECT deger = ISNULL(duvd.deger, uvd.deger) FROM urun_varyasyon_degerleri uvd LEFT OUTER JOIN dil_urun_varyasyon_degerleri duvd ON duvd.urun_varyasyon_deger_id = uvd.urun_varyasyon_deger_id AND duvd.silindi = 0 AND duvd.dil_id = " + dr_dil["dil_id"] + " WHERE uvd.urun_varyasyon_deger_id = " + deger_id["deger_id"]).Rows[0];
+                                        }
+                                        <li>@dr_urun_dgr["deger"]</li>
+                                    }
+                                </ul>
+                                <ul class="tt-list-parameters">
+                                    <li>
+                                        <div class="tt-price">
+                                            @fiyat.ToString("n2") ₺
+                                        </div>
+                                    </li>
+                                    <li>
+                                        x @miktar.ToString("n2")
+                                    </li>
+                                    <li>
+                                        <div class="tt-price subtotal">
+                                            @((fiyat * miktar).ToString("n2")) ₺
+                                        </div>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td>
+                                <div class="tt-price">
+                                    @fiyat.ToString("n2") ₺
+                                </div>
+                            </td>
+                            <td>
+                                <div class="tt-price">
+                                    x @miktar.ToString("n2")
+                                </div>
+                            </td>
+                            <td>
+                                <div class="tt-price subtotal">
+                                    @((fiyat * miktar).ToString("n2")) ₺
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="tt-shopcart-col">
+            <div class="row">
+                <div class="col-md-12 col-lg-12">
+                    <div class="tt-shopcart-box text-center">
+                        <h4 class="tt-title">
+                            @sotec_web.Resources.Dil.ÖDEME
+                        </h4>
+                        @if (odeme_tipi_parametre_id == 29)
+                        {
+                            <p>@sotec_web.Resources.Dil.KREDİ_KARTI</p>
+                            <h5>SANAL POS ENTEGRASYONUNU BURAYA YAPICAM</h5>
+                        }
+                        else if (odeme_tipi_parametre_id == 30)
+                        {
+                            { SQL.set("UPDATE siparisler SET siparis_durumu_parametre_id = 34 WHERE siparis_id = " + siparis_id); }
+                            <p>@sotec_web.Resources.Dil.KAPIDA_ÖDEME</p>
+                            <h5>@sotec_web.Resources.Dil.Siparişiniz_bize_ulaşmıştır</h5>
+                        }
+                        else if (odeme_tipi_parametre_id == 31)
+                        {
+                            { SQL.set("UPDATE siparisler SET siparis_durumu_parametre_id = 34 WHERE siparis_id = " + siparis_id); }
+                            <p>@sotec_web.Resources.Dil.MAĞAZADAN_TESLİM</p>
+                            <h5>@sotec_web.Resources.Dil.Siparişiniz_bize_ulaşmıştır_MAĞAZA</h5>
+                        }
+                        else if (odeme_tipi_parametre_id == 32)
+                        {
+                            <p>@sotec_web.Resources.Dil.HAVALE</p>
+                            <h2>@sotec_web.Resources.Dil.SİPARİŞ NO: @siparis_id</h2>
+                            <h5>@sotec_web.Resources.Dil.Siparişiniz_bize_ulaşmıştır_HAVALE</h5>
+                            <h2>@dr_site_bilgileri["iban"]</h2>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

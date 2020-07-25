@@ -16,6 +16,7 @@ namespace sotec_web.Controllers
         {
             return RedirectToAction("Index", "Admin");
         }
+
         public ActionResult Index()
         {
             if (Session["kullanici_id"] == null)
@@ -144,10 +145,10 @@ namespace sotec_web.Controllers
                         WebImage img = new WebImage(resim.ElementAt(i).InputStream);
                         var path = Path.Combine("~/admin_src/images/sliders/orjinal", result);
                         img.Save(path);
-                        img.Resize(2000, 2000, true, false);
+                        img.Resize(2000, 2000, true, false).Crop(1, 1);
                         path = Path.Combine("~/admin_src/images/sliders/buyuk", result);
                         img.Save(path);
-                        img.Resize(1000, 1000, true, false);
+                        img.Resize(1000, 1000, true, false).Crop(1, 1);
                         path = Path.Combine("~/admin_src/images/sliders/kucuk", result);
                         img.Save(path);
                         result += Path.GetExtension(resim.ElementAt(i).FileName);
@@ -164,10 +165,10 @@ namespace sotec_web.Controllers
                         WebImage img = new WebImage(resim.ElementAt(i).InputStream);
                         var path = Path.Combine("~/admin_src/images/sliders/orjinal", result);
                         img.Save(path);
-                        img.Resize(2000, 2000, true, false);
+                        img.Resize(2000, 2000, true, false).Crop(1, 1);
                         path = Path.Combine("~/admin_src/images/sliders/buyuk", result);
                         img.Save(path);
-                        img.Resize(1000, 1000, true, false);
+                        img.Resize(1000, 1000, true, false).Crop(1, 1);
                         path = Path.Combine("~/admin_src/images/sliders/kucuk", result);
                         img.Save(path);
                         result += Path.GetExtension(resim.ElementAt(i).FileName);
@@ -222,10 +223,10 @@ namespace sotec_web.Controllers
                         WebImage img = new WebImage(resim.ElementAt(i).InputStream);
                         var path = Path.Combine("~/admin_src/images/karo/orjinal", result);
                         img.Save(path);
-                        img.Resize(2000, 2000, true, false);
+                        img.Resize(2000, 2000, true, false).Crop(1, 1);
                         path = Path.Combine("~/admin_src/images/karo/buyuk", result);
                         img.Save(path);
-                        img.Resize(1000, 1000, true, false);
+                        img.Resize(1000, 1000, true, false).Crop(1, 1);
                         path = Path.Combine("~/admin_src/images/karo/kucuk", result);
                         img.Save(path);
                         result += Path.GetExtension(resim.ElementAt(i).FileName);
@@ -242,10 +243,10 @@ namespace sotec_web.Controllers
                         WebImage img = new WebImage(resim.ElementAt(i).InputStream);
                         var path = Path.Combine("~/admin_src/images/karo/orjinal", result);
                         img.Save(path);
-                        img.Resize(2000, 2000, true, false);
+                        img.Resize(2000, 2000, true, false).Crop(1, 1);
                         path = Path.Combine("~/admin_src/images/karo/buyuk", result);
                         img.Save(path);
-                        img.Resize(1000, 1000, true, false);
+                        img.Resize(1000, 1000, true, false).Crop(1, 1);
                         path = Path.Combine("~/admin_src/images/karo/kucuk", result);
                         img.Save(path);
                         result += Path.GetExtension(resim.ElementAt(i).FileName);
@@ -313,7 +314,7 @@ namespace sotec_web.Controllers
             cnt += dt.Rows.Count;
             dt = SQL.get("SELECT * FROM haberler WHERE silindi = 0 AND kategori_id = " + kategori_id);
             cnt += dt.Rows.Count;
-            dt = SQL.get("SELECT * FROM urunler WHERE silindi = 0 AND kategori_id = " + kategori_id);
+            dt = SQL.get("SELECT * FROM urun_kategorileri WHERE silindi = 0 AND kategori_id = " + kategori_id);
             cnt += dt.Rows.Count;
 
             if (dt.Rows.Count > 0)
@@ -366,10 +367,10 @@ namespace sotec_web.Controllers
                 WebImage img = new WebImage(gorsel.InputStream);
                 var path = Path.Combine("~/admin_src/images/blog/orjinal", result);
                 img.Save(path);
-                img.Resize(1600, 1600, true, false);
+                img.Resize(1600, 1600, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/blog/buyuk", result);
                 img.Save(path);
-                img.Resize(400, 400, true, false);
+                img.Resize(400, 400, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/blog/kucuk", result);
                 img.Save(path);
                 result += Path.GetExtension(gorsel.FileName);
@@ -395,10 +396,10 @@ namespace sotec_web.Controllers
                 WebImage img = new WebImage(gorsel.InputStream);
                 var path = Path.Combine("~/admin_src/images/blog/orjinal", result);
                 img.Save(path);
-                img.Resize(1600, 1600, true, false);
+                img.Resize(1600, 1600, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/blog/buyuk", result);
                 img.Save(path);
-                img.Resize(400, 400, true, false);
+                img.Resize(400, 400, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/blog/kucuk", result);
                 img.Save(path);
                 result += Path.GetExtension(gorsel.FileName);
@@ -461,10 +462,10 @@ namespace sotec_web.Controllers
                 WebImage img = new WebImage(gorsel.InputStream);
                 var path = Path.Combine("~/admin_src/images/haber/orjinal", result);
                 img.Save(path);
-                img.Resize(1600, 1600, true, false);
+                img.Resize(1600, 1600, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/haber/buyuk", result);
                 img.Save(path);
-                img.Resize(400, 400, true, false);
+                img.Resize(400, 400, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/haber/kucuk", result);
                 img.Save(path);
                 result += Path.GetExtension(gorsel.FileName);
@@ -490,10 +491,10 @@ namespace sotec_web.Controllers
                 WebImage img = new WebImage(gorsel.InputStream);
                 var path = Path.Combine("~/admin_src/images/haber/orjinal", result);
                 img.Save(path);
-                img.Resize(1600, 1600, true, false);
+                img.Resize(1600, 1600, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/haber/buyuk", result);
                 img.Save(path);
-                img.Resize(400, 400, true, false);
+                img.Resize(400, 400, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/haber/kucuk", result);
                 img.Save(path);
                 result += Path.GetExtension(gorsel.FileName);
@@ -556,10 +557,10 @@ namespace sotec_web.Controllers
                 WebImage img = new WebImage(gorsel.InputStream);
                 var path = Path.Combine("~/admin_src/images/hizmet/orjinal", result);
                 img.Save(path);
-                img.Resize(1600, 1600, true, false);
+                img.Resize(1600, 1600, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/hizmet/buyuk", result);
                 img.Save(path);
-                img.Resize(400, 400, true, false);
+                img.Resize(400, 400, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/hizmet/kucuk", result);
                 img.Save(path);
                 result += Path.GetExtension(gorsel.FileName);
@@ -585,10 +586,10 @@ namespace sotec_web.Controllers
                 WebImage img = new WebImage(gorsel.InputStream);
                 var path = Path.Combine("~/admin_src/images/hizmet/orjinal", result);
                 img.Save(path);
-                img.Resize(1600, 1600, true, false);
+                img.Resize(1600, 1600, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/hizmet/buyuk", result);
                 img.Save(path);
-                img.Resize(400, 400, true, false);
+                img.Resize(400, 400, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/hizmet/kucuk", result);
                 img.Save(path);
                 result += Path.GetExtension(gorsel.FileName);
@@ -660,7 +661,7 @@ namespace sotec_web.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult siteBilgiGuncelle(HttpPostedFileBase logo, string site_adi, string slogan, string hakkimizda, string adres, string telefon, string gsm, string fax, string email, string calisma_saatleri, string facebook, string twitter, string instagram, string youtube, string linkedin, string whatsapp, string seo_aciklama, string seo_anahtar_kelimeler, string uyelik_sozlesmesi, string kullanim_sartlari, string mesafeli_satis_sozlesmesi, string gizlilik_politikasi, string sik_sorulan_sorular, int dil_id)
+        public ActionResult siteBilgiGuncelle(HttpPostedFileBase logo, string site_adi, string slogan, string hakkimizda, string adres, string telefon, string gsm, string fax, string email, string calisma_saatleri, string facebook, string twitter, string instagram, string youtube, string linkedin, string whatsapp, string seo_aciklama, string seo_anahtar_kelimeler, string uyelik_sozlesmesi, string kullanim_sartlari, string mesafeli_satis_sozlesmesi, string gizlilik_politikasi, string sik_sorulan_sorular, int dil_id, string iban)
         {
             string result = "";
             if (logo != null && logo.ContentLength > 0)
@@ -669,7 +670,7 @@ namespace sotec_web.Controllers
                 WebImage img = new WebImage(logo.InputStream);
                 var path = Path.Combine("~/admin_src/images/site_logo/orjinal", result);
                 img.Save(path);
-                img.Resize(150, 75, true, false);
+                img.Resize(150, 75, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/site_logo/", result);
                 img.Save(path);
                 result += Path.GetExtension(logo.FileName);
@@ -678,7 +679,7 @@ namespace sotec_web.Controllers
             string sql = "UPDATE site_bilgileri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), logo = " + (result.Length <= 0 ? "logo" : "'" + result + "'") + ", site_adi = '" + site_adi + "', slogan = '" + slogan + "', " +
                 " hakkimizda = '" + hakkimizda + "', adres = '" + adres + "', telefon = '" + telefon + "', gsm = '" + gsm + "', fax = '" + fax + "', whatsapp = '" + whatsapp + "', email = '" + email + "', calisma_saatleri = '" + calisma_saatleri + "', facebook = '" + facebook + "', " +
                 " instagram = '" + instagram + "', twitter = '" + twitter + "', youtube = '" + youtube + "', linkedin = '" + linkedin + "', seo_aciklama = '" + seo_aciklama + "', seo_anahtar_kelimeler = '" + seo_anahtar_kelimeler + "', uyelik_sozlesmesi = '" + uyelik_sozlesmesi + "', " +
-                " kullanim_sartlari = '" + kullanim_sartlari + "', mesafeli_satis_sozlesmesi = '" + mesafeli_satis_sozlesmesi + "', gizlilik_politikasi = '" + gizlilik_politikasi + "', sik_sorulan_sorular = '" + sik_sorulan_sorular + "' WHERE dil_id = " + dil_id;
+                " kullanim_sartlari = '" + kullanim_sartlari + "', mesafeli_satis_sozlesmesi = '" + mesafeli_satis_sozlesmesi + "', gizlilik_politikasi = '" + gizlilik_politikasi + "', sik_sorulan_sorular = '" + sik_sorulan_sorular + "', iban = '" + iban + "' WHERE dil_id = " + dil_id;
 
             SQL.set(sql);
 
@@ -711,10 +712,10 @@ namespace sotec_web.Controllers
                 WebImage img = new WebImage(ikon.InputStream);
                 var path = Path.Combine("~/admin_src/images/dil/orjinal", result);
                 img.Save(path);
-                img.Resize(250, 250, true, false);
+                img.Resize(250, 250, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/dil/buyuk", result);
                 img.Save(path);
-                img.Resize(40, 40, true, false);
+                img.Resize(40, 40, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/dil/kucuk", result);
                 img.Save(path);
                 result += Path.GetExtension(ikon.FileName);
@@ -743,10 +744,10 @@ namespace sotec_web.Controllers
                 WebImage img = new WebImage(ikon.InputStream);
                 var path = Path.Combine("~/admin_src/images/dil/orjinal", result);
                 img.Save(path);
-                img.Resize(250, 250, true, false);
+                img.Resize(250, 250, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/dil/buyuk", result);
                 img.Save(path);
-                img.Resize(40, 40, true, false);
+                img.Resize(40, 40, true, false).Crop(1, 1);
                 path = Path.Combine("~/admin_src/images/dil/kucuk", result);
                 img.Save(path);
                 result += Path.GetExtension(ikon.FileName);
@@ -816,10 +817,10 @@ namespace sotec_web.Controllers
                         WebImage img = new WebImage(imageBytes);
                         var path = Path.Combine("~/admin_src/images/urun/orjinal", result);
                         img.Save(path);
-                        img.Resize(1600, 1600, true, false);
+                        img.Resize(1600, 1600, true, false).Crop(1, 1);
                         path = Path.Combine("~/admin_src/images/urun/buyuk", result);
                         img.Save(path);
-                        img.Resize(400, 400, true, false);
+                        img.Resize(400, 400, true, false).Crop(1, 1);
                         path = Path.Combine("~/admin_src/images/urun/kucuk", result);
                         img.Save(path);
                         result += Path.GetExtension(img.FileName);
@@ -876,7 +877,7 @@ namespace sotec_web.Controllers
                     SQL.set("UPDATE urun_resimleri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), sira = " + resim_sira[i] + " WHERE urun_resim_id = " + resim_id[i]);
                     resim_ids += resim_id[i] + ",";
                 }
-                SQL.set("UPDATE urun_resimleri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE urun_resim_id NOT IN (" + resim_ids + "0" + ")");
+                SQL.set("UPDATE urun_resimleri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE urun_id = " + urun_id + " AND urun_resim_id NOT IN (" + resim_ids + "0" + ")");
                 for (int i = 0; i < resim_id.Length; i++)
                 {
                     if (resim_id[i] == 0)
@@ -888,10 +889,10 @@ namespace sotec_web.Controllers
                             WebImage img = new WebImage(imageBytes);
                             var path = Path.Combine("~/admin_src/images/urun/orjinal", result);
                             img.Save(path);
-                            img.Resize(1600, 1600, true, false);
+                            img.Resize(1600, 1600, true, false).Crop(1, 1);
                             path = Path.Combine("~/admin_src/images/urun/buyuk", result);
                             img.Save(path);
-                            img.Resize(400, 400, true, false);
+                            img.Resize(400, 400, true, false).Crop(1, 1);
                             path = Path.Combine("~/admin_src/images/urun/kucuk", result);
                             img.Save(path);
                             result += Path.GetExtension(img.FileName);
@@ -1194,6 +1195,53 @@ namespace sotec_web.Controllers
             }
 
             return Json(new { result = ozellik_id, message = ret_data });
+        }
+        #endregion
+
+        #region E-TİCARET
+        public ActionResult Siparisler(string ad_soyad = "", int siparis_durumu_parametre_id = 0, int odeme_tipi_parametre_id = 0, int siparis_id = 0)
+        {
+            if (Session["kullanici_id"] == null)
+                return RedirectToAction("Login");
+
+            ViewBag.ad_soyad = ad_soyad;
+            ViewBag.siparis_durumu_parametre_id = siparis_durumu_parametre_id;
+            ViewBag.odeme_tipi_parametre_id = odeme_tipi_parametre_id;
+            ViewBag.siparis_id = siparis_id;
+
+            return View();
+        }
+
+        public ActionResult Siparis(int id = 0)
+        {
+            if (Session["kullanici_id"] == null)
+                return RedirectToAction("Login");
+
+            ViewBag.siparis_id = id;
+
+            DataTable dt_siparis = SQL.get("SELECT * FROM siparisler WHERE siparis_id = " + id);
+            if(dt_siparis.Rows.Count <= 0)
+                return RedirectToAction("Index");
+
+            return View();
+        }
+
+        public ActionResult SiparisDuzenle(int siparis_id, int siparis_durumu_parametre_id, string kargo_no)
+        {
+            if (Session["kullanici_id"] == null)
+                return RedirectToAction("Login");
+
+            SQL.set("UPDATE siparisler SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), siparis_durumu_parametre_id = " + siparis_durumu_parametre_id + ", kargo_no = '" + kargo_no + "' WHERE siparis_id = " + siparis_id);
+
+            return RedirectToAction("Siparis", new { id = siparis_id });
+        }
+
+        public ActionResult N11()
+        {
+            if (Session["kullanici_id"] == null)
+                return RedirectToAction("Login");
+
+            return View();
         }
         #endregion
     }

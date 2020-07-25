@@ -1,0 +1,229 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    int siparis_id = ViewBag.siparis_id;
+    DataRow dr_siparis = SQL.get("SELECT * FROM siparisler WHERE siparis_id = " + siparis_id).Rows[0];
+
+    ViewBag.Title = "Sipariş / " + siparis_id;
+    DataTable dt_siparis_kalem = SQL.get("SELECT * FROM siparis_kalemleri sk WHERE sk.silindi = 0 AND siparis_id = " + siparis_id);
+    decimal fiyat = 0, miktar = 0;
+    DataRow dr_urun_itm;
+    DataRow dr_urun_dgr;
+}
+    <div class="row clearfix">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="header">
+                    <h2>@ViewBag.Title</h2>
+                    <ul class="header-dropdown dropdown dropdown-animated scale-left">
+                        <li><a href="javascript:void(0);" class="full-screen"><i class="icon-size-fullscreen"></i></a></li>
+                    </ul>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table m-b-0">
+                            <tbody>
+                                @foreach (DataRow dr_sip_kalem in dt_siparis_kalem.Rows)
+                                {
+                                    { dr_urun_itm = SQL.get("SELECT u.urun_id, u.stok_kodu, u.stok, u.fiyat, urun_adi = u.urun_adi, aciklama = u.aciklama, resim = ISNULL((SELECT TOP 1 resim FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id AND sira = (SELECT MIN(sira) FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id)), '') FROM urunler u WHERE u.urun_id = " + dr_sip_kalem["urun_id"]).Rows[0]; }
+
+                                    <tr>
+                                        <td>
+                                            <div class="tt-product-img">
+                                                <img src="/admin_src/images/urun/kucuk/@dr_urun_itm["resim"]" style="max-width: 100px;" alt="">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <h3 class="tt-title">
+                                                @{ fiyat = Convert.ToDecimal(dr_sip_kalem["birim_fiyat"]); miktar = Convert.ToDecimal(dr_sip_kalem["miktar"]); }
+                                                <a href="#">@dr_urun_itm["urun_adi"]</a>
+                                            </h3>
+                                            <ul>
+                                                @foreach (DataRow deger_id in SQL.get("SELECT deger_id FROM siparis_kalem_degerleri WHERE silindi = 0 AND siparis_kalem_id = " + dr_sip_kalem["siparis_kalem_id"]).Rows)
+                                                {
+                                                    { dr_urun_dgr = SQL.get("SELECT deger = uvd.deger FROM urun_varyasyon_degerleri uvd WHERE uvd.urun_varyasyon_deger_id = " + deger_id["deger_id"]).Rows[0]; }
+                                                    <li>@dr_urun_dgr["deger"]</li>
+                                                }
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <h6>
+                                                @fiyat.ToString("n2") ₺
+                                            </h6>
+                                        </td>
+                                        <td>
+                                            <h6>
+                                                x @miktar.ToString("n2")
+                                            </h6>
+                                        </td>
+                                        <td>
+                                            <h4>
+                                                @((fiyat * miktar).ToString("n2")) ₺
+                                            </h4>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <div class="card">
+                <div class="body">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>@sotec_web.Resources.Dil.AD_SOYAD : </th>
+                                <td>@dr_siparis["ad_soyad"]</td>
+                            </tr>
+                            <tr>
+                                <th>@sotec_web.Resources.Dil.E_MAİL : </th>
+                                <td>@dr_siparis["email"]</td>
+                            </tr>
+                            <tr>
+                                <th>@sotec_web.Resources.Dil.TELEFON : </th>
+                                <td>@dr_siparis["telefon"]</td>
+                            </tr>
+                            <tr>
+                                <th>@sotec_web.Resources.Dil.ÜLKE : </th>
+                                <td>@dr_siparis["ulke"]</td>
+                            </tr>
+                            <tr>
+                                <th>@sotec_web.Resources.Dil.ŞEHİR : </th>
+                                <td>@dr_siparis["sehir"]</td>
+                            </tr>
+                            <tr>
+                                <th>@sotec_web.Resources.Dil.SEMT : </th>
+                                <td>@dr_siparis["semt"]</td>
+                            </tr>
+                            <tr>
+                                <th>@sotec_web.Resources.Dil.POSTA_KODU : </th>
+                                <td>@dr_siparis["posta_kodu"]</td>
+                            </tr>
+                            <tr>
+                                <th>@sotec_web.Resources.Dil.ADRES : </th>
+                                <td>@dr_siparis["adres"]</td>
+                            </tr>
+                            <tr>
+                                <th>@sotec_web.Resources.Dil.not : </th>
+                                <td>@dr_siparis["siparis_notu"]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="body">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>@sotec_web.Resources.Dil.SİPARİŞ NO : </th>
+                                <td>#@siparis_id</td>
+                            </tr>
+                            <tr>
+                                <th>@sotec_web.Resources.Dil.TARİH : </th>
+                                <td>@dr_siparis["kayit_tarihi"]</td>
+                            </tr>
+                            <tr>
+                                <th>@sotec_web.Resources.Dil.DURUM : </th>
+                                <td>
+                                    @switch (Convert.ToInt32(dr_siparis["siparis_durumu_parametre_id"]))
+                                    {
+                                        case 33:
+                                            @sotec_web.Resources.Dil.BEKLEMEDE;
+                                            break;
+                                        case 34:
+                                            @sotec_web.Resources.Dil.HAZIRLANIYOR;
+                                            break;
+                                        case 36:
+                                            @sotec_web.Resources.Dil.KARGODA;
+                                            break;
+                                        case 37:
+                                            @sotec_web.Resources.Dil.TAMAMLANDI;
+                                            break;
+                                        case 38:
+                                            @sotec_web.Resources.Dil.İPTAL_EDİLDİ;
+                                            break;
+                                        default:
+                                            @sotec_web.Resources.Dil.BEKLEMEDE;
+                                            break;
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>@sotec_web.Resources.Dil.ÖDEME_TİPİ : </th>
+                                <td>
+                                    @switch (Convert.ToInt32(dr_siparis["odeme_tipi_parametre_id"]))
+                                    {
+                                        case 29:
+                                            @sotec_web.Resources.Dil.KREDİ_KARTI;
+                                            break;
+                                        case 30:
+                                            @sotec_web.Resources.Dil.KAPIDA_ÖDEME;
+                                            break;
+                                        case 31:
+                                            @sotec_web.Resources.Dil.MAĞAZADAN_TESLİM;
+                                            break;
+                                        case 32:
+                                            @sotec_web.Resources.Dil.HAVALE;
+                                            break;
+                                        default:
+                                            @sotec_web.Resources.Dil.KREDİ_KARTI;
+                                            break;
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>@sotec_web.Resources.Dil.KARGO NO : </th>
+                                <td>@dr_siparis["kargo_no"]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <div class="card">
+                <div class="header">
+                    <h3>Sipariş Düzenle</h3>
+                </div>
+                <div class="body">
+                    <form method="post" action="/Admin/SiparisDuzenle">
+                        <input type="hidden" name="siparis_id" value="@siparis_id"/>
+                        <div class="col-lg-12 col-md-12">
+                            <b>Sipariş Durumu</b>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="icon-paper-plane"></i></span>
+                                </div>
+                                <select name="siparis_durumu_parametre_id" class="form-control">
+                                    <option value="0" @(Convert.ToInt32(dr_siparis["siparis_durumu_parametre_id"]) == 0 ? "selected" : "")>Hepsi</option>
+                                    <option value="33" @(Convert.ToInt32(dr_siparis["siparis_durumu_parametre_id"]) == 33 ? "selected" : "")>Ödeme Bekliyor</option>
+                                    <option value="34" @(Convert.ToInt32(dr_siparis["siparis_durumu_parametre_id"]) == 34 ? "selected" : "")>Hazırlanıyor</option>
+                                    <option value="36" @(Convert.ToInt32(dr_siparis["siparis_durumu_parametre_id"]) == 36 ? "selected" : "")>Kargoya Verildi</option>
+                                    <option value="37" @(Convert.ToInt32(dr_siparis["siparis_durumu_parametre_id"]) == 37 ? "selected" : "")>Tamamlandı</option>
+                                    <option value="38" @(Convert.ToInt32(dr_siparis["siparis_durumu_parametre_id"]) == 38 ? "selected" : "")>İptal Edildi</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12">
+                            <b>Kargo No</b>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="icon-directions"></i></span>
+                                </div>
+                                <input type="text" name="kargo_no" class="form-control" value="@dr_siparis["kargo_no"]">
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 align-right">
+                            <button type="submit" class="btn btn-primary">Siparişi Düzenle</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>      
+    </div>
+

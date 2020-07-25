@@ -23,6 +23,12 @@
     }
     DataRow dr_urun_itm;
     DataRow dr_urun_dgr;
+
+    DataTable dt_odeme_tipileri = SQL.get("SELECT * FROM parametreler WHERE tip = 'odeme_tipi'");
+
+    decimal fiyat = 0;
+    decimal stok = 0;
+    bool stokta_yok = false;
 }
 <div class="container-indent">
     <div class="container">
@@ -35,8 +41,8 @@
                             @{ decimal toplam = 0; }
                             @foreach (sotec_web.Models.SepetKalem sk in sepetKalem)
                             {
-                                { dr_urun_itm = SQL.get("SELECT u.urun_id, u.stok_kodu, u.fiyat, urun_adi = ISNULL(du.urun_adi, u.urun_adi), aciklama = ISNULL(du.aciklama, u.aciklama), resim = ISNULL((SELECT TOP 1 resim FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id AND sira = (SELECT MIN(sira) FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id)), '') FROM urunler u LEFT OUTER JOIN dil_urunler du ON du.urun_id = u.urun_id AND du.silindi = 0 AND du.dil_id = " + dr_dil["dil_id"] + " WHERE u.urun_id = " + sk.urun_id).Rows[0]; }
-                                { toplam += (Convert.ToDecimal(dr_urun_itm["fiyat"]) * sk.miktar); }
+                                { dr_urun_itm = SQL.get("SELECT u.urun_id, u.stok_kodu, u.stok, u.fiyat, urun_adi = ISNULL(du.urun_adi, u.urun_adi), aciklama = ISNULL(du.aciklama, u.aciklama), resim = ISNULL((SELECT TOP 1 resim FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id AND sira = (SELECT MIN(sira) FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id)), '') FROM urunler u LEFT OUTER JOIN dil_urunler du ON du.urun_id = u.urun_id AND du.silindi = 0 AND du.dil_id = " + dr_dil["dil_id"] + " WHERE u.urun_id = " + sk.urun_id).Rows[0]; }
+                                
                                 <tr>
                                     <td>
                                         <a href="@Url.Action("sepetSil2", "Home", new { id = sk.sepet_id })" class="tt-btn-close"></a>
@@ -48,51 +54,65 @@
                                     </td>
                                     <td>
                                         <h2 class="tt-title">
+                                            @{ fiyat = Convert.ToDecimal(dr_urun_itm["fiyat"]); if (Convert.ToDecimal(dr_urun_itm["stok"]) < 1) { stokta_yok = true; } }
                                             <a href="@Url.Action("Product", "Home", new { id = sk.urun_id })">@dr_urun_itm["urun_adi"]</a>
                                         </h2>
                                         <ul class="tt-add-info">
-                                            @foreach (int deger_id in sk.deger_id)
+                                            @if (sk.deger_id != null)
                                             {
-                                                { dr_urun_dgr = SQL.get("SELECT deger = ISNULL(duvd.deger, uvd.deger) FROM urun_varyasyon_degerleri uvd LEFT OUTER JOIN dil_urun_varyasyon_degerleri duvd ON duvd.urun_varyasyon_deger_id = uvd.urun_varyasyon_deger_id AND duvd.silindi = 0 AND duvd.dil_id = " + dr_dil["dil_id"] + " WHERE uvd.urun_varyasyon_deger_id = " + deger_id).Rows[0]; }
-                                                <li>@dr_urun_dgr["deger"]</li>
+                                                foreach (int deger_id in sk.deger_id)
+                                                {
+                                                    {
+                                                        fiyat += Convert.ToDecimal(SQL.get("SELECT tutar FROM urun_varyasyon WHERE silindi = 0 AND urun_id = " + dr_urun_itm["urun_id"] + " AND deger_id = " + deger_id).Rows[0]["tutar"]);
+                                                        dr_urun_dgr = SQL.get("SELECT deger = ISNULL(duvd.deger, uvd.deger) FROM urun_varyasyon_degerleri uvd LEFT OUTER JOIN dil_urun_varyasyon_degerleri duvd ON duvd.urun_varyasyon_deger_id = uvd.urun_varyasyon_deger_id AND duvd.silindi = 0 AND duvd.dil_id = " + dr_dil["dil_id"] + " WHERE uvd.urun_varyasyon_deger_id = " + deger_id).Rows[0];
+                                                        if (Convert.ToDecimal(SQL.get("SELECT stok FROM urun_varyasyon WHERE silindi = 0 AND urun_id = " + dr_urun_itm["urun_id"] + " AND deger_id = " + deger_id).Rows[0]["stok"]) < 1) { stokta_yok = true; }
+                                                    }
+                                                    <li>@dr_urun_dgr["deger"]</li>
+                                                }
                                             }
                                         </ul>
+                                        @if (stokta_yok)
+                                        {
+                                            <span class="text-danger">@sotec_web.Resources.Dil.STOKTA_YOK</span>
+                                        }
                                         <ul class="tt-list-parameters">
                                             <li>
                                                 <div class="tt-price">
-                                                    @dr_urun_itm["fiyat"] ₺
+                                                    @fiyat.ToString("n2") ₺
                                                 </div>
                                             </li>
                                             <li>
-                                                <div class="detach-quantity-mobile"></div>
+                                                x @sk.miktar
                                             </li>
                                             <li>
                                                 <div class="tt-price subtotal">
-                                                    @(Convert.ToDecimal(dr_urun_itm["fiyat"]) * sk.miktar) ₺
+                                                    @((fiyat * sk.miktar).ToString("n2")) ₺
                                                 </div>
                                             </li>
                                         </ul>
                                     </td>
                                     <td>
                                         <div class="tt-price">
-                                            @dr_urun_itm["fiyat"] ₺
+                                            @fiyat.ToString("n2") ₺
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="detach-quantity-desctope">
-                                            <div class="tt-input-counter style-01">
+                                        <div class="tt-price">
+                                            x @sk.miktar
+                                            @*<div class="tt-input-counter style-01">
                                                 <span class="minus-btn"></span>
                                                 <input type="text" value="@sk.miktar" size="5">
                                                 <span class="plus-btn"></span>
-                                            </div>
+                                            </div>*@
                                         </div>
                                     </td>
                                     <td>
                                         <div class="tt-price subtotal">
-                                            @(Convert.ToDecimal(dr_urun_itm["fiyat"]) * sk.miktar) ₺
+                                            @((fiyat * sk.miktar).ToString("n2")) ₺
                                         </div>
                                     </td>
                                 </tr>
+                                { toplam += fiyat * sk.miktar; }
                             }
                         </tbody>
                     </table>
@@ -108,90 +128,110 @@
                 </div>
             </div>
             <div class="col-sm-12 col-xl-4">
-                <div class="tt-shopcart-wrapper">
-                    <div class="tt-shopcart-box">
-                        <a href="#" class="btn btn-border">GİRİŞ YAP</a>
-                        <p class="text-center">
-                            yada<br />üye olmadan devam et
-                        </p>
-                        <hr />
-                        <h4 class="tt-title text-center">
-                            ADRES BİLGİLERİ
-                        </h4>
-                        <p>Enter your destination to get a shipping estimate.</p>
-                        <div class="form-default">
-                            <div class="form-group">
-                                <label for="address_country">COUNTRY <sup>*</sup></label>
-                                <select id="address_country" class="form-control">
-                                    <option>Austria</option>
-                                    <option>Belgium</option>
-                                    <option>Cyprus</option>
-                                    <option>Croatia</option>
-                                    <option>Czech Republic</option>
-                                    <option>Denmark</option>
-                                    <option>Finland</option>
-                                    <option>France</option>
-                                    <option>Germany</option>
-                                    <option>Greece</option>
-                                    <option>Hungary</option>
-                                    <option>Ireland</option>
-                                    <option>France</option>
-                                    <option>Italy</option>
-                                    <option>Luxembourg</option>
-                                    <option>Netherlands</option>
-                                    <option>Poland</option>
-                                    <option>Portugal</option>
-                                    <option>Slovakia</option>
-                                    <option>Slovenia</option>
-                                    <option>Spain</option>
-                                    <option>United Kingdom</option>
-                                </select>
+                <form method="post" action="/Home/siparisEkle">
+                    <label class="text-danger">@Request.Params["hata"]</label>
+                    <input type="hidden" name="kullanici_id" value="@(dr_kullanici == null ? "0" : dr_kullanici["kullanici_id"].ToString())"/>
+                    <div class="tt-shopcart-wrapper">
+                        <div class="tt-shopcart-box">
+                            @if (dr_kullanici == null)
+                            {
+                                <a href="@Url.Action("SignIn", "Home")" class="btn btn-border">@sotec_web.Resources.Dil.GİRİŞ_YAP</a>
+                                <p class="text-center">
+                                    @sotec_web.Resources.Dil.yada<br />@sotec_web.Resources.Dil.üye_olmadan_devam_et
+                                </p>
+                                <hr />
+                                <div class="form-default">
+                                    <div class="form-group">
+                                        <label for="address_zip">@sotec_web.Resources.Dil.AD_SOYAD <sup>*</sup></label>
+                                        <input type="text" name="ad_soyad" class="form-control" id="ad_soyad" placeholder="@sotec_web.Resources.Dil.AD_SOYAD" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address_zip">@sotec_web.Resources.Dil.E_MAİL <sup>*</sup></label>
+                                        <input type="email" name="email" class="form-control" id="email" placeholder="@sotec_web.Resources.Dil.E_MAİL" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address_zip">@sotec_web.Resources.Dil.TELEFON <sup>*</sup></label>
+                                        <input type="tel" name="telefon" class="form-control" id="telefon" placeholder="@sotec_web.Resources.Dil.TELEFON" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address_zip">@sotec_web.Resources.Dil.ÜLKE <sup>*</sup></label>
+                                        <input type="text" name="ulke" class="form-control" id="ulke" placeholder="@sotec_web.Resources.Dil.ÜLKE" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address_zip">@sotec_web.Resources.Dil.ŞEHİR <sup>*</sup></label>
+                                        <input type="text" name="sehir" class="form-control" id="sehir" placeholder="@sotec_web.Resources.Dil.ŞEHİR" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address_zip">@sotec_web.Resources.Dil.SEMT <sup>*</sup></label>
+                                        <input type="text" name="semt" class="form-control" id="semt" placeholder="@sotec_web.Resources.Dil.SEMT" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address_zip">@sotec_web.Resources.Dil.POSTA_KODU</label>
+                                        <input type="text" name="posta_kodu" class="form-control" id="posta_kodu" placeholder="@sotec_web.Resources.Dil.POSTA_KODU">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address_zip">@sotec_web.Resources.Dil.ADRES <sup>*</sup></label>
+                                        <textarea name="adres" class="form-control" rows="7" required></textarea>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-default">
+                                    <div class="form-group">
+                                        <label for="address_zip">@sotec_web.Resources.Dil.ADRES</label>
+                                        <select name="adres_id" id="adres_id" class="form-control" required>
+                                            @foreach (DataRow item_adr in SQL.get("SELECT * FROM adresler WHERE silindi = 0 AND kullanici_id = " + dr_kullanici["kullanici_id"]).Rows)
+                                            {
+                                                <option value="@item_adr["adres_id"]">@item_adr["ad"]</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <a href="@Url.Action("Adress", "Home")" class="btn btn-border">@sotec_web.Resources.Dil.ADRESLERİ_DÜZENLE</a>
+                            }
+                        </div>
+                        <div class="tt-shopcart-box">
+                            <h4 class="tt-title">
+                                @sotec_web.Resources.Dil.ÖDEME_TİPİ
+                            </h4>
+                            <div class="form-default">
+                                <div class="form-group">
+                                    <select name="odeme_tipi" id="odeme_tipi" class="form-control" required>
+                                        @if (ConfigurationManager.AppSettings["kredi_karti"] == "true") { <option value="29">@sotec_web.Resources.Dil.KREDİ_KARTI</option> }
+                                        @if (ConfigurationManager.AppSettings["havale"] == "true") { <option value="32">@sotec_web.Resources.Dil.HAVALE</option> }
+                                        @if (ConfigurationManager.AppSettings["kapida_odeme"] == "true") { <option value="30">@sotec_web.Resources.Dil.KAPIDA_ÖDEME</option> }
+                                        @if (ConfigurationManager.AppSettings["magazadan_teslim"] == "true") { <option value="31">@sotec_web.Resources.Dil.MAĞAZADAN_TESLİM</option> }
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="address_province">STATE/PROVINCE <sup>*</sup></label>
-                                <select id="address_province" class="form-control">
-                                    <option>State/Province</option>
-                                </select>
+                        </div>
+                        <div class="tt-shopcart-box">
+                            <h4 class="tt-title">
+                                @sotec_web.Resources.Dil.not
+                            </h4>
+                            <div class="form-default">
+                                <textarea name="siparis_notu" class="form-control" rows="7"></textarea>
                             </div>
-                            <div class="form-group">
-                                <label for="address_zip">ZIP/POSTAL CODE <sup>*</sup></label>
-                                <input type="text" name="name" class="form-control" id="address_zip" placeholder="Zip/Postal Code">
+                        </div>
+                        <div class="tt-shopcart-box tt-boredr-large">
+                            <table class="tt-shopcart-table01">
+                                <tfoot>
+                                    <tr>
+                                        <th>@sotec_web.Resources.Dil.TOPLAM</th>
+                                        <td>@toplam.ToString("n2") ₺</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <div class="form-default">
+                                <ul class="tt-list-dot list-dot-large">
+                                    <li><a href="#">Mesafeli Satış Sözleşmesi</a></li>
+                                </ul>
                             </div>
-                            <p>
-                                There is one shipping rate available for Alabama, Tanzania, United Republic Of.
-                            </p>
-                            <ul class="tt-list-dot list-dot-large">
-                                <li><a href="#">International Shipping at $20.00</a></li>
-                            </ul>
+                            <button type="submit" class="btn btn-lg"><span class="icon icon-check_circle"></span>@sotec_web.Resources.Dil.ÖDEMEYE_GEÇ</button>
                         </div>
                     </div>
-                    <div class="tt-shopcart-box">
-                        <h4 class="tt-title">
-                            NOTE
-                        </h4>
-                        <p>Add special instructions for your order...</p>
-                        <div class="form-default">
-                            <textarea class="form-control" rows="7"></textarea>
-                        </div>
-                    </div>
-                    <div class="tt-shopcart-box tt-boredr-large">
-                        <table class="tt-shopcart-table01">
-                            <tbody>
-                                <tr>
-                                    <th>SUBTOTAL</th>
-                                    <td>$324</td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>GRAND TOTAL</th>
-                                    <td>$324</td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        <a href="#" class="btn btn-lg"><span class="icon icon-check_circle"></span>@sotec_web.Resources.Dil.ÖDEMEYE_GEÇ</a>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

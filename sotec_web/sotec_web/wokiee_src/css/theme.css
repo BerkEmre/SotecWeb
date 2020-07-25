@@ -11797,7 +11797,7 @@ header .container-fluid {
     .tt-mobile-header .tt-logo-container .tt-logo-alignment .tt-title {
       margin-top: 11px; }
   .tt-mobile-header .tt-logo-container .tt-logo img {
-    max-height: 30px; }
+    max-height: 50px; }
 
 @media (min-width: 481px) {
   .tt-mobile-header .tt-mobile-parent-menu {
@@ -12961,7 +12961,7 @@ footer {
         top: 0px; } }
   footer .tt-logo img {
     height: auto;
-    max-height: 20px; }
+    max-height: 50px; }
   footer .tt-logo-alignment {
     position: relative; }
     @media (min-width: 790px) {
@@ -26175,7 +26175,7 @@ input::-ms-clear {
   display: inline-block; }
   .tt-logo img {
     height: auto;
-    max-height: 30px; }
+    max-height: 50px; }
 
 /* tt-box-info */
 .tt-box-info {
