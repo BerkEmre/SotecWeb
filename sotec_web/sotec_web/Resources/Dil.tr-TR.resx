@@ -192,6 +192,9 @@
   <data name="GERİ" xml:space="preserve">
     <value>GERİ</value>
   </data>
+  <data name="Gizlilik Politikası" xml:space="preserve">
+    <value>Gizlilik Politikası</value>
+  </data>
   <data name="GSM" xml:space="preserve">
     <value>GSM</value>
   </data>
@@ -255,6 +258,9 @@
   <data name="KREDİ KARTI" xml:space="preserve">
     <value>KREDİ KARTI</value>
   </data>
+  <data name="Kullanım Şartları" xml:space="preserve">
+    <value>Kullanım Şartları</value>
+  </data>
   <data name="MAHALLE" xml:space="preserve">
     <value>MAHALLE</value>
   </data>
@@ -266,6 +272,9 @@
   </data>
   <data name="MENÜ" xml:space="preserve">
     <value>MENÜ</value>
+  </data>
+  <data name="Mesafeli Satış Sözleşmesi" xml:space="preserve">
+    <value>Mesafeli Satış Sözleşmesi</value>
   </data>
   <data name="MESAJ" xml:space="preserve">
     <value>MESAJ</value>
@@ -335,6 +344,9 @@
   </data>
   <data name="SİPARİŞLER" xml:space="preserve">
     <value>SİPARİŞLER</value>
+  </data>
+  <data name="Sık Sorulan Sorular" xml:space="preserve">
+    <value>Sık Sorulan Sorular</value>
   </data>
   <data name="TAMAMLANDI" xml:space="preserve">
     <value>TAMAMLANDI</value>
@@ -410,6 +422,9 @@
   </data>
   <data name="üye olmadan devam et" xml:space="preserve">
     <value>üye olmadan devam et</value>
+  </data>
+  <data name="Üyelik Sözleşmesi" xml:space="preserve">
+    <value>Üyelik Sözleşmesi</value>
   </data>
   <data name="İLETİŞİM" xml:space="preserve">
     <value>İLETİŞİM</value>

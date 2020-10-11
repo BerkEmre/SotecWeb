@@ -80,6 +80,13 @@ namespace sotec_web.Controllers
             return View();
         }
 
+        public ActionResult Page(int id = 0)
+        {
+            ViewBag.yazi_id = id;
+
+            return View();
+        }
+
         public ActionResult Wishlist()
         {
             if (Session["kullanici_id"] == null)

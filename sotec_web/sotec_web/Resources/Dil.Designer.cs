@@ -313,6 +313,15 @@ namespace sotec_web.Resources {
         }
         
         /// <summary>
+        ///   Privacy Policy benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string Gizlilik_Politikası {
+            get {
+                return ResourceManager.GetString("Gizlilik Politikası", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   SEND benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string GÖNDER {
@@ -520,6 +529,15 @@ namespace sotec_web.Resources {
         }
         
         /// <summary>
+        ///   Terms of use benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string Kullanım_Şartları {
+            get {
+                return ResourceManager.GetString("Kullanım Şartları", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   SHOP benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string MAĞAZA {
@@ -552,6 +570,15 @@ namespace sotec_web.Resources {
         public static string MENÜ {
             get {
                 return ResourceManager.GetString("MENÜ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Distance Selling Contract benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string Mesafeli_Satış_Sözleşmesi {
+            get {
+                return ResourceManager.GetString("Mesafeli Satış Sözleşmesi", resourceCulture);
             }
         }
         
@@ -732,6 +759,15 @@ namespace sotec_web.Resources {
         public static string Şifremi_Ununttum {
             get {
                 return ResourceManager.GetString("Şifremi Ununttum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   FAQ benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string Sık_Sorulan_Sorular {
+            get {
+                return ResourceManager.GetString("Sık Sorulan Sorular", resourceCulture);
             }
         }
         
@@ -930,6 +966,15 @@ namespace sotec_web.Resources {
         public static string üye_olmadan_devam_et {
             get {
                 return ResourceManager.GetString("üye olmadan devam et", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Membership Agreement benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string Üyelik_Sözleşmesi {
+            get {
+                return ResourceManager.GetString("Üyelik Sözleşmesi", resourceCulture);
             }
         }
         

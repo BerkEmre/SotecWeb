@@ -1,0 +1,41 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    int yazi_id = ViewBag.yazi_id;
+    string yazi = "";
+    string deger = "";
+
+    switch (yazi_id)
+    {
+        case 1: yazi = sotec_web.Resources.Dil.Üyelik_Sözleşmesi; deger = "uyelik_sozlesmesi"; break;
+        case 2: yazi = sotec_web.Resources.Dil.Kullanım_Şartları; deger = "kullanim_sartlari"; break;
+        case 3: yazi = sotec_web.Resources.Dil.Mesafeli_Satış_Sözleşmesi; deger = "mesafeli_satis_sozlesmesi"; break;
+        case 4: yazi = sotec_web.Resources.Dil.Gizlilik_Politikası; deger = "gizlilik_politikasi"; break;
+        case 5: yazi = sotec_web.Resources.Dil.Sık_Sorulan_Sorular; deger = "sik_sorulan_sorular"; break;
+        default: yazi = ""; deger = "hakkimizda"; break;
+    }
+
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    DataRow dr_site_bilgileri = SQL.get("SELECT * FROM site_bilgileri WHERE dil_id = " + dr_dil["dil_id"]).Rows[0];
+
+    ViewBag.Title = yazi;
+}
+<div class="container-indent">
+    <div class="container container-fluid-custom-mobile-padding">
+        <h1 class="tt-title-subpages">@yazi</h1>
+        <div class="tt-box-faq-listing">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="tt-box-faq">
+                        @MvcHtmlString.Create(dr_site_bilgileri[deger].ToString())
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

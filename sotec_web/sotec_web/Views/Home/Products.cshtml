@@ -88,7 +88,7 @@
                                         <h2 class="tt-title"><a href="@Url.Action("Product", "Home", new { id = dr_urun_item["urun_id"] })">@dr_urun_item["urun_adi"]</a></h2>
                                         <div class="tt-price">
                                             @if (ConfigurationManager.AppSettings["eticaret"] == "true")
-                                            {@dr_urun_item["fiyat"] }
+                                            {@(dr_urun_item["fiyat"].ToString() + "₺") }
                                         else
                                         { <br />}
                                         </div>

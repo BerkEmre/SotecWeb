@@ -26,7 +26,7 @@
                             @foreach (DataRow dr_slider_item in dt_slider.Rows)
                             {
                                 <li data-thumb="/admin_src/images/sliders/buyuk/@dr_slider_item["resim"]" data-transition="fade" data-slotamount="1" data-masterspeed="1000" data-saveperformance="off" data-title="Slide">
-                                    <img src="~/admin_src/images/sliders/buyuk/@dr_slider_item["resim"]" alt="@dr_slider_item["baslik"]" data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat">
+                                    <img src="~/admin_src/images/sliders/buyuk/@dr_slider_item["resim"]" alt="@dr_slider_item["baslik"]" data-bgposition="center center" data-bgfit="contain" data-bgrepeat="no-repeat">
                                     <div class="tp-caption tp-caption1 lft stb"
                                          data-x="center"
                                          data-y="center"
@@ -57,7 +57,7 @@
                 <div class="row clearfix">
                     @foreach (DataRow dr_karo_item in dt_karo.Rows)
                     {
-                        <div class="col-sm-3">
+                        <div class="col-sm-3 col-6">
                             <a href="@dr_karo_item["link"]" class="tt-promo-box tt-one-child hover-type-2">
                                 <img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/karo/buyuk/@dr_karo_item["resim"]" alt="">
                                 @MvcHtmlString.Create((dr_karo_item["buton"].ToString().Length <= 0 ? "" : "<div class='tt-description'><div class='tt-description-wrapper'><div class='tt-background'></div><div class='tt-title-small'>" + dr_karo_item["buton"] + "</div></div></div>"))
@@ -96,7 +96,7 @@
                                 </div>
                                 <h2 class="tt-title"><a href="@Url.Action("Product", "Home", new { id = dr_urun_item["urun_id"] })">@dr_urun_item["urun_adi"]</a></h2>
                                 <div class="tt-price">
-                                    @if (ConfigurationManager.AppSettings["eticaret"] == "true") {@dr_urun_item["fiyat"] } else { <br />}
+                                    @if (ConfigurationManager.AppSettings["eticaret"] == "true") {@(dr_urun_item["fiyat"] + "₺") } else { <br />}
                                 </div>
                                 <div class="tt-product-inside-hover">
                                     <div class="tt-row-btn">

@@ -362,15 +362,33 @@
                     </div>
                     <div class="col-md-6 col-lg-4 col-xl-3">
                         <div class="tt-mobile-collapse">
-                            <h4 class="tt-collapse-title">@sotec_web.Resources.Dil.HAKKIMIZDA</h4>
-                            <div class="tt-collapse-content"><p>@(dr_site_bilgileri["hakkimizda"].ToString().Substring(0, dr_site_bilgileri["hakkimizda"].ToString().Length < 100 ? dr_site_bilgileri["hakkimizda"].ToString().Length : 100))...</p></div>
+                            @if (ConfigurationManager.AppSettings["urunler"] == "true")
+                            {
+                                <h4 class="tt-collapse-title">
+                                    @sotec_web.Resources.Dil.KATEGORİLER
+                                </h4>
+                                <div class="tt-collapse-content">
+                                    <ul class="tt-list">
+                                        <li><a href="@Url.Action("Page", "Home", new { id = 1 })">@sotec_web.Resources.Dil.Üyelik_Sözleşmesi</a></li>
+                                        <li><a href="@Url.Action("Page", "Home", new { id = 2 })">@sotec_web.Resources.Dil.Kullanım_Şartları</a></li>
+                                        <li><a href="@Url.Action("Page", "Home", new { id = 3 })">@sotec_web.Resources.Dil.Mesafeli_Satış_Sözleşmesi</a></li>
+                                        <li><a href="@Url.Action("Page", "Home", new { id = 4 })">@sotec_web.Resources.Dil.Gizlilik_Politikası</a></li>
+                                        <li><a href="@Url.Action("Page", "Home", new { id = 5 })">@sotec_web.Resources.Dil.Sık_Sorulan_Sorular</a></li>
+                                    </ul>
+                                </div>
+                            }
+                            else
+                            {
+                                <h4 class="tt-collapse-title">@sotec_web.Resources.Dil.HAKKIMIZDA</h4>
+                                <div class="tt-collapse-content"><p>@(dr_site_bilgileri["hakkimizda"].ToString().Substring(0, dr_site_bilgileri["hakkimizda"].ToString().Length < 100 ? dr_site_bilgileri["hakkimizda"].ToString().Length : 100))...</p></div>
+                            }
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-4 col-xl-3">
                         <div class="tt-newsletter">
                             <div class="tt-mobile-collapse">
                                 <h4 class="tt-collapse-title">
-                                    @sotec_web.Resources.Dil.İLETİŞİM
+                                    @sotec_web.Resources.Dil.MENÜ
                                 </h4>
                                 <div class="tt-collapse-content">
                                     <address>
