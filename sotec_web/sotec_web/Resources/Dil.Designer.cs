@@ -673,6 +673,24 @@ namespace sotec_web.Resources {
         }
         
         /// <summary>
+        ///   PROJECTS benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string PROJELERIMIZ {
+            get {
+                return ResourceManager.GetString("PROJELERIMIZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   REFFERANCES benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string REFERANSLAR {
+            get {
+                return ResourceManager.GetString("REFERANSLAR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   BUY benzeri yerelleştirilmiş bir dize arar.
         /// </summary>
         public static string SATIN_AL {
@@ -957,6 +975,24 @@ namespace sotec_web.Resources {
         public static string Ürün_Sepetten_Silindi {
             get {
                 return ResourceManager.GetString("Ürün Sepetten Silindi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   PRODUCTS benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string URUNLERIMIZ {
+            get {
+                return ResourceManager.GetString("URUNLERIMIZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   PRODUCTS benzeri yerelleştirilmiş bir dize arar.
+        /// </summary>
+        public static string ÜRÜNLERİMİZ {
+            get {
+                return ResourceManager.GetString("ÜRÜNLERİMİZ", resourceCulture);
             }
         }
         

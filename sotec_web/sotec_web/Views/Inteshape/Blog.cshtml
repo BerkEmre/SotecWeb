@@ -1,0 +1,100 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@using System.Text.RegularExpressions
+@{
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    int blog_id = ViewBag.blog_id;
+
+    Regex rRemScript = new Regex(@"<iframe[^>]*>[\s\S]*?</iframe>");
+    string yazi;
+
+    DataRow dr_blog = SQL.get("SELECT b.blog_id, b.gorsel, baslik = ISNULL(db.baslik, b.baslik), yazi = ISNULL(db.yazi, b.yazi), ad_soyad = k.ad + ' ' + k.soyad, b.kayit_tarihi, kategori = ISNULL(dk.kategori, kat.kategori), b.kategori_id FROM bloglar b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id INNER JOIN kategoriler kat ON kat.kategori_id = b.kategori_id LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = kat.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " LEFT OUTER JOIN dil_bloglar db ON db.blog_id = b.blog_id AND db.silindi = 0 AND db.dil_id = " + dr_dil["dil_id"] + " WHERE b.silindi = 0 AND b.blog_id = " + blog_id).Rows[0];
+    DataTable dt_son_bloglar = SQL.get("SELECT TOP 3 b.blog_id, b.gorsel, baslik = ISNULL(db.baslik, b.baslik), yazi = ISNULL(db.yazi, b.yazi), ad_soyad = k.ad + ' ' + k.soyad, b.kayit_tarihi  FROM bloglar b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id LEFT OUTER JOIN dil_bloglar db ON db.blog_id = b.blog_id AND db.silindi = 0 AND db.dil_id = " + dr_dil["dil_id"] + " WHERE b.silindi = 0 ORDER by b.blog_id DESC");
+
+    ViewBag.Title = dr_blog["baslik"];
+}
+<div class="sx-bnr-inr overlay-wraper bg-parallax bg-top-center" data-stellar-background-ratio="0.5" style="background-image:url(images/banner/10.jpg);">
+    <div class="overlay-main bg-black opacity-07"></div>
+    <div class="container">
+        <div class="sx-bnr-inr-entry">
+            <div class="banner-title-outer">
+                <div class="banner-title-name">
+                    <h2 class="m-tb0">@dr_blog["baslik"]</h2>
+                </div>
+            </div>
+            <div>
+                <ul class="sx-breadcrumb breadcrumb-style-2">
+                    <li><a href="@Url.Action("Index", "Inteshape")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
+                    <li><a href="@Url.Action("Blogs", "Inteshape")">@sotec_web.Resources.Dil.BLOG</a></li>
+                    <li>@dr_blog["baslik"]</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section-full p-t80 p-b50 inner-page-padding">
+    <div class="container">
+        <div class="blog-single-space max-w900 ml-auto mr-auto">
+            <div class="blog-post blog-detail text-black">
+                <div class="sx-post-media">
+                    <div class="portfolio-item">
+                        <img class="img-responsive" src="~/admin_src/images/blog/buyuk/@dr_blog["gorsel"]" alt="">
+                    </div>
+                </div>
+                <div class="sx-post-meta  m-t20">
+                    <ul>
+                        <li class="post-date">@(Convert.ToDateTime(dr_blog["kayit_tarihi"]).ToShortDateString()) </li>
+                        <li class="post-author">@dr_blog["ad_soyad"] </li>
+                        <li class="post-category"><a href="@Url.Action("Blogs", new { id = 0, id2 = dr_blog["kategori_id"] })">@dr_blog["kategori"]</a> </li>
+                    </ul>
+                </div>
+                <div class="sx-post-title ">
+                    <h3 class="post-title">@dr_blog["baslik"]</h3>
+                </div>
+                <div class="sx-post-text">
+                    @MvcHtmlString.Create(dr_blog["yazi"].ToString())
+                </div>
+                <div class="section-head">
+                    <div class="sx-separator-outer separator-left">
+                        <div class="sx-separator bg-white bg-moving bg-repeat-x" style="background-image:url(images/background/cross-line2.png)">
+                            <h3 class="sep-line-one">@sotec_web.Resources.Dil.SON_BLOG_YAZILARI</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <div class="row">
+                        @foreach (DataRow dr_blog_item in dt_son_bloglar.Rows)
+                        {
+                            <div class="col-md-4 col-sm-12">
+                                <div class="blog-post blog-grid date-style-2">
+                                    <div class="sx-post-media sx-img-effect img-reflection">
+                                        <a href="@Url.Action("Blog", "Inteshape", new { id = dr_blog_item["blog_id"] })"><img src="~/admin_src/images/blog/kucuk/@dr_blog_item["gorsel"]" alt=""></a>
+                                    </div>
+                                    <div class="sx-post-info p-t30">
+                                        <div class="sx-post-meta ">
+                                            <ul>
+                                                <li class="post-date">@(Convert.ToDateTime(dr_blog_item["kayit_tarihi"]).ToShortDateString())</li>
+                                                <li class="post-author">@dr_blog_item["ad_soyad"]</li>
+                                            </ul>
+                                        </div>
+                                        <div class="sx-post-title ">
+                                            <h4 class="post-title"><a href="@Url.Action("Blog", "Inteshape", new { id = dr_blog_item["blog_id"] })">@dr_blog_item["baslik"]</a></h4>
+                                        </div>
+                                        <div class="sx-post-readmore">
+                                            <a href="@Url.Action("Blog", "Inteshape", new { id = dr_blog_item["blog_id"] })" title="@sotec_web.Resources.Dil.DEVAMINI_OKU" rel="bookmark" class="site-button-link">@sotec_web.Resources.Dil.DEVAMINI_OKU</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

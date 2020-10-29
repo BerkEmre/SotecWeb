@@ -56,20 +56,20 @@
         <!-- tt-mobile menu -->
         <nav class="panel-menu mobile-main-menu">
             <ul>
-                <li><a href="@Url.Action("Index", "Home")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
+                <li><a href="@Url.Action("Index", "Wokiee")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
                 @if (ConfigurationManager.AppSettings["urunler"] == "true")
                 {
                     <li>
-                        <a href="@Url.Action("Products", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.MAĞAZA</a>
+                        <a href="@Url.Action("Products", "Wokiee", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.MAĞAZA</a>
                         <ul>
                             @foreach (DataRow dr_kategori in dt_urun_kategorileri.Rows)
                             {
                                 <li>
-                                    <a href="@Url.Action("Products", "Home", new { id = 0, id2 = dr_kategori["kategori_id"] })">@dr_kategori["kategori"]</a>
+                                    <a href="@Url.Action("Products", "Wokiee", new { id = 0, id2 = dr_kategori["kategori_id"] })">@dr_kategori["kategori"]</a>
                                     <ul>
                                         @foreach (DataRow dr_alt_kategori in SQL.get("SELECT k.kategori_id, kategori = ISNULL(dk.kategori, k.kategori) FROM kategoriler k LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = k.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " WHERE k.silindi = 0 AND k.ust_kategori_id = " + dr_kategori["kategori_id"]).Rows)
                                         {
-                                            <li><a href="@Url.Action("Products", "Home", new { id = 0, id2 = dr_alt_kategori["kategori_id"] })">@dr_alt_kategori["kategori"]</a></li>
+                                            <li><a href="@Url.Action("Products", "Wokiee", new { id = 0, id2 = dr_alt_kategori["kategori_id"] })">@dr_alt_kategori["kategori"]</a></li>
                                         }
                                     </ul>
                                 </li>
@@ -79,23 +79,23 @@
                 }
                 @if (ConfigurationManager.AppSettings["blog"] == "true")
                 {
-                    <li><a href="@Url.Action("Blogs", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.BLOG</a></li>
+                    <li><a href="@Url.Action("Blogs", "Wokiee", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.BLOG</a></li>
                 }
                 @if (ConfigurationManager.AppSettings["haberler"] == "true")
                 {
-                    <li><a href="@Url.Action("News", "Home")">@sotec_web.Resources.Dil.HABERLER</a></li>
+                    <li><a href="@Url.Action("News", "Wokiee")">@sotec_web.Resources.Dil.HABERLER</a></li>
                 }
                 @if (ConfigurationManager.AppSettings["hizmetler"] == "true")
                 {
-                    <li><a href="@Url.Action("Services", "Home")">@sotec_web.Resources.Dil.HİZMETLER</a></li>
+                    <li><a href="@Url.Action("Services", "Wokiee")">@sotec_web.Resources.Dil.HİZMETLER</a></li>
                 }
                 @if (ConfigurationManager.AppSettings["hakkimizda"] == "true")
                 {
-                    <li><a href="@Url.Action("About", "Home")">@sotec_web.Resources.Dil.HAKKIMIZDA</a></li>
+                    <li><a href="@Url.Action("About", "Wokiee")">@sotec_web.Resources.Dil.HAKKIMIZDA</a></li>
                 }
                 @if (ConfigurationManager.AppSettings["iletisim"] == "true")
                 {
-                    <li><a href="@Url.Action("Contact", "Home")">@sotec_web.Resources.Dil.İLETİŞİM</a></li>
+                    <li><a href="@Url.Action("Contact", "Wokiee")">@sotec_web.Resources.Dil.İLETİŞİM</a></li>
                 }
             </ul>
             <div class="mm-navbtn-names">
@@ -130,7 +130,7 @@
                 <div class="row">
                     <div class="tt-logo-container">
                         <!-- mobile logo -->
-                        <a class="tt-logo tt-logo-alignment" href="@Url.Action("Index", "Home")"><img src="~/admin_src/images/site_logo/@dr_site_bilgileri["logo"]" alt=""></a>
+                        <a class="tt-logo tt-logo-alignment" href="@Url.Action("Index", "Wokiee")"><img src="~/admin_src/images/site_logo/@dr_site_bilgileri["logo"]" alt=""></a>
                         <!-- /mobile logo -->
                     </div>
                 </div>
@@ -142,7 +142,7 @@
                 <div class="tt-header-holder">
                     <div class="tt-col-obj tt-obj-logo">
                         <!-- logo -->
-                        <a class="tt-logo tt-logo-alignment" href="@Url.Action("Index", "Home")"><img src="~/admin_src/images/site_logo/@dr_site_bilgileri["logo"]" alt=""></a>
+                        <a class="tt-logo tt-logo-alignment" href="@Url.Action("Index", "Wokiee")"><img src="~/admin_src/images/site_logo/@dr_site_bilgileri["logo"]" alt=""></a>
                         <!-- /logo -->
                     </div>
                     <div class="tt-col-obj tt-obj-menu">
@@ -151,21 +151,21 @@
                             <div class="tt-desctop-menu">
                                 <nav>
                                     <ul>
-                                        <li class="dropdown @(currentAction == "Index" ? "active" : "")"><a href="@Url.Action("Index", "Home")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
+                                        <li class="dropdown @(currentAction == "Index" ? "active" : "")"><a href="@Url.Action("Index", "Wokiee")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
                                         @if (ConfigurationManager.AppSettings["urunler"] == "true")
                                         {
                                             <li class="dropdown megamenu @(currentAction == "Products" ? "active" : "")">
-                                                <a href="@Url.Action("Products", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.MAĞAZA</a>
+                                                <a href="@Url.Action("Products", "Wokiee", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.MAĞAZA</a>
                                                 <div class="dropdown-menu">
                                                     <div class="row tt-col-list">
                                                         @foreach (DataRow dr_kategori in dt_urun_kategorileri.Rows)
                                                         {
                                                             <div class="col">
-                                                                <h6 class="tt-title-submenu"><a href="@Url.Action("Products", "Home", new { id = 0, id2 = dr_kategori["kategori_id"] })">@dr_kategori["kategori"]</a></h6>
+                                                                <h6 class="tt-title-submenu"><a href="@Url.Action("Products", "Wokiee", new { id = 0, id2 = dr_kategori["kategori_id"] })">@dr_kategori["kategori"]</a></h6>
                                                                 <ul class="tt-megamenu-submenu">
                                                                     @foreach (DataRow dr_alt_kategori in SQL.get("SELECT k.kategori_id, kategori = ISNULL(dk.kategori, k.kategori) FROM kategoriler k LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = k.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " WHERE k.silindi = 0 AND k.ust_kategori_id = " + dr_kategori["kategori_id"]).Rows)
                                                                     {
-                                                                        <li><a href="@Url.Action("Products", "Home", new { id = 0, id2 = dr_alt_kategori["kategori_id"] })">@dr_alt_kategori["kategori"]</a></li>
+                                                                        <li><a href="@Url.Action("Products", "Wokiee", new { id = 0, id2 = dr_alt_kategori["kategori_id"] })">@dr_alt_kategori["kategori"]</a></li>
                                                                     }
                                                                 </ul>
                                                             </div>
@@ -176,23 +176,23 @@
                                         }
                                         @if (ConfigurationManager.AppSettings["blog"] == "true")
                                         {
-                                            <li class="dropdown @(currentAction == "Blogs" ? "active" : "")"><a href="@Url.Action("Blogs", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.BLOG</a></li>
+                                            <li class="dropdown @(currentAction == "Blogs" ? "active" : "")"><a href="@Url.Action("Blogs", "Wokiee", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.BLOG</a></li>
                                         }
                                         @if (ConfigurationManager.AppSettings["haberler"] == "true")
                                         {
-                                            <li class="dropdown @(currentAction == "News" ? "active" : "")"><a href="@Url.Action("News", "Home")">@sotec_web.Resources.Dil.HABERLER</a></li>
+                                            <li class="dropdown @(currentAction == "News" ? "active" : "")"><a href="@Url.Action("News", "Wokiee")">@sotec_web.Resources.Dil.HABERLER</a></li>
                                         }
                                         @if (ConfigurationManager.AppSettings["hizmetler"] == "true")
                                         {
-                                            <li class="dropdown @(currentAction == "Services" ? "active" : "")"><a href="@Url.Action("Services", "Home")">@sotec_web.Resources.Dil.HİZMETLER</a></li>
+                                            <li class="dropdown @(currentAction == "Services" ? "active" : "")"><a href="@Url.Action("Services", "Wokiee")">@sotec_web.Resources.Dil.HİZMETLER</a></li>
                                         }
                                         @if (ConfigurationManager.AppSettings["hakkimizda"] == "true")
                                         {
-                                            <li class="dropdown @(currentAction == "About" ? "active" : "")"><a href="@Url.Action("About", "Home")">@sotec_web.Resources.Dil.HAKKIMIZDA</a></li>
+                                            <li class="dropdown @(currentAction == "About" ? "active" : "")"><a href="@Url.Action("About", "Wokiee")">@sotec_web.Resources.Dil.HAKKIMIZDA</a></li>
                                         }
                                         @if (ConfigurationManager.AppSettings["iletisim"] == "true")
                                         {
-                                            <li class="dropdown @(currentAction == "Contact" ? "active" : "")"><a href="@Url.Action("Contact", "Home")">@sotec_web.Resources.Dil.İLETİŞİM</a></li>
+                                            <li class="dropdown @(currentAction == "Contact" ? "active" : "")"><a href="@Url.Action("Contact", "Wokiee")">@sotec_web.Resources.Dil.İLETİŞİM</a></li>
                                         }
                                     </ul>
                                 </nav>
@@ -236,16 +236,16 @@
                                             <ul>
                                                 @if (dr_kullanici == null)
                                                 {
-                                                    <li><a href="@Url.Action("SignIn", "Home")"><i class="icon-f-76"></i>@sotec_web.Resources.Dil.GİRİŞ_YAP</a></li>
-                                                    <li><a href="@Url.Action("Register", "Home")"><i class="icon-f-94"></i>@sotec_web.Resources.Dil.KAYIT_OL</a></li>
+                                                    <li><a href="@Url.Action("SignIn", "Wokiee")"><i class="icon-f-76"></i>@sotec_web.Resources.Dil.GİRİŞ_YAP</a></li>
+                                                    <li><a href="@Url.Action("Register", "Wokiee")"><i class="icon-f-94"></i>@sotec_web.Resources.Dil.KAYIT_OL</a></li>
                                                 }
                                                 else
                                                 {
-                                                    <li><a href="@Url.Action("Acount", "Home")"><i class="icon-f-94"></i>@sotec_web.Resources.Dil.HESAP (@dr_kullanici["ad"] @dr_kullanici["soyad"])</a></li>
-                                                    @*<li><a href="@Url.Action("Wishlist", "Home")"><i class="icon-n-072"></i>@sotec_web.Resources.Dil.İSTEK_LİSTESİ</a></li>*@
+                                                    <li><a href="@Url.Action("Acount", "Wokiee")"><i class="icon-f-94"></i>@sotec_web.Resources.Dil.HESAP (@dr_kullanici["ad"] @dr_kullanici["soyad"])</a></li>
+                                                    @*<li><a href="@Url.Action("Wishlist", "Wokiee")"><i class="icon-n-072"></i>@sotec_web.Resources.Dil.İSTEK_LİSTESİ</a></li>*@
                                                     @*<li><a href="compare.html"><i class="icon-n-08"></i>Compare</a></li>*@
                                                     @*<li><a href="page404.html"><i class="icon-f-68"></i>Check Out</a></li>*@
-                                                    <li><a href="@Url.Action("SignOut", "Home")"><i class="icon-f-77"></i>@sotec_web.Resources.Dil.ÇIKIŞ_YAP</a></li>
+                                                    <li><a href="@Url.Action("SignOut", "Wokiee")"><i class="icon-f-77"></i>@sotec_web.Resources.Dil.ÇIKIŞ_YAP</a></li>
                                                 }
                                             </ul>
                                         </div>
@@ -261,7 +261,7 @@
                                 <div class="tt-multi-obj">
                                     @foreach (DataRow dil_item in dt_diller.Rows)
                                     {
-                                        <a href="/Home/ChangeLanguage?language=@dil_item["kisa_kod"]&id=@dil_item["dil_id"]"><img style="margin: 10px; max-width: 25px;" src="~/admin_src/images/dil/kucuk/@dil_item["icon"]" /> </a>
+                                        <a href="/Wokiee/ChangeLanguage?language=@dil_item["kisa_kod"]&id=@dil_item["dil_id"]"><img style="margin: 10px; max-width: 25px;" src="~/admin_src/images/dil/kucuk/@dil_item["icon"]" /> </a>
                                     }
                                 </div>
                             }
@@ -317,7 +317,7 @@
                                     <ul class="tt-list">
                                         @foreach (DataRow dr_kategori in dt_urun_kategorileri.Rows)
                                         {
-                                            <li><a href="@Url.Action("Products", "Home", new { id = 0, id2 = dr_kategori["kategori_id"] })">@dr_kategori["kategori"]</a></li>
+                                            <li><a href="@Url.Action("Products", "Wokiee", new { id = 0, id2 = dr_kategori["kategori_id"] })">@dr_kategori["kategori"]</a></li>
                                         }
                                     </ul>
                                 </div>
@@ -331,30 +331,30 @@
                             </h4>
                             <div class="tt-collapse-content">
                                 <ul class="tt-list">
-                                    <li><a href="@Url.Action("Index", "Home")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
+                                    <li><a href="@Url.Action("Index", "Wokiee")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
                                     @if (ConfigurationManager.AppSettings["urunler"] == "true")
                                     {
-                                        <li><a href="@Url.Action("Products", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.MAĞAZA</a></li>
+                                        <li><a href="@Url.Action("Products", "Wokiee", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.MAĞAZA</a></li>
                                     }
                                     @if (ConfigurationManager.AppSettings["blog"] == "true")
                                     {
-                                        <li><a href="@Url.Action("Blogs", "Home", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.BLOG</a></li>
+                                        <li><a href="@Url.Action("Blogs", "Wokiee", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.BLOG</a></li>
                                     }
                                     @if (ConfigurationManager.AppSettings["haberler"] == "true")
                                     {
-                                        <li><a href="@Url.Action("News", "Home")">@sotec_web.Resources.Dil.HABERLER</a></li>
+                                        <li><a href="@Url.Action("News", "Wokiee")">@sotec_web.Resources.Dil.HABERLER</a></li>
                                     }
                                     @if (ConfigurationManager.AppSettings["hizmetler"] == "true")
                                     {
-                                        <li><a href="@Url.Action("Services", "Home")">@sotec_web.Resources.Dil.HİZMETLER</a></li>
+                                        <li><a href="@Url.Action("Services", "Wokiee")">@sotec_web.Resources.Dil.HİZMETLER</a></li>
                                     }
                                     @if (ConfigurationManager.AppSettings["hakkimizda"] == "true")
                                     {
-                                        <li><a href="@Url.Action("About", "Home")">@sotec_web.Resources.Dil.HAKKIMIZDA</a></li>
+                                        <li><a href="@Url.Action("About", "Wokiee")">@sotec_web.Resources.Dil.HAKKIMIZDA</a></li>
                                     }
                                     @if (ConfigurationManager.AppSettings["iletisim"] == "true")
                                     {
-                                        <li><a href="@Url.Action("Contact", "Home")">@sotec_web.Resources.Dil.İLETİŞİM</a></li>
+                                        <li><a href="@Url.Action("Contact", "Wokiee")">@sotec_web.Resources.Dil.İLETİŞİM</a></li>
                                     }
                                 </ul>
                             </div>
@@ -369,11 +369,11 @@
                                 </h4>
                                 <div class="tt-collapse-content">
                                     <ul class="tt-list">
-                                        <li><a href="@Url.Action("Page", "Home", new { id = 1 })">@sotec_web.Resources.Dil.Üyelik_Sözleşmesi</a></li>
-                                        <li><a href="@Url.Action("Page", "Home", new { id = 2 })">@sotec_web.Resources.Dil.Kullanım_Şartları</a></li>
-                                        <li><a href="@Url.Action("Page", "Home", new { id = 3 })">@sotec_web.Resources.Dil.Mesafeli_Satış_Sözleşmesi</a></li>
-                                        <li><a href="@Url.Action("Page", "Home", new { id = 4 })">@sotec_web.Resources.Dil.Gizlilik_Politikası</a></li>
-                                        <li><a href="@Url.Action("Page", "Home", new { id = 5 })">@sotec_web.Resources.Dil.Sık_Sorulan_Sorular</a></li>
+                                        <li><a href="@Url.Action("Page", "Wokiee", new { id = 1 })">@sotec_web.Resources.Dil.Üyelik_Sözleşmesi</a></li>
+                                        <li><a href="@Url.Action("Page", "Wokiee", new { id = 2 })">@sotec_web.Resources.Dil.Kullanım_Şartları</a></li>
+                                        <li><a href="@Url.Action("Page", "Wokiee", new { id = 3 })">@sotec_web.Resources.Dil.Mesafeli_Satış_Sözleşmesi</a></li>
+                                        <li><a href="@Url.Action("Page", "Wokiee", new { id = 4 })">@sotec_web.Resources.Dil.Gizlilik_Politikası</a></li>
+                                        <li><a href="@Url.Action("Page", "Wokiee", new { id = 5 })">@sotec_web.Resources.Dil.Sık_Sorulan_Sorular</a></li>
                                     </ul>
                                 </div>
                             }
@@ -388,7 +388,7 @@
                         <div class="tt-newsletter">
                             <div class="tt-mobile-collapse">
                                 <h4 class="tt-collapse-title">
-                                    @sotec_web.Resources.Dil.MENÜ
+                                    @sotec_web.Resources.Dil.İLETİŞİM
                                 </h4>
                                 <div class="tt-collapse-content">
                                     <address>
@@ -413,7 +413,7 @@
                     <div class="tt-col-left">
                         <div class="tt-col-item tt-logo-col">
                             <!-- logo -->
-                            <a class="tt-logo tt-logo-alignment" href="@Url.Action("Index", "Home")">
+                            <a class="tt-logo tt-logo-alignment" href="@Url.Action("Index", "Wokiee")">
                                 <img src="~/admin_src/images/site_logo/@dr_site_bilgileri["logo"]" alt="">
                             </a>
                             <!-- /logo -->

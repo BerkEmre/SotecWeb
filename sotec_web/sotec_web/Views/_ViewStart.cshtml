@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Configuration;
+@{
     string currentController = Convert.ToString(HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"]);
     string currentAction = Convert.ToString(HttpContext.Current.Request.RequestContext.RouteData.Values["Action"]);
 
@@ -21,7 +22,7 @@
         }
         else
         {
-            Layout = "~/Views/Shared/_WokieeLayout.cshtml";
+            Layout = "~/Views/Shared/_" + ConfigurationManager.AppSettings["tema"] + "Layout.cshtml";
         }
     }
 }

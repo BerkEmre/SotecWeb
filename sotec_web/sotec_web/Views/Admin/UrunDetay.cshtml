@@ -1,5 +1,6 @@
 ﻿@using System.Data
 @using sotec_firma.Helpers
+@using System.Configuration
 @{
     ViewBag.Title = "Ürün Ekle/Düzenle";
 
@@ -380,41 +381,44 @@
             </form>
         </div>
     </div>
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="header">
-                <h2>Entegrasyon</h2>
-            </div>
-            <div class="body">
-                <ul class="nav nav-tabs">
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#n11">N11</a></li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane" id="n11">
-                        <h6>N11</h6>
-                        <div class="row clearfix">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label class="control-label">N11 ID</label>
-                                    <input type="text" name="stok_kodu" class="form-control" placeholder="Stok Kodu" value="" autocomplete="off" />
+    @if (ConfigurationManager.AppSettings["n11_entegrasyon"] == "true")
+    {
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Entegrasyon</h2>
+                </div>
+                <div class="body">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#n11">N11</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane" id="n11">
+                            <h6>N11</h6>
+                            <div class="row clearfix">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="control-label">N11 ID</label>
+                                        <input type="text" name="stok_kodu" class="form-control" placeholder="Stok Kodu" value="" autocomplete="off" />
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label class="control-label">Fiyat</label>
-                                    <input type="text" name="stok_kodu" class="form-control" placeholder="Stok Kodu" value="" autocomplete="off" />
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Fiyat</label>
+                                        <input type="text" name="stok_kodu" class="form-control" placeholder="Stok Kodu" value="" autocomplete="off" />
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label class="control-label">Alt Başlık</label>
-                                    <input type="text" name="stok_kodu" class="form-control" placeholder="Stok Kodu" value="" autocomplete="off" />
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Alt Başlık</label>
+                                        <input type="text" name="stok_kodu" class="form-control" placeholder="Stok Kodu" value="" autocomplete="off" />
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label class="control-label">Açıklama</label>
-                                    <input type="text" name="stok_kodu" class="form-control" placeholder="Stok Kodu" value="" autocomplete="off" />
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Açıklama</label>
+                                        <input type="text" name="stok_kodu" class="form-control" placeholder="Stok Kodu" value="" autocomplete="off" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -422,6 +426,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    }
 </div>
 

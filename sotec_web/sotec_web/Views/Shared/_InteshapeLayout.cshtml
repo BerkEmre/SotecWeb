@@ -1,0 +1,354 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@using System.Configuration
+@{
+    string currentAction = Convert.ToString(HttpContext.Current.Request.RequestContext.RouteData.Values["Action"]);
+
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    DataRow dr_site_bilgileri = SQL.get("SELECT * FROM site_bilgileri WHERE dil_id = " + dr_dil["dil_id"]).Rows[0];
+    DataTable dt_diller = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND dil_durumu_parametre_id = 27");
+
+    DataTable dt_son_bloglar = SQL.get("SELECT TOP 4 b.blog_id, b.gorsel, baslik = ISNULL(db.baslik, b.baslik), yazi = ISNULL(db.yazi, b.yazi), ad_soyad = k.ad + ' ' + k.soyad, b.kayit_tarihi  FROM bloglar b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id LEFT OUTER JOIN dil_bloglar db ON db.blog_id = b.blog_id AND db.silindi = 0 AND db.dil_id = " + dr_dil["dil_id"] + " WHERE b.silindi = 0 ORDER by b.blog_id DESC");
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <!-- META -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="@dr_site_bilgileri["seo_anahtar_kelimeler"]">
+    <meta name="description" content="@dr_site_bilgileri["seo_aciklama"]">
+    <meta name="author" content="SotecMedia" />
+    <!-- FAVICONS ICON -->
+    <link rel="icon" href="~/inteshape_src/images/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/inteshape_src/images/favicon.png" />
+    <!-- PAGE TITLE HERE -->
+    <title>@ViewBag.Title | @dr_site_bilgileri["site_adi"]</title>
+    <!-- MOBILE SPECIFIC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- BOOTSTRAP STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/inteshape_src/css/bootstrap.min.css">
+    <!-- FONTAWESOME STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/inteshape_src/css/fontawesome/css/font-awesome.min.css" />
+    <!-- OWL CAROUSEL STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/inteshape_src/css/owl.carousel.min.css">
+    <!-- MAGNIFIC POPUP STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/inteshape_src/css/magnific-popup.min.css">
+    <!-- LOADER STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/inteshape_src/css/loader.min.css">
+    <!-- FLATICON STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/inteshape_src/css/flaticon.min.css">
+    <!-- MAIN STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/inteshape_src/css/style.css">
+    <!-- Color Theme Change Css -->
+    <link rel="stylesheet" class="skin" type="text/css" href="~/inteshape_src/css/skin/skin-8.css">
+    <!-- REVOLUTION SLIDER CSS -->
+    <link rel="stylesheet" type="text/css" href="~/inteshape_src/plugins/revolution/revolution/css/settings.css">
+    <!-- REVOLUTION NAVIGATION STYLE -->
+    <link rel="stylesheet" type="text/css" href="~/inteshape_src/plugins/revolution/revolution/css/navigation.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/admin_src/vendor/sweetalert/sweetalert.css" />
+    @RenderSection("style", false)
+</head>
+<body>
+    <div class="page-wraper">
+
+        <!-- HEADER START -->
+        <header class="site-header header-style-3 nav-wide header-fixed">
+            <div class="sticky-header main-bar-wraper navbar-expand-lg">
+                <div class="main-bar bg-white">
+                    <div class="container-fluid clearfix">
+                        <div class="logo-header">
+                            <div class="logo-header-inner logo-header-one">
+                                <a href="@Url.Action("Index", "Inteshape")">
+                                    <img src="~/admin_src/images/site_logo/@dr_site_bilgileri["logo"]" alt="" />
+                                </a>
+                            </div>
+                        </div>
+                        <!-- NAV Toggle Button -->
+                        <button data-target=".header-nav" data-toggle="collapse" type="button" class="navbar-toggler collapsed">
+                            <span class="sr-only"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <!-- EXTRA NAV -->
+                        <div class="extra-nav">
+                            <div class="extra-cell">
+                                @if (ConfigurationManager.AppSettings["multilanguage"] == "true")
+                                {
+                                    <ul class="list-unstyled social-bx text-black d-flex flex-wrap align-content-center">
+                                        @foreach (DataRow dil_item in dt_diller.Rows)
+                                        {
+                                            <li><a href="/Inteshape/ChangeLanguage?language=@dil_item["kisa_kod"]&id=@dil_item["dil_id"]"><img style="margin: 10px; max-width: 25px;" src="~/admin_src/images/dil/kucuk/@dil_item["icon"]" /></a></li>
+                                        }
+                                    </ul>
+                                }
+                            </div>
+                            <div class="extra-cell">
+                                <ul class="list-unstyled social-bx text-black d-flex flex-wrap align-content-center">
+                                    @(MvcHtmlString.Create(dr_site_bilgileri["facebook"].ToString().Length <= 0 ? "" : "<li><a target='_blank' href='" + dr_site_bilgileri["facebook"] + "'><i class='fa fa-facebook'></i></a></li>"))
+                                    @(MvcHtmlString.Create(dr_site_bilgileri["twitter"].ToString().Length <= 0 ? "" : "<li><a target='_blank' href='" + dr_site_bilgileri["twitter"] + "'><i class='fa fa-twitter'></i></a></li>"))
+                                    @(MvcHtmlString.Create(dr_site_bilgileri["instagram"].ToString().Length <= 0 ? "" : "<li><a target='_blank' href='" + dr_site_bilgileri["instagram"] + "'><i class='fa fa-instagram'></i></a></li>"))
+                                    @(MvcHtmlString.Create(dr_site_bilgileri["youtube"].ToString().Length <= 0 ? "" : "<li><a target='_blank' href='" + dr_site_bilgileri["youtube"] + "'><i class='fa fa-youtube'></i></a></li>"))
+                                    @(MvcHtmlString.Create(dr_site_bilgileri["linkedin"].ToString().Length <= 0 ? "" : "<li><a target='_blank' href='" + dr_site_bilgileri["linkedin"] + "'><i class='fa fa-linkedin'></i></a></li>"))
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- EXTRA Nav -->
+                        <!-- MAIN NAVIGATION -->
+                        <div class="header-nav navbar-collapse collapse justify-content-center collapse">
+                            <ul class=" nav navbar-nav">
+                                <li><a href="@Url.Action("Index", "Inteshape")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
+                                @if (ConfigurationManager.AppSettings["hakkimizda"] == "true")
+                                {
+                                    <li><a href="@Url.Action("About", "Inteshape")">@sotec_web.Resources.Dil.HAKKIMIZDA</a></li>
+                                }
+                                @if (ConfigurationManager.AppSettings["projelerimiz"] == "true")
+                                {
+                                    <li><a href="@Url.Action("Projects", "Inteshape")">@sotec_web.Resources.Dil.PROJELERIMIZ</a></li>
+                                }
+                                @if (ConfigurationManager.AppSettings["urunler"] == "true")
+                                {
+                                    <li><a href="@Url.Action("Products", "Inteshape")">@sotec_web.Resources.Dil.URUNLERIMIZ</a></li>
+                                }
+                                @if (ConfigurationManager.AppSettings["referanslar"] == "true")
+                                {
+                                    <li><a href="@Url.Action("Referances", "Inteshape")">@sotec_web.Resources.Dil.REFERANSLAR</a></li>
+                                }
+                                @if (ConfigurationManager.AppSettings["blog"] == "true")
+                                {
+                                    <li><a href="@Url.Action("Blogs", "Inteshape", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.BLOG</a></li>
+                                }
+                                @if (ConfigurationManager.AppSettings["haberler"] == "true")
+                                {
+                                    <li><a href="@Url.Action("News", "Inteshape")">@sotec_web.Resources.Dil.HABERLER</a></li>
+                                }
+                                @if (ConfigurationManager.AppSettings["hizmetler"] == "true")
+                                {
+                                    <li><a href="@Url.Action("Services", "Inteshape")">@sotec_web.Resources.Dil.HİZMETLER</a></li>
+                                }
+                                @if (ConfigurationManager.AppSettings["iletisim"] == "true")
+                                {
+                                    <li><a href="@Url.Action("Contact", "Inteshape")">@sotec_web.Resources.Dil.İLETİŞİM</a></li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- HEADER END -->
+        <div class="page-content">
+            @RenderBody()
+        </div>
+        <!-- FOOTER START -->
+        <footer class="site-footer footer-large  footer-light	footer-wide">
+
+            <!-- FOOTER BLOCKES START -->
+            <div class="footer-top">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- ABOUT COMPANY -->
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="widget widget_about">
+                                <!--<h4 class="widget-title">About Company</h4>-->
+                                <div class="logo-footer clearfix p-b15">
+                                    <a href="@Url.Action("Index", "Inteshape")"><img src="~/admin_src/images/site_logo/@dr_site_bilgileri["logo"]" alt=""></a>
+                                </div>
+                                <p>@(dr_site_bilgileri["hakkimizda"].ToString().Substring(0, dr_site_bilgileri["hakkimizda"].ToString().Length < 100 ? dr_site_bilgileri["hakkimizda"].ToString().Length : 100))...</p>
+
+                                <ul class="social-icons  sx-social-links">
+                                    @(MvcHtmlString.Create(dr_site_bilgileri["facebook"].ToString().Length <= 0 ? "" : "<li><a target='_blank' href='" + dr_site_bilgileri["facebook"] + "'><i class='fa fa-facebook'></i></a></li>"))
+                                    @(MvcHtmlString.Create(dr_site_bilgileri["twitter"].ToString().Length <= 0 ? "" : "<li><a target='_blank' href='" + dr_site_bilgileri["twitter"] + "'><i class='fa fa-twitter'></i></a></li>"))
+                                    @(MvcHtmlString.Create(dr_site_bilgileri["instagram"].ToString().Length <= 0 ? "" : "<li><a target='_blank' href='" + dr_site_bilgileri["instagram"] + "'><i class='fa fa-instagram'></i></a></li>"))
+                                    @(MvcHtmlString.Create(dr_site_bilgileri["youtube"].ToString().Length <= 0 ? "" : "<li><a target='_blank' href='" + dr_site_bilgileri["youtube"] + "'><i class='fa fa-youtube'></i></a></li>"))
+                                    @(MvcHtmlString.Create(dr_site_bilgileri["linkedin"].ToString().Length <= 0 ? "" : "<li><a target='_blank' href='" + dr_site_bilgileri["linkedin"] + "'><i class='fa fa-linkedin'></i></a></li>"))
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- RESENT POST -->
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="widget recent-posts-entry-date">
+                                <h5 class="widget-title">@sotec_web.Resources.Dil.SON_BLOG_YAZILARI</h5>
+                                <div class="widget-post-bx">
+                                    @foreach (DataRow dr_blog_item in dt_son_bloglar.Rows)
+                                    {
+                                        <div class="widget-post clearfix">
+                                            <div class="sx-post-date text-center text-uppercase text-white">
+                                                <strong class="p-date">@(Convert.ToDateTime(dr_blog_item["kayit_tarihi"]).Day)</strong>
+                                                <span class="p-month">@(Convert.ToDateTime(dr_blog_item["kayit_tarihi"]).Month)</span>
+                                                <span class="p-year">@(Convert.ToDateTime(dr_blog_item["kayit_tarihi"]).Year)</span>
+                                            </div>
+                                            <div class="sx-post-info">
+                                                <div class="sx-post-header">
+                                                    <h6 class="post-title"><a href="@Url.Action("Blog", "Inteshape", new { id = dr_blog_item["blog_id"] })">@dr_blog_item["baslik"]</a></h6>
+                                                </div>
+                                                <div class="sx-post-meta">
+                                                    <ul>
+                                                        <li class="post-author"><i class="fa fa-user"></i>@dr_blog_item["ad_soyad"]</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- USEFUL LINKS -->
+                        <div class="col-lg-3 col-md-6 col-sm-6 footer-col-3">
+                            <div class="widget widget_services inline-links">
+                                <h5 class="widget-title">@sotec_web.Resources.Dil.MENÜ</h5>
+                                <ul>
+                                    <li><a href="@Url.Action("Index", "Inteshape")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
+                                    @if (ConfigurationManager.AppSettings["hakkimizda"] == "true")
+                                    {
+                                        <li><a href="@Url.Action("About", "Inteshape")">@sotec_web.Resources.Dil.HAKKIMIZDA</a></li>
+                                    }
+                                    @if (ConfigurationManager.AppSettings["projelerimiz"] == "true")
+                                    {
+                                        <li><a href="@Url.Action("Project", "Inteshape")">@sotec_web.Resources.Dil.PROJELERIMIZ</a></li>
+                                    }
+                                    @if (ConfigurationManager.AppSettings["urunler"] == "true")
+                                    {
+                                        <li><a href="@Url.Action("Product", "Inteshape")">@sotec_web.Resources.Dil.URUNLERIMIZ</a></li>
+                                    }
+                                    @if (ConfigurationManager.AppSettings["referanslar"] == "true")
+                                    {
+                                        <li><a href="@Url.Action("Referance", "Inteshape")">@sotec_web.Resources.Dil.REFERANSLAR</a></li>
+                                    }
+                                    @if (ConfigurationManager.AppSettings["blog"] == "true")
+                                    {
+                                        <li><a href="@Url.Action("Blogs", "Inteshape", new { id = 0, id2 = 0 })">@sotec_web.Resources.Dil.BLOG</a></li>
+                                    }
+                                    @if (ConfigurationManager.AppSettings["haberler"] == "true")
+                                    {
+                                        <li><a href="@Url.Action("News", "Inteshape")">@sotec_web.Resources.Dil.HABERLER</a></li>
+                                    }
+                                    @if (ConfigurationManager.AppSettings["hizmetler"] == "true")
+                                    {
+                                        <li><a href="@Url.Action("Services", "Inteshape")">@sotec_web.Resources.Dil.HİZMETLER</a></li>
+                                    }
+                                    @if (ConfigurationManager.AppSettings["iletisim"] == "true")
+                                    {
+                                        <li><a href="@Url.Action("Contact", "Inteshape")">@sotec_web.Resources.Dil.İLETİŞİM</a></li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- CONTACT US -->
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="widget widget_address_outer">
+                                <h5 class="widget-title">@sotec_web.Resources.Dil.İLETİŞİM</h5>
+                                <ul class="widget_address">
+                                    @MvcHtmlString.Create((dr_site_bilgileri["adres"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.ADRES + ": </span>" + dr_site_bilgileri["adres"] + "</p>"))
+                                    @MvcHtmlString.Create((dr_site_bilgileri["telefon"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.TELEFON + ": </span>" + dr_site_bilgileri["telefon"] + "</p>"))
+                                    @MvcHtmlString.Create((dr_site_bilgileri["gsm"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.GSM + ": </span>" + dr_site_bilgileri["gsm"] + "</p>"))
+                                    @MvcHtmlString.Create((dr_site_bilgileri["fax"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.FAX + ": </span>" + dr_site_bilgileri["fax"] + "</p>"))
+                                    @MvcHtmlString.Create((dr_site_bilgileri["whatsapp"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.WHATSAPP + ": </span>" + dr_site_bilgileri["whatsapp"] + "</p>"))
+                                    @MvcHtmlString.Create((dr_site_bilgileri["calisma_saatleri"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.ÇALIŞMA_SAATLERİ + ": </span>" + dr_site_bilgileri["calisma_saatleri"] + "</p>"))
+                                    @MvcHtmlString.Create((dr_site_bilgileri["email"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.E_MAİL + ": </span> <a href='mailto: " + dr_site_bilgileri["email"] + "'>" + dr_site_bilgileri["email"] + "</a></p>"))
+                                </ul>
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+            <!-- FOOTER COPYRIGHT -->
+            <div class="footer-bottom overlay-wraper">
+                <div class="overlay-main"></div>
+                <div class="container">
+                    <div class="clearfix">
+                        <div class="sx-footer-bot-center">
+                            <span class="copyrights-text">© @DateTime.Now.Year @sotec_web.Resources.Dil.Tüm_Hakları_Saklıdır | <a href="http://sotecmedia.com" target="_blank">SotecMedia</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- FOOTER END -->
+        <!-- BUTTON TOP START -->
+        <button class="scroltop"><span class="fa fa-angle-up  relative" id="btn-vibrate"></span></button>
+    </div>
+    <!-- LOADING AREA START ===== -->
+    <div class="loading-area">
+        <div class="loading-box"></div>
+        <div class="loading-pic">
+            <div class="cssload-spinner">
+                <div class="cssload-cube cssload-cube0"></div>
+                <div class="cssload-cube cssload-cube1"></div>
+                <div class="cssload-cube cssload-cube2"></div>
+                <div class="cssload-cube cssload-cube3"></div>
+                <div class="cssload-cube cssload-cube4"></div>
+                <div class="cssload-cube cssload-cube5"></div>
+                <div class="cssload-cube cssload-cube6"></div>
+                <div class="cssload-cube cssload-cube7"></div>
+                <div class="cssload-cube cssload-cube8"></div>
+                <div class="cssload-cube cssload-cube9"></div>
+                <div class="cssload-cube cssload-cube10"></div>
+                <div class="cssload-cube cssload-cube11"></div>
+                <div class="cssload-cube cssload-cube12"></div>
+                <div class="cssload-cube cssload-cube13"></div>
+                <div class="cssload-cube cssload-cube14"></div>
+                <div class="cssload-cube cssload-cube15"></div>
+            </div>
+        </div>
+    </div>
+    <!-- LOADING AREA  END ====== -->
+    <!-- JAVASCRIPT  FILES ========================================= -->
+    <script src="~/inteshape_src/js/jquery-1.12.4.min.js"></script><!-- JQUERY.MIN JS -->
+    <script src="~/inteshape_src/js/popper.min.js"></script><!-- POPPER.MIN JS -->
+    <script src="~/inteshape_src/js/bootstrap.min.js"></script><!-- BOOTSTRAP.MIN JS -->
+    <script src="~/inteshape_src/js/magnific-popup.min.js"></script><!-- MAGNIFIC-POPUP JS -->
+    <script src="~/inteshape_src/js/waypoints.min.js"></script><!-- WAYPOINTS JS -->
+    <script src="~/inteshape_src/js/counterup.min.js"></script><!-- COUNTERUP JS -->
+    <script src="~/inteshape_src/js/waypoints-sticky.min.js"></script><!-- sticky header JS -->
+    <script src="~/inteshape_src/js/isotope.pkgd.min.js"></script><!-- MASONRY  -->
+    <script src="~/inteshape_src/js/owl.carousel.min.js"></script><!-- OWL  SLIDER  -->
+    <script src="~/inteshape_src/js/jquery.owl-filter.js"></script>
+    <script src="~/inteshape_src/js/stellar.min.js"></script><!-- PARALLAX BG IMAGE   -->
+    <script src="~/inteshape_src/js/custom.js"></script><!-- CUSTOM FUCTIONS  -->
+    <script src="~/inteshape_src/js/jquery.bgscroll.js"></script><!-- BACKGROUND SCROLL -->
+    <script src="~/inteshape_src/js/theia-sticky-sidebar.js"></script><!--sticky content-->
+    <!-- REVOLUTION JS FILES -->
+    <script src="~/inteshape_src/plugins/revolution/revolution/js/jquery.themepunch.tools.min.js"></script>
+    <script src="~/inteshape_src/plugins/revolution/revolution/js/jquery.themepunch.revolution.min.js"></script>
+    <!-- SLIDER REVOLUTION 5.0 EXTENSIONS  (Load Extensions only on Local File Systems !  The following part can be removed on Server for On Demand Loading) -->
+    <script src="~/inteshape_src/plugins/revolution/revolution/js/extensions/revolution-plugin.js"></script>
+    <!-- REVOLUTION SLIDER SCRIPT FILES -->
+    <script src="~/inteshape_src/js/rev-script-3.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/admin_src/vendor/sweetalert/sweetalert.min.js"></script><!-- SweetAlert Plugin Js -->
+    <script>
+        var onAjaxRequestSuccess = function (result) {
+            $("#form-blog-reply-name").val("");
+            $("#form-blog-reply-email").val("");
+            $("#form-blog-reply-telefon").val("");
+            $("#form-blog-reply-message").val("");
+
+            swal(
+                {
+                    icon: 'success',
+                    title: '@sotec_web.Resources.Dil.TEŞEKKÜRLER_',
+                    text: result,
+                    confirmButtonText: 'Tamam'
+                }
+            );
+        }
+    </script>
+    @RenderSection("script", false)
+</body>
+</html>
+

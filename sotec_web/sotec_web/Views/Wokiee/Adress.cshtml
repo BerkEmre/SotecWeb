@@ -1,0 +1,96 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    ViewBag.Title = sotec_web.Resources.Dil.ADRES;
+
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    int kullanici_id = Convert.ToInt32(Session["kullanici_id"]);
+    DataRow dr_kullanici = null;
+    if (kullanici_id != 0) { dr_kullanici = SQL.get("SELECT * FROM kullanicilar WHERE kullanici_id = " + kullanici_id).Rows[0]; }
+
+    DataTable dt_adresler = SQL.get("SELECT * FROM adresler WHERE silindi = 0 AND kullanici_id = " + kullanici_id);
+}
+@section script
+{
+    <script>
+        function adres_sil(adres_id) {
+            swal({
+                title: "@sotec_web.Resources.Dil.SİL",
+                text: "@sotec_web.Resources.Dil.EMİN_MİSİNİZ_",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "@sotec_web.Resources.Dil.EVET",
+                cancelButtonText: "@sotec_web.Resources.Dil.HAYIR",
+                closeOnConfirm: false
+            },
+                function () {
+                    window.location = "/Wokiee/DeleteAdress?id=" + adres_id;
+                });
+        }
+    </script>
+}
+<div class="container-indent">
+    <div class="container container-fluid-custom-mobile-padding">
+        <h1 class="tt-title-subpages noborder">@sotec_web.Resources.Dil.ADRES</h1>
+        <div class="tt-shopping-layout">
+            <h2 class="tt-title">@sotec_web.Resources.Dil.ADRES</h2>
+            <div class="tt-wrapper">
+                <a href="@Url.Action("AddAdress", "Wokiee", new { id = 0 })" class="btn">@sotec_web.Resources.Dil.YENİ_ADRES_EKLE</a><br>
+                <a href="@Url.Action("Acount", "Wokiee")" class="tt-link-back">
+                    <i class="icon-h-46"></i> @sotec_web.Resources.Dil.GERİ
+                </a>
+            </div>
+            @foreach (DataRow dr_adres_item in dt_adresler.Rows)
+            {
+                <div class="tt-wrapper">
+                    <h3 class="tt-title">@dr_adres_item["ad"]</h3>
+                    <div class="tt-table-responsive">
+                        <table class="tt-table-shop-02">
+                            <tbody>
+                                <tr>
+                                    <td>@sotec_web.Resources.Dil.AD_SOYAD:</td>
+                                    <td>@dr_adres_item["alici"]</td>
+                                </tr>
+                                <tr>
+                                    <td>@sotec_web.Resources.Dil.TELEFON:</td>
+                                    <td>@dr_adres_item["telefon"]</td>
+                                </tr>
+                                <tr>
+                                    <td>@sotec_web.Resources.Dil.ÜLKE:</td>
+                                    <td>@dr_adres_item["ulke"]</td>
+                                </tr>
+                                <tr>
+                                    <td>@sotec_web.Resources.Dil.ŞEHİR:</td>
+                                    <td>@dr_adres_item["sehir"]</td>
+                                </tr>
+                                <tr>
+                                    <td>@sotec_web.Resources.Dil.SEMT:</td>
+                                    <td>@dr_adres_item["semt"]</td>
+                                </tr>
+                                <tr>
+                                    <td>@sotec_web.Resources.Dil.ADRES:</td>
+                                    <td>@dr_adres_item["adres"]</td>
+                                </tr>
+                                <tr>
+                                    <td>@sotec_web.Resources.Dil.POSTA_KODU:</td>
+                                    <td>@dr_adres_item["posta_kodu"]</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tt-shop-btn">
+                        <a class="btn-link" href="@Url.Action("AddAdress", "Wokiee", new { id = dr_adres_item["adres_id"] })"><i class="icon-g-25"></i>@sotec_web.Resources.Dil.DÜZENLE</a>
+                        <button onclick="adres_sil(@dr_adres_item["adres_id"])" class="btn btn-danger" title="@sotec_web.Resources.Dil.SİL" type="button"><i class="icon-h-02"></i>@sotec_web.Resources.Dil.SİL</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

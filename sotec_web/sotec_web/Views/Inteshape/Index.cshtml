@@ -1,0 +1,299 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@using System.Configuration
+@using System.Text.RegularExpressions
+@{
+    ViewBag.Title = "";
+
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    Regex rRemScript = new Regex(@"<iframe[^>]*>[\s\S]*?</iframe>");
+    string yazi;
+
+    DataTable dt_slider = SQL.get("SELECT * FROM slider WHERE silindi = 0 AND dil_id = " + dr_dil["dil_id"]);
+    DataTable dt_one_cikan_urunler = SQL.get("SELECT u.stok_kodu, u.urun_id, u.fiyat, urun_adi = ISNULL(du.urun_adi, u.urun_adi), aciklama = ISNULL(du.aciklama, u.aciklama), resim = ISNULL((SELECT TOP 1 ur1.resim FROM urun_resimleri ur1 WHERE ur1.silindi = 0 AND ur1.urun_id = u.urun_id AND sira = (SELECT MIN(ur2.sira) FROM urun_resimleri ur2 WHERE ur2.silindi = 0 AND ur2.urun_id = u.urun_id)), '')  FROM urunler u LEFT OUTER JOIN dil_urunler du ON du.urun_id = u.urun_id AND du.silindi = 0 AND du.dil_id = " + dr_dil["dil_id"] + " WHERE u.silindi = 0 AND u.one_cikan = 1");
+    DataTable dt_projeler = SQL.get("SELECT TOP 10 b.proje_id, b.gorsel, baslik = ISNULL(db.baslik, b.baslik), yazi = ISNULL(db.yazi, b.yazi), ad_soyad = k.ad + ' ' + k.soyad, b.kayit_tarihi  FROM projeler b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id LEFT OUTER JOIN dil_projeler db ON db.proje_id = b.proje_id AND db.silindi = 0 AND db.dil_id = " + dr_dil["dil_id"] + " WHERE b.silindi = 0 ORDER by b.proje_id DESC");
+    DataTable dt_son_bloglar = SQL.get("SELECT TOP 2 b.blog_id, b.gorsel, baslik = ISNULL(db.baslik, b.baslik), yazi = ISNULL(db.yazi, b.yazi), ad_soyad = k.ad + ' ' + k.soyad, b.kayit_tarihi  FROM bloglar b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id LEFT OUTER JOIN dil_bloglar db ON db.blog_id = b.blog_id AND db.silindi = 0 AND db.dil_id = " + dr_dil["dil_id"] + " WHERE b.silindi = 0 ORDER by b.blog_id DESC");
+    DataTable dt_son_hizmetler = SQL.get("SELECT h.hizmet_id, h.gorsel, baslik = ISNULL(dh.baslik, h.baslik), yazi = ISNULL(dh.yazi, h.yazi) FROM hizmetler h LEFT OUTER JOIN dil_hizmetler dh ON dh.hizmet_id = h.hizmet_id AND dh.silindi = 0 AND dh.dil_id = " + dr_dil["dil_id"] + " WHERE h.silindi = 0");
+    DataTable dt_referanslar = SQL.get("SELECT h.referans_id, h.gorsel, baslik = ISNULL(dh.baslik, h.baslik), yazi = ISNULL(dh.yazi, h.yazi) FROM referanslar h LEFT OUTER JOIN dil_referanslar dh ON dh.referans_id = h.referans_id AND dh.silindi = 0 AND dh.dil_id = " + dr_dil["dil_id"] + " WHERE h.silindi = 0");
+}
+<div id="rev_slider_three_wrapper" class="rev_slider_wrapper fullscreen-container" data-alias="mask-showcase" data-source="gallery" style="background:#aaaaaa;padding:0px;">
+    <div id="rev_slider_three" class="rev_slider fullscreenbanner" style="display:none;" data-version="5.4.1">
+        <ul>
+            @foreach (DataRow dr_slider_item in dt_slider.Rows)
+            {
+                <li data-index="rs-71" data-transition="fade" data-slotamount="default" data-hideafterloop="0" data-hideslideonmobile="off" data-easein="default" data-easeout="default" data-masterspeed="300" data-thumb="~/inteshape_src/images/main-slider/slider3/slide2.jpg" data-rotate="0" data-saveperformance="off" data-title="" data-param1="1" data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9="" data-param10="" data-description="">
+                    <img src="~/admin_src/images/sliders/buyuk/@dr_slider_item["resim"]" data-bgcolor='#f8f8f8' style='' alt="" data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="off" class="rev-slidebg" data-no-retina>
+                    <div class="tp-caption tp-resizeme" id="slide-71-layer-4" data-x="['right','right','right','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']"
+                            data-voffset="['10','10','10','10']" data-fontsize="['64','64','60','40']" data-lineheight="['74','74','70','50']" data-width="['700','700','700','98%']" data-height="none" data-whitespace="normal" data-type="text" data-responsive_offset="on"
+                            data-frames='[{"from":"y:[-100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;",
+                        "mask":"x:0px;y:0px;s:inherit;e:inherit;","speed":2500,"to":"o:1;","delay":1000,"ease":"Power3.easeInOut"},
+                        {"delay":"wait","speed":500,"to":"y:[-100%];","mask":"x:inherit;y:inherit;s:inherit;e:inherit;","ease":"Power1.easeIn"}]'
+                            data-textAlign="['right','right','right','center']" data-paddingtop="[20,20,20,20]" data-paddingright="[20,20,20,0]" data-paddingbottom="[30,30,30,30]" data-paddingleft="[0,0,0,0]"
+                            style="z-index: 10; text-transform:uppercase; letter-spacing:10px; white-space: normal;font-weight: 800; color: #000;font-family: 'Poppins', sans-serif;">@dr_slider_item["baslik"]</div>
+                        <div class="tp-caption tp-resizeme" id="slide-71-layer-5" data-x="['right','right','right','center']" data-hoffset="['10','10','10','0']" data-y="['middle','middle','middle','middle']" data-voffset="['90','90','90','80']"
+                                data-fontsize="['20','20','20','16']" data-lineheight="['30','30','30','26']" data-width="['600','600','600','380']" data-height="none" data-whitespace="normal" data-type="text" data-responsive_offset="on"
+                                data-frames='[{"from":"y:[-100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;",
+                        "mask":"x:0px;y:0px;s:inherit;e:inherit;","speed":3500,"to":"o:1;","delay":1000,"ease":"Power3.easeInOut"},
+                        {"delay":"wait","speed":500,"to":"y:[-100%];","mask":"x:inherit;y:inherit;s:inherit;e:inherit;","ease":"Power1.easeIn"}]'
+                                data-textAlign="['right','right','right','center']" data-paddingtop="[20,20,20,20]" data-paddingright="[20,20,20,20]" data-paddingbottom="[30,30,30,30]" data-paddingleft="[0,0,0,0]"
+                                style="z-index: 10; white-space: normal; color: #000;font-family: 'Poppins', sans-serif;">@dr_slider_item["yazi"]</div>
+                            <div class="tp-caption rev-btn  tp-resizeme" id="slide-71-layer-6" data-x="['right','right','right','center']" data-hoffset="['30','30','30','0']" data-y="['middle','middle','middle','middle']" data-voffset="['180','180','180','180']"
+                                    data-width="none" data-height="none" data-whitespace="nowrap" data-type="button" data-responsive_offset="on"
+                                    data-frames='[{"from":"y:[-100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;",
+                        "mask":"x:0px;y:0px;s:inherit;e:inherit;","speed":4000,"to":"o:1;","delay":1000,"ease":"Power3.easeInOut"},
+                        {"delay":"wait","speed":500,"to":"y:[-100%];","mask":"x:inherit;y:inherit;s:inherit;e:inherit;","ease":"Power1.easeIn"}]'
+                                    data-textAlign="['right','right','right','center']" data-paddingtop="[0,0,0,0]" data-paddingright="[0,0,0,0]" data-paddingbottom="[0,0,0,0]" data-paddingleft="[0,0,0,0]"
+                                    style="z-index:9; line-height:30px;"><a href="@dr_slider_item["link"]" class="site-button btn-half"><span>@dr_slider_item["buton"]</span></a></div>
+                            </li>
+                        }
+        </ul>
+        <div class="tp-bannertimer" style="height: 10px; background: rgba(0, 0, 0, 0.15);"></div>
+    </div>
+</div>
+@if (ConfigurationManager.AppSettings["urunler"] == "true")
+{
+    <div class="section-full mobile-page-padding bg-white p-t80 p-b50 bg-repeat overflow-hide" style="background-image: url(/inteshape_src/images/background/cross-line2.png)">
+        <div class="container">
+            <div class="section-head">
+                <div class="sx-separator-outer separator-center">
+                    <div class="sx-separator bg-white bg-moving bg-repeat-x" style="background-image: url(/inteshape_src/images/background/cross-line2.png)">
+                        <h3 class="sep-line-one">@sotec_web.Resources.Dil.ÜRÜNLERİMİZ</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="section-content">
+                <div class="row number-block-three-outer justify-content-center">
+                    @foreach (DataRow dr_urun_item in dt_one_cikan_urunler.Rows)
+                    {
+                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
+                            <div class="number-block-three slide-ani-top">
+                                <div class="sx-media">
+                                    <img src="~/admin_src/images/urun/kucuk/@dr_urun_item["resim"]" alt="">
+                                </div>
+                                <div class="figcaption bg-gray  p-a30">
+                                    <h4 class="m-tb0"><a href="@Url.Action("Product", "Inteshape", new { id = dr_urun_item["urun_id"] })">@dr_urun_item["urun_adi"]</a></h4>
+                                    <div class="figcaption-number animate-top-content">
+                                        <span>@dr_urun_item["stok_kodu"]</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (ConfigurationManager.AppSettings["projelerimiz"] == "true")
+{
+    <div class="section-full p-tb80 bg-white inner-page-padding">
+        <div class="container-fluid">
+            <div class="section-content">
+                <div class="section-head">
+                    <div class="sx-separator-outer separator-center">
+                        <div class="sx-separator bg-white bg-moving bg-repeat-x" style="background-image: url(/inteshape_src/images/background/cross-line2.png)">
+                            <h3 class="sep-line-one">@sotec_web.Resources.Dil.PROJELERIMIZ</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="work-carousel-outer">
+                    <div class="owl-carousel mfp-gallery project-carousel project-carousel3 owl-btn-vertical-center p-lr80">
+                        @foreach (DataRow dr_proje_item in dt_projeler.Rows)
+                        {
+                            <div class="item">
+                                <div class="project-mas hover-shadow m-a30">
+                                    <div class="image-effect-one">
+                                        <img src="~/admin_src/images/proje/kucuk/@dr_proje_item["gorsel"]" alt="" />
+                                        <div class="figcaption">
+                                            <a class="mfp-link" href="~/admin_src/images/proje/buyuk/@dr_proje_item["gorsel"]">
+                                                <i class="fa fa-arrows-alt"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="project-info p-a20 bg-gray">
+                                        <h4 class="sx-tilte m-t0"><a href="@Url.Action("Project", "Inteshape", new { id = dr_proje_item["proje_id"] })">@dr_proje_item["baslik"]</a></h4>
+                                        @{ yazi = rRemScript.Replace(dr_proje_item["yazi"].ToString(), String.Empty);}
+                                        <p>@MvcHtmlString.Create(SQL.StripHTML(yazi.Substring(0, yazi.Length < 100 ? yazi.Length : 100)))...</p>
+                                        <a href="@Url.Action("Project", "Inteshape", new { id = dr_proje_item["proje_id"] })"><i class="link-plus bg-primary"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (ConfigurationManager.AppSettings["blog"] == "true")
+{
+    <div class="section-full mobile-page-padding bg-gray p-t80 p-b50">
+        <div class="container">
+            <div class="section-head">
+                <div class="sx-separator-outer separator-center">
+                    <div class="sx-separator bg-white bg-moving bg-repeat-x" style="background-image: url(/inteshape_src/images/background/cross-line2.png)">
+                        <h3 class="sep-line-one">@sotec_web.Resources.Dil.BLOG</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="section-content">
+                <div class="row">
+                    @foreach (DataRow dr_blog_item in dt_son_bloglar.Rows)
+                    {
+                        <div class="col-lg-6 col-md-12 col-sm-12">
+                            <div class="blog-post blog-lg date-style-3 block-shadow">
+                                <div class="sx-post-media">
+                                    <div class="owl-carousel owl-fade-slider-one owl-btn-vertical-center owl-dots-bottom-right">
+                                        <div class="item">
+                                            <div class="aon-thum-bx">
+                                                <img src="~/admin_src/images/blog/kucuk/@dr_blog_item["gorsel"]" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sx-post-info  bg-white">
+                                    <div class="sx-post-meta ">
+                                        <ul>
+                                            <li class="post-date"> <span>@(Convert.ToDateTime(dr_blog_item["kayit_tarihi"]).ToShortDateString())</span> </li>
+                                            <li class="post-author"><a href="@Url.Action("Blog", "Inteshape", new { id = dr_blog_item["blog_id"] })"> <span>@dr_blog_item["ad_soyad"]</span></a> </li>
+                                        </ul>
+                                    </div>
+                                    <div class="sx-post-title ">
+                                        <h4 class="post-title"><a href="@Url.Action("Blog", "Inteshape", new { id = dr_blog_item["blog_id"] })">@dr_blog_item["baslik"]</a></h4>
+                                    </div>
+                                    <div class="sx-post-text">
+                                        @{ yazi = rRemScript.Replace(dr_blog_item["yazi"].ToString(), String.Empty);}
+                                        <p>@MvcHtmlString.Create(SQL.StripHTML(yazi.Substring(0, yazi.Length < 100 ? yazi.Length : 100)))...</p>
+                                    </div>
+                                    <div class="clearfix">
+                                        <div class="sx-post-readmore pull-left">
+                                            <a href="@Url.Action("Blog", "Inteshape", new { id = dr_blog_item["blog_id"] })" title="@sotec_web.Resources.Dil.DEVAMINI_OKU" rel="bookmark" class="site-button-link">@sotec_web.Resources.Dil.DEVAMINI_OKU</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="hilite-title text-left p-l50 text-uppercase">
+            <strong>@sotec_web.Resources.Dil.BLOG</strong>
+        </div>
+    </div>
+}
+@if (ConfigurationManager.AppSettings["hizmetler"] == "true")
+{
+    <div class="section-full mobile-page-padding p-t80 bg-white bg-change-section">
+        <div class="container">
+            <div class="section-head">
+                <div class="sx-separator-outer separator-center">
+                    <div class="sx-separator bg-white bg-moving bg-repeat-x" style="background-image: url(/inteshape_src/images/background/cross-line2.png)">
+                        <h3 class="sep-line-one">@sotec_web.Resources.Dil.HİZMETLER</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="owl-carousel service-slider-two owl-btn-vertical-center">
+            @foreach (DataRow dr_hizmet_item in dt_son_hizmetler.Rows)
+            {
+                <div class="item">
+                    <div class="bgcall-block d-flex flex-wrap justify-content-center align-content-end bg-cover overlay-wraper" style="background-image: url(/admin_src/images/hizmet/kucuk/@dr_hizmet_item["gorsel"])">
+                        <div class="overlay-main bg-black opacity-05"></div>
+                        <div class="bg-content-mid-outer">
+                            <div class="bg-content-mid">
+                                <div class="sx-icon-box-wraper center text-white">
+                                    <div class="icon-lg m-b15">
+                                        <span class="icon-cell"></span>
+                                    </div>
+                                    <div class="icon-content">
+                                        <h4 class="sx-tilte"> <a href="@Url.Action("Service", "Inteshape", new { id = dr_hizmet_item["hizmet_id"] })" class="sx-text-white">@dr_hizmet_item["baslik"]</a></h4>
+                                    </div>
+                                </div>
+                                <span class="bgcall-block-number">@dr_hizmet_item["hizmet_id"]</span>
+                                <div class="bg-overlay"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+@if (ConfigurationManager.AppSettings["iletisim"] == "true")
+{
+    <div class="section-full p-tb80 mobile-page-padding bg-center bg-no-repeat bg-fixed" style="background-image: url(/inteshape_src/images/background/iletisim.jpg);">
+        <div class="section-content">
+            <div class="container get-in-touch-form">
+                <div class="section-head">
+                    <div class="sx-separator-outer separator-left">
+                        <div class="sx-separator bg-white bg-moving bg-repeat-x" style="background-image: url(/inteshape_src/images/background/cross-line2.png)">
+                            <h3 class="sep-line-one">@sotec_web.Resources.Dil.İLETİŞİM</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="contact-home1-left contact-home1-left-v2 shadow-lg bg-white p-a30" style="background-image: url(/inteshape_src/images/background/bg-map.png)">
+                            @using (Ajax.BeginForm("MesajGonder", "Inteshape", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divSonuc", OnSuccess = "onAjaxRequestSuccess" }, new { id = "formKapsayici" }))
+                            {
+                                <input type="hidden" name="kaynak" value="İletişim" />
+                                <div class="input input-animate">
+                                    <label for="name">@sotec_web.Resources.Dil.AD_SOYAD</label>
+                                    <input type="text" name="ad_soyad" id="form-blog-reply-name" required>
+                                    <span class="spin"></span>
+                                </div>
+                                <div class="input input-animate">
+                                    <label for="email">@sotec_web.Resources.Dil.E_MAİL</label>
+                                    <input type="email" name="email" id="form-blog-reply-email" required>
+                                    <span class="spin"></span>
+                                </div>
+                                <div class="input input-animate">
+                                    <label for="Phone">@sotec_web.Resources.Dil.TELEFON</label>
+                                    <input type="text" name="telefon" id="form-blog-reply-telefon" required>
+                                    <span class="spin"></span>
+                                </div>
+                                <div class="input input-animate">
+                                    <label for="message">@sotec_web.Resources.Dil.MESAJ</label>
+                                    <textarea name="mesaj" id="form-blog-reply-message" required></textarea>
+                                    <span class="spin"></span>
+                                </div>
+                                <div class="text-left p-t10">
+                                    <button type="submit" class="site-button-secondry btn-half ">
+                                        <span>@sotec_web.Resources.Dil.GÖNDER</span>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (ConfigurationManager.AppSettings["referanslar"] == "true")
+{
+    <div class="section-full bg-white ">
+        <div class="container">
+            <div class="section-content p-tb10 owl-btn-vertical-center">
+                <div class="owl-carousel home-client-carousel-2">
+                    @foreach (DataRow dr_referans_item in dt_referanslar.Rows)
+                    {
+                        <div class="item">
+                            <a href="@Url.Action("Referance", "Inteshape", new { id = dr_referans_item["referans_id"] })" class="client-logo-pic">
+                                <img src="~/admin_src/images/referans/kucuk/@dr_referans_item["gorsel"]" alt="">
+                                <div>
+                                    <span>@dr_referans_item["baslik"]</span>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}

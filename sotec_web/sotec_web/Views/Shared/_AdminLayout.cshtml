@@ -77,7 +77,10 @@
                                 <a href="#urun" class="has-arrow"><i class="icon-basket-loaded"></i><span>E-Ticaret</span></a>
                                 <ul>
                                     <li><a href="@Url.Action("Siparisler", "Admin")">Siparişler</a></li>
-                                    @if(ConfigurationManager.AppSettings["n11_entegrasyon"] == "true") { <li><a href="@Url.Action("N11", "Admin")">N11 Entegrasyon</a></li> }
+                                    @if (ConfigurationManager.AppSettings["n11_entegrasyon"] == "true")
+                                    {
+                                        <li><a href="@Url.Action("N11", "Admin")">N11 Entegrasyon</a></li>
+                                    }
                                 </ul>
                             </li>
                         }
@@ -103,6 +106,16 @@
                                 </ul>
                             </li>
                         }
+                        @if ((Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1 || Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 5) && (ConfigurationManager.AppSettings["projelerimiz"] == "true"))
+                        {
+                            <li class="@(currentAction == "Proje" ? "active" : "")">
+                                <a href="#urun" class="has-arrow"><i class="icon-chemistry"></i><span>Proje</span></a>
+                                <ul>
+                                    <li><a href="@Url.Action("Proje", "Admin")">Proje Yazıları</a></li>
+                                    <li><a href="@Url.Action("Kategori", "Admin", new { id = 39 })">Proje Kategorileri</a></li>
+                                </ul>
+                            </li>
+                        }
                         @if ((Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1 || Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 5) && (ConfigurationManager.AppSettings["haberler"] == "true"))
                         {
                             <li class="@(currentAction == "Haber" ? "active" : "")">
@@ -116,6 +129,10 @@
                         @if ((Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1 || Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 5) && (ConfigurationManager.AppSettings["hizmetler"] == "true"))
                         {
                             <li class="@(currentAction == "Hizmet" ? "active" : "")"><a href="@Url.Action("Hizmet", "Admin")"><i class="icon-energy"></i><span>Hizmetler</span></a></li>
+                        }
+                        @if ((Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1 || Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 5) && (ConfigurationManager.AppSettings["referanslar"] == "true"))
+                        {
+                            <li class="@(currentAction == "Referans" ? "active" : "")"><a href="@Url.Action("Referans", "Admin")"><i class="icon-rocket"></i><span>Referanslar</span></a></li>
                         }
                         @if (Convert.ToInt32(dr_kullanici["kullanici_tipi_parametre_id"]) == 1)
                         {

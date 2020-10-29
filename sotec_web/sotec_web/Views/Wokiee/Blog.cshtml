@@ -1,0 +1,66 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    int blog_id = ViewBag.blog_id;
+
+    DataRow dr_blog = SQL.get("SELECT b.blog_id, b.gorsel, baslik = ISNULL(db.baslik, b.baslik), yazi = ISNULL(db.yazi, b.yazi), ad_soyad = k.ad + ' ' + k.soyad, b.kayit_tarihi, kategori = ISNULL(dk.kategori, kat.kategori), b.kategori_id FROM bloglar b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id INNER JOIN kategoriler kat ON kat.kategori_id = b.kategori_id LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = kat.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " LEFT OUTER JOIN dil_bloglar db ON db.blog_id = b.blog_id AND db.silindi = 0 AND db.dil_id = " + dr_dil["dil_id"] + " WHERE b.silindi = 0 AND b.blog_id = " + blog_id).Rows[0];
+    DataTable dt_son_bloglar = SQL.get("SELECT TOP 2 b.blog_id, b.gorsel, baslik = ISNULL(db.baslik, b.baslik), yazi = ISNULL(db.yazi, b.yazi), ad_soyad = k.ad + ' ' + k.soyad, b.kayit_tarihi  FROM bloglar b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id LEFT OUTER JOIN dil_bloglar db ON db.blog_id = b.blog_id AND db.silindi = 0 AND db.dil_id = " + dr_dil["dil_id"] + " WHERE b.silindi = 0 ORDER by b.blog_id DESC");
+
+    ViewBag.Title = dr_blog["baslik"];
+}
+<div class="container-indent">
+    <div class="container container-fluid-custom-mobile-padding">
+        <div class="row justify-content-center">
+            <div class="col-xs-12 col-md-10 col-lg-8 col-md-auto">
+                <div class="tt-post-single">
+                    <div class="tt-tag"><a href="@Url.Action("Blogs", new { id = 0, id2 = dr_blog["kategori_id"] })">@dr_blog["kategori"]</a></div>
+                    <h1 class="tt-title">@dr_blog["baslik"]</h1>
+                    <div class="tt-autor">by <span>@dr_blog["ad_soyad"]</span> on @(Convert.ToDateTime(dr_blog["kayit_tarihi"]).ToShortDateString())</div>
+                    <div class="tt-post-content">
+                        <img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/blog/buyuk/@dr_blog["gorsel"]" alt="">
+                        <h2 class="tt-title">@dr_blog["baslik"]</h2>
+                        <p>
+                            @MvcHtmlString.Create(dr_blog["yazi"].ToString())
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-indent">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xs-12 col-md-10 col-lg-8 col-md-auto">
+                <div class="comments-single-post">
+                    <h6 class="tt-title-border">@sotec_web.Resources.Dil.SON_BLOG_YAZILARI</h6>
+                    <div class="tt-blog-thumb-list">
+                        <div class="row">
+                            @foreach (DataRow dr_blog_item in dt_son_bloglar.Rows)
+                            {
+                                <div class="col-sm-6">
+                                    <div class="tt-blog-thumb">
+                                        <div class="tt-img"><a href="@Url.Action("Blog", "Wokiee", new { id = dr_blog_item["blog_id"] })"><img src="~/wokiee_src/images/loader.svg" data-src="/admin_src/images/blog/kucuk/@dr_blog_item["gorsel"]" alt=""></a></div>
+                                        <div class="tt-title-description">
+                                            <div class="tt-background"></div>
+                                            <div class="tt-title">
+                                                <a href="@Url.Action("Blog", "Wokiee", new { id = dr_blog_item["blog_id"] })">@dr_blog_item["baslik"]</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

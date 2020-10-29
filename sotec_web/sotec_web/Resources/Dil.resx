@@ -291,6 +291,12 @@
   <data name="POSTA KODU" xml:space="preserve">
     <value>POST CODE</value>
   </data>
+  <data name="PROJELERIMIZ" xml:space="preserve">
+    <value>PROJECTS</value>
+  </data>
+  <data name="REFERANSLAR" xml:space="preserve">
+    <value>REFFERANCES</value>
+  </data>
   <data name="SATIN AL" xml:space="preserve">
     <value>BUY</value>
   </data>
@@ -369,6 +375,9 @@
   <data name="Tüm Hakları Saklıdır" xml:space="preserve">
     <value>All Right Reserved</value>
   </data>
+  <data name="URUNLERIMIZ" xml:space="preserve">
+    <value>PRODUCTS</value>
+  </data>
   <data name="WHATSAPP" xml:space="preserve">
     <value>WHATSAPP</value>
   </data>
@@ -419,6 +428,9 @@
   </data>
   <data name="Ürün Sepetten Silindi" xml:space="preserve">
     <value>Product Removed from Cart</value>
+  </data>
+  <data name="ÜRÜNLERİMİZ" xml:space="preserve">
+    <value>PRODUCTS</value>
   </data>
   <data name="üye olmadan devam et" xml:space="preserve">
     <value>continue with</value>

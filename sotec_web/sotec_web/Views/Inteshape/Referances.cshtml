@@ -1,0 +1,74 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    ViewBag.Title = sotec_web.Resources.Dil.HİZMETLER;
+
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    DataTable dt_referanslar = SQL.get("SELECT b.referans_id, b.gorsel, baslik = ISNULL(db.baslik, b.baslik), yazi = ISNULL(db.yazi, b.yazi), ad_soyad = k.ad + ' ' + k.soyad, b.kayit_tarihi FROM referanslar b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id LEFT OUTER JOIN dil_referanslar db ON db.referans_id = b.referans_id AND db.silindi = 0 AND db.dil_id = " + dr_dil["dil_id"] + " WHERE b.silindi = 0 ORDER by b.referans_id");
+}
+
+<div class="sx-bnr-inr overlay-wraper bg-parallax bg-top-center" data-stellar-background-ratio="0.5" style="background-image:url(images/banner/5.jpg);">
+    <div class="overlay-main bg-black opacity-07"></div>
+    <div class="container">
+        <div class="sx-bnr-inr-entry">
+            <div class="banner-title-outer">
+                <div class="banner-title-name">
+                    <h2 class="m-tb0">@sotec_web.Resources.Dil.REFERANSLAR</h2>
+                </div>
+            </div>
+            <div>
+                <ul class="sx-breadcrumb breadcrumb-style-2">
+                    <li><a href="@Url.Action("Index", "Inteshape")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
+                    <li>@sotec_web.Resources.Dil.REFERANSLAR</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- INNER PAGE BANNER END -->
+<!-- OUR SERVICES START -->
+<div class="section-full mobile-page-padding p-t80  p-b50 bg-gray">
+    <div class="section-content">
+        <div class="container">
+            <!-- TITLE START -->
+            <div class="section-head">
+                <div class="sx-separator-outer separator-left">
+                    <div class="sx-separator bg-white bg-moving bg-repeat-x" style="background-image:url(images/background/cross-line2.png)">
+                        <h3 class="sep-line-one ">@sotec_web.Resources.Dil.REFERANSLAR</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @foreach (DataRow dr_referans_item in dt_referanslar.Rows)
+                {
+                    <div class="col-lg-4 col-md-6 col-sm-12 m-b30">
+                        <div class="sx-icon-box-wraper  icon-count-2-outer">
+                            <div class="icon-count-2 bg-white">
+                                <span class="icon-count-number">@dr_referans_item["referans_id"]</span>
+                                <div class="icon-xl inline-icon m-b5 scale-in-center">
+                                    <span class="icon-cell"><!--<i class="flaticon-sketch"></i>--><img src="~/admin_src/images/referans/kucuk/@dr_referans_item["gorsel"]" alt=""></span>
+                                </div>
+                                <div class="icon-content">
+                                    <h4 class="sx-tilte">@dr_referans_item["baslik"]</h4>
+                                    <p>@MvcHtmlString.Create(SQL.StripHTML(dr_referans_item["yazi"].ToString().Substring(0, dr_referans_item["yazi"].ToString().Length < 100 ? dr_referans_item["yazi"].ToString().Length : 100)))...</p>
+                                    <div class="text-left">
+                                        <a href="@Url.Action("Referance", "Inteshape", new { id = dr_referans_item["referans_id"] })" class="site-button-link">@sotec_web.Resources.Dil.DEVAMINI_OKU</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="hilite-title text-left p-l50 text-uppercase">
+        <strong>@sotec_web.Resources.Dil.REFERANSLAR</strong>
+    </div>
+</div>
+

@@ -1,0 +1,114 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    ViewBag.Title = sotec_web.Resources.Dil.İLETİŞİM;
+
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    DataRow dr_site_bilgileri = SQL.get("SELECT * FROM site_bilgileri WHERE dil_id = " + dr_dil["dil_id"]).Rows[0];
+}
+<div class="sx-bnr-inr overlay-wraper bg-parallax bg-top-center" data-stellar-background-ratio="0.5" style="background-image:url(images/banner/9.jpg);">
+    <div class="overlay-main bg-black opacity-07"></div>
+    <div class="container">
+        <div class="sx-bnr-inr-entry">
+            <div class="banner-title-outer">
+                <div class="banner-title-name">
+                    <h2 class="m-tb0">@sotec_web.Resources.Dil.İLETİŞİM</h2>
+                </div>
+            </div>
+            <div>
+                <ul class="sx-breadcrumb breadcrumb-style-2">
+                    <li><a href="@Url.Action("Index", "Inteshape")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
+                    <li>@sotec_web.Resources.Dil.İLETİŞİM</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- SECTION CONTENTG START -->
+<div class="section-full p-tb80 inner-page-padding">
+    <!-- LOCATION BLOCK-->
+    <div class="container">
+
+        <!-- GOOGLE MAP & CONTACT FORM -->
+        <div class="section-content">
+            <!-- CONTACT FORM-->
+            <div class="row">
+                <div class="col-lg-8 col-md-12 col-sm-12">
+                    @using (Ajax.BeginForm("MesajGonder", "Inteshape", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divSonuc", OnSuccess = "onAjaxRequestSuccess" }, new { id = "formKapsayici", @class = "contact-form bg-gray p-a30" }))
+                    {
+                        <input type="hidden" name="kaynak" value="İletişim" />
+                        <div class="contact-one">
+                            <div class="section-head">
+                                <div class="sx-separator-outer separator-left">
+                                    <div class="sx-separator bg-white bg-moving bg-repeat-x" style="background-image:url(images/background/cross-line2.png)">
+                                        <h3 class="sep-line-one">@sotec_web.Resources.Dil.İLETİŞİM</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input name="ad_soyad" type="text" class="form-control" id="form-blog-reply-name" required placeholder="@sotec_web.Resources.Dil.AD_SOYAD">
+                            </div>
+                            <div class="form-group">
+                                <input name="email" type="email" class="form-control" id="form-blog-reply-email" required placeholder="@sotec_web.Resources.Dil.E_MAİL">
+                            </div>
+                            <div class="form-group">
+                                <input name="telefon" type="tel" class="form-control" id="form-blog-reply-telefon" required placeholder="@sotec_web.Resources.Dil.TELEFON">
+                            </div>
+                            <div class="form-group">
+                                <textarea name="mesaj" rows="4" class="form-control " id="form-blog-reply-message" required placeholder="@sotec_web.Resources.Dil.MESAJ"></textarea>
+                            </div>
+                            <div class="text-right">
+                                <button type="submit" class="site-button btn-half">
+                                    <span> @sotec_web.Resources.Dil.GÖNDER</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    }
+                </div>
+                <div class="col-lg-4 col-md-12 col-sm-12">
+                    <div class="contact-info block-shadow bg-white bg-center p-a40" style="background-image:url(images/background/bg-map.png)">
+                        <div>
+                            <div class="sx-icon-box-wraper left p-b30">
+                                <div class="icon-xs"><i class="fa fa-phone"></i></div>
+                                <div class="icon-content">
+                                    <h5 class="m-t0">@sotec_web.Resources.Dil.TELEFON</h5>
+                                    <p>
+                                        @MvcHtmlString.Create((dr_site_bilgileri["telefon"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.TELEFON + ": </span>" + dr_site_bilgileri["telefon"] + "</p>"))
+                                        @MvcHtmlString.Create((dr_site_bilgileri["gsm"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.GSM + ": </span>" + dr_site_bilgileri["gsm"] + "</p>"))
+                                        @MvcHtmlString.Create((dr_site_bilgileri["fax"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.FAX + ": </span>" + dr_site_bilgileri["fax"] + "</p>"))
+                                        @MvcHtmlString.Create((dr_site_bilgileri["whatsapp"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.WHATSAPP + ": </span>" + dr_site_bilgileri["whatsapp"] + "</p>"))
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="sx-icon-box-wraper left p-b30">
+                                <div class="icon-xs"><i class="fa fa-envelope"></i></div>
+                                <div class="icon-content">
+                                    <h5 class="m-t0">@sotec_web.Resources.Dil.E_MAİL</h5>
+                                    <p>
+                                        @MvcHtmlString.Create((dr_site_bilgileri["email"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.E_MAİL + ": </span> <a href='mailto: " + dr_site_bilgileri["email"] + "'>" + dr_site_bilgileri["email"] + "</a></p>"))
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="sx-icon-box-wraper left">
+                                <div class="icon-xs"><i class="fa fa-map-marker"></i></div>
+                                <div class="icon-content">
+                                    <h5 class="m-t0">@sotec_web.Resources.Dil.ADRES</h5>
+                                    <p>
+                                        @MvcHtmlString.Create((dr_site_bilgileri["adres"].ToString().Length <= 0 ? "" : "<p>" + dr_site_bilgileri["adres"] + "</p>"))
+                                        @MvcHtmlString.Create((dr_site_bilgileri["calisma_saatleri"].ToString().Length <= 0 ? "" : "<p>" + dr_site_bilgileri["calisma_saatleri"] + "</p>"))
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

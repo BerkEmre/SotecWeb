@@ -1,0 +1,60 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    int proje_id = ViewBag.proje_id;
+
+    DataRow dr_proje = SQL.get("SELECT b.proje_id, b.gorsel, baslik = ISNULL(db.baslik, b.baslik), yazi = ISNULL(db.yazi, b.yazi), ad_soyad = k.ad + ' ' + k.soyad, b.kayit_tarihi, kategori = ISNULL(dk.kategori, kat.kategori), b.kategori_id FROM projeler b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id INNER JOIN kategoriler kat ON kat.kategori_id = b.kategori_id LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = kat.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " LEFT OUTER JOIN dil_projeler db ON db.proje_id = b.proje_id AND db.silindi = 0 AND db.dil_id = " + dr_dil["dil_id"] + " WHERE b.silindi = 0 AND b.proje_id = " + proje_id).Rows[0];
+
+    ViewBag.Title = dr_proje["baslik"];
+}
+<div class="sx-bnr-inr overlay-wraper bg-parallax bg-top-center" data-stellar-background-ratio="0.5" style="background-image:url(images/banner/10.jpg);">
+    <div class="overlay-main bg-black opacity-07"></div>
+    <div class="container">
+        <div class="sx-bnr-inr-entry">
+            <div class="banner-title-outer">
+                <div class="banner-title-name">
+                    <h2 class="m-tb0">@dr_proje["baslik"]</h2>
+                </div>
+            </div>
+            <div>
+                <ul class="sx-breadcrumb breadcrumb-style-2">
+                    <li><a href="@Url.Action("Index", "Inteshape")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
+                    <li><a href="@Url.Action("Projects", "Inteshape")">@sotec_web.Resources.Dil.PROJELERIMIZ</a></li>
+                    <li>@dr_proje["baslik"]</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section-full p-t80 p-b50 inner-page-padding">
+    <div class="container">
+        <div class="blog-single-space max-w900 ml-auto mr-auto">
+            <div class="blog-post blog-detail text-black">
+                <div class="sx-post-media">
+                    <div class="portfolio-item">
+                        <img class="img-responsive" src="~/admin_src/images/proje/buyuk/@dr_proje["gorsel"]" alt="">
+                    </div>
+                </div>
+                <div class="sx-post-meta  m-t20">
+                    <ul>
+                        <li class="post-date">@(Convert.ToDateTime(dr_proje["kayit_tarihi"]).ToShortDateString()) </li>
+                        <li class="post-author">@dr_proje["ad_soyad"] </li>
+                        <li class="post-category"><a href="@Url.Action("Projects", new { id = 0, id2 = dr_proje["kategori_id"] })">@dr_proje["kategori"]</a> </li>
+                    </ul>
+                </div>
+                <div class="sx-post-title ">
+                    <h3 class="post-title">@dr_proje["baslik"]</h3>
+                </div>
+                <div class="sx-post-text">
+                    @MvcHtmlString.Create(dr_proje["yazi"].ToString())
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

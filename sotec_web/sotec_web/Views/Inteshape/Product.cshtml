@@ -1,0 +1,104 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@using System.Configuration
+@{
+    bool first = true;
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    int urun_id = ViewBag.urun_id;
+
+    DataRow dr_urun = SQL.get("SELECT u.stok, u.urun_id, u.stok_kodu, u.fiyat, urun_adi = ISNULL(du.urun_adi, u.urun_adi), aciklama = ISNULL(du.aciklama, u.aciklama), resim = ISNULL((SELECT TOP 1 resim FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id AND sira = (SELECT MIN(sira) FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id)), '') FROM urunler u LEFT OUTER JOIN dil_urunler du ON du.urun_id = u.urun_id AND du.silindi = 0 AND du.dil_id = " + dr_dil["dil_id"] + " WHERE u.urun_id = " + urun_id).Rows[0];
+    DataTable dt_urun_resimleri = SQL.get("SELECT * FROM urun_resimleri WHERE silindi = 0 AND urun_id = " + urun_id + " ORDER by sira");
+    DataTable dt_urun_kategorileri = SQL.get("SELECT uk.kategori_id, kategori = ISNULL(dk.kategori, k.kategori) FROM urun_kategorileri uk INNER JOIN kategoriler k ON k.kategori_id = uk.kategori_id AND k.silindi = 0 LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = k.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " WHERE uk.silindi = 0 AND uk.urun_id = " + urun_id);
+    DataTable dt_urun_varyasyon = SQL.get("SELECT uoz.urun_varyasyon_id, varyasyon = ISNULL(duo.varyasyon, uoz.varyasyon) FROM urun_varyasyon uo INNER JOIN urun_varyasyon_degerleri uod ON uod.urun_varyasyon_deger_id = uo.deger_id AND uod.silindi = 0 INNER JOIN urun_varyasyonlari uoz ON uoz.urun_varyasyon_id = uod.varyasyon_id AND uoz.silindi = 0 LEFT OUTER JOIN dil_urun_varyasyonlari duo ON duo.urun_varyasyon_id = uoz.urun_varyasyon_id AND duo.silindi = 0 AND duo.dil_id = " + dr_dil["dil_id"] + " WHERE uo.silindi = 0 AND uo.urun_id = " + urun_id + " GROUP by uoz.urun_varyasyon_id, duo.varyasyon, uoz.varyasyon");
+    DataTable dt_urun_ozellik = SQL.get("SELECT uoz.urun_ozellik_id, ozellik = ISNULL(duo.ozellik, uoz.ozellik), deger = ISNULL(duoz.deger, uod.deger) FROM urun_ozellik uo INNER JOIN urun_ozellik_degerleri uod ON uod.urun_ozellik_deger_id = uo.deger_id AND uod.silindi = 0 LEFT OUTER JOIN dil_urun_ozellik_degerleri duoz ON duoz.urun_ozellik_deger_id = uod.urun_ozellik_deger_id AND duoz.silindi = 0 AND duoz.dil_id = " + dr_dil["dil_id"] + " INNER JOIN urun_ozellikleri uoz ON uoz.urun_ozellik_id = uod.ozellik_id AND uoz.silindi = 0 LEFT OUTER JOIN dil_urun_ozellikleri duo ON duo.urun_ozellik_id = uoz.urun_ozellik_id AND duo.silindi = 0 AND duo.dil_id = " + dr_dil["dil_id"] + " WHERE uo.silindi = 0 AND uo.urun_id = " + urun_id);
+
+    DataTable dt_one_cikan_urunler = SQL.get("SELECT u.stok_kodu, u.urun_id, u.fiyat, urun_adi = ISNULL(du.urun_adi, u.urun_adi), aciklama = ISNULL(du.aciklama, u.aciklama), resim = ISNULL((SELECT TOP 1 resim FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id AND sira = (SELECT MIN(sira) FROM urun_resimleri WHERE silindi = 0 AND urun_id = u.urun_id)), '')  FROM urunler u LEFT OUTER JOIN dil_urunler du ON du.urun_id = u.urun_id AND du.silindi = 0 AND du.dil_id = " + dr_dil["dil_id"] + " WHERE u.silindi = 0 AND u.one_cikan = 1");
+
+    ViewBag.Title = dr_urun["urun_adi"].ToString();
+
+    decimal stok = Convert.ToDecimal(dr_urun["stok"]);
+}
+@section script {
+    <script>
+        function varyasyon_kontrol() {
+            var span_fiyat = document.getElementById("span_fiyat");
+            var fiyat = @dr_urun["fiyat"].ToString().Replace(',', '.');
+
+            $('.deger_id').each(function () {
+                $.ajax({
+                    url: '/Wokiee/varyasyonFiyatGetir?urun_id=@dr_urun["urun_id"]&deger_id=' + $(this).val(),//$(this).options[$(this).selectedIndex].value,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (data) {
+                        fiyat = fiyat + data.fiyat;
+                        span_fiyat.innerHTML = fiyat + " ₺";
+                    }
+                });
+            });
+        }
+    </script>
+}
+<div class="sx-bnr-inr overlay-wraper bg-parallax bg-top-center" data-stellar-background-ratio="0.5" style="background-image:url(images/banner/2.jpg);">
+    <div class="overlay-main bg-black opacity-07"></div>
+    <div class="container">
+        <div class="sx-bnr-inr-entry">
+            <div class="banner-title-outer">
+                <div class="banner-title-name">
+                    <h2 class="m-tb0">@dr_urun["urun_adi"]</h2>
+                </div>
+            </div>
+            <div>
+                <ul class="sx-breadcrumb breadcrumb-style-2">
+                    <li><a href="@Url.Action("Index", "Inteshape")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
+                    <li><a href="@Url.Action("Products", "Inteshape")">@sotec_web.Resources.Dil.ÜRÜNLERİMİZ</a></li>
+                    <li>@dr_urun["urun_adi"]</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section-full p-tb80 inner-page-padding stick_in_parent">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 col-md-7  sticky_column">
+                <div class="project-detail-containt">
+                    <div class="bg-white text-black">
+                        <h3>@dr_urun["urun_adi"]</h3>
+                        <div class="product-block">
+                            <ul>
+                                @foreach (DataRow dr_ozellik_item in dt_urun_ozellik.Rows)
+                                {
+                                    <li>
+                                        <h4 class="m-b10">@dr_ozellik_item["ozellik"]</h4>
+                                        <p>@dr_ozellik_item["deger"]</p>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="m-b0">
+                            <div class="sx-divider divider-1px  bg-black"><i class="icon-dot c-square"></i></div>
+                        </div>
+                        <p>@MvcHtmlString.Create(dr_urun["aciklama"].ToString())</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-5 ">
+                <div class="project-detail-outer">
+                    @foreach (DataRow dr_urun_resim_item in dt_urun_resimleri.Rows)
+                    {
+                        <div class="project-detail-pic m-b30">
+                            <div class="sx-media">
+                                <img src="~/admin_src/images/urun/buyuk/@dr_urun_resim_item["resim"]" alt="">
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

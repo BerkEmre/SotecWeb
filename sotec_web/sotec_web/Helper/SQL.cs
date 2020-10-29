@@ -11,9 +11,8 @@ namespace sotec_firma.Helpers
 #if DEBUG
         static string text = ConfigurationManager.ConnectionStrings["conStr_local"].ConnectionString;
 #else
-            static string text = ConfigurationManager.ConnectionStrings["conStr_srver"].ConnectionString;
+        static string text = ConfigurationManager.ConnectionStrings["conStr_srver"].ConnectionString;
 #endif
-        //ConfigurationSettings.AppSettings["connecitonstring"].ToString();//@"Server=DESKTOP-46PJDJK\SQLEXPRESS;Database=sotec_ticaret;User Id=sa;Password=1234;";
         static SqlConnection con = new SqlConnection(@text);
 
         public static bool baglanti_test()
@@ -21,7 +20,6 @@ namespace sotec_firma.Helpers
 
             try
             {
-                //text = System.IO.File.ReadAllText(@"constr.txt");
                 con = new SqlConnection(text);
                 SQL.get("SELECT * FROM kullanicilar"); return true;
             }

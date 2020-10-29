@@ -1,0 +1,102 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@using System.Text.RegularExpressions
+@{
+    ViewBag.Title = sotec_web.Resources.Dil.PROJELERIMIZ;
+
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    int sayfa_no = ViewBag.sayfa_no;
+    int kategori_id = ViewBag.kategori_id;
+
+    Regex rRemScript = new Regex(@"<iframe[^>]*>[\s\S]*?</iframe>");
+    string yazi;
+
+    int cnt_proje = Convert.ToInt32(SQL.get("SELECT cnt = COUNT(*) FROM projeler b WHERE b.silindi = 0 " + (kategori_id == 0 ? "" : " AND b.kategori_id = " + kategori_id + " ")).Rows[0]["cnt"]);
+    int sayfa_sayisi = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(cnt_proje) / 10));
+
+    DataTable dt_son_projeler = SQL.get("SELECT b.proje_id, b.gorsel, baslik = ISNULL(db.baslik, b.baslik), yazi = ISNULL(db.yazi, b.yazi), ad_soyad = k.ad + ' ' + k.soyad, b.kayit_tarihi, kategori = ISNULL(dk.kategori, kat.kategori), b.kategori_id FROM projeler b INNER JOIN kullanicilar k ON k.kullanici_id = b.kaydeden_kullanici_id INNER JOIN kategoriler kat ON kat.kategori_id = b.kategori_id LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = kat.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " LEFT OUTER JOIN dil_projeler db ON db.proje_id = b.proje_id AND db.silindi = 0 AND db.dil_id = " + dr_dil["dil_id"] + " WHERE b.silindi = 0 " + (kategori_id == 0 ? "" : " AND b.kategori_id = " + kategori_id + " ") + " ORDER by b.proje_id DESC OFFSET " + (sayfa_no * 10) + " ROWS FETCH NEXT 10 ROWS ONLY");
+    DataTable dt_haber_kategori = SQL.get("SELECT k.kategori_id, kategori = ISNULL(dk.kategori, k.kategori) FROM kategoriler k LEFT OUTER JOIN dil_kategoriler dk ON dk.kategori_id = k.kategori_id AND dk.silindi = 0 AND dk.dil_id = " + dr_dil["dil_id"] + " WHERE k.silindi = 0 AND k.kategori_tipi_parametre_id = 39");
+}
+<div class="sx-bnr-inr overlay-wraper bg-parallax bg-top-center" data-stellar-background-ratio="0.5" style="background-image:url(images/banner/8.jpg);">
+    <div class="overlay-main bg-black opacity-07"></div>
+    <div class="container">
+        <div class="sx-bnr-inr-entry">
+            <div class="banner-title-outer">
+                <div class="banner-title-name">
+                    <h2 class="m-tb0">@sotec_web.Resources.Dil.PROJELERIMIZ</h2>
+                </div>
+            </div>
+            <div>
+                <ul class="sx-breadcrumb breadcrumb-style-2">
+                    <li><a href="@Url.Action("Index", "Inteshape")">@sotec_web.Resources.Dil.ANA_SAYFA</a></li>
+                    <li>@sotec_web.Resources.Dil.PROJELERIMIZ</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section-full p-tb80 inner-page-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-12 col-sm-12">
+                <div class="news-listing ">
+                    @foreach (DataRow dr_proje_item in dt_son_projeler.Rows)
+                    {
+                        <div class="blog-post blog-lg date-style-3 block-shadow">
+                            <div class="sx-post-media sx-img-effect zoom-slow">
+                                <a href="@Url.Action("Project", "Inteshape", new { id = dr_proje_item["proje_id"] })"><img src="~/admin_src/images/proje/kucuk/@dr_proje_item["gorsel"]" alt=""></a>
+                            </div>
+                            <div class="sx-post-info  bg-white">
+                                <div class="sx-post-meta ">
+                                    <ul>
+                                        <li class="post-date"> @(Convert.ToDateTime(dr_proje_item["kayit_tarihi"]).ToShortDateString()) </li>
+                                        <li class="post-author">@dr_proje_item["ad_soyad"] </li>
+                                    </ul>
+                                </div>
+                                <div class="sx-post-title ">
+                                    <h4 class="post-title"><a href="@Url.Action("Project", "Inteshape", new { id = dr_proje_item["proje_id"] })">@dr_proje_item["baslik"]</a></h4>
+                                </div>
+                                <div class="sx-post-text">
+                                    @{ yazi = rRemScript.Replace(dr_proje_item["yazi"].ToString(), String.Empty);}
+                                    <p>@MvcHtmlString.Create(SQL.StripHTML(yazi.Substring(0, yazi.Length < 100 ? yazi.Length : 100)))...</p>
+                                </div>
+                                <div class="clearfix">
+                                    <div class="sx-post-readmore pull-left">
+                                        <a href="@Url.Action("Project", "Inteshape", new { id = dr_proje_item["proje_id"] })" title="@sotec_web.Resources.Dil.DEVAMINI_OKU" rel="bookmark" class="site-button-link">@sotec_web.Resources.Dil.DEVAMINI_OKU</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <ul class="pagination m-b30">
+                    @for (int i = 0; i < sayfa_sayisi; i++)
+                    {
+                        <li class="@(i == sayfa_no ? "active" : "")"><a href="@Url.Action("Projects", new { id = i, id2 = kategori_id })">@(i + 1)</a></li>
+                    }
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12 sticky_column">
+                <div class="side-bar p-a30 bg-gray">
+
+                    <!-- Categories  -->
+                    <div class="widget widget_services ">
+                        <h4 class="widget-title">@sotec_web.Resources.Dil.KATEGORİLER</h4>
+                        <ul class="p-a10 bg-white">
+                            @foreach (DataRow dr_kategori_item in dt_haber_kategori.Rows)
+                            {
+                                <li><a href="@Url.Action("Projects", "Inteshape", new { id2 = dr_kategori_item["kategori_id"] })">@dr_kategori_item["kategori"]</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

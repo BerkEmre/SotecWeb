@@ -1,0 +1,82 @@
+﻿@using System.Data
+@using sotec_firma.Helpers
+@{
+    ViewBag.Title = sotec_web.Resources.Dil.İLETİŞİM;
+
+    string lang = Request.Cookies.Get("MultiLanguageExample").Value;
+
+    DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
+    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    DataRow dr_dil = dt_dil.Rows[0];
+
+    DataRow dr_site_bilgileri = SQL.get("SELECT * FROM site_bilgileri WHERE dil_id = " + dr_dil["dil_id"]).Rows[0];
+}
+<div class="container-indent">
+    <div class="container container-fluid-custom-mobile-padding">
+        <div class="tt-contact02-col-list">
+            <div class="row">
+                <div class="col-sm-12 col-md-4 ml-sm-auto mr-sm-auto">
+                    <div class="tt-contact-info">
+                        <i class="tt-icon icon-f-93"></i>
+                        <h6 class="tt-title">@sotec_web.Resources.Dil.İLETİŞİM</h6>
+                        <address>
+                            @MvcHtmlString.Create((dr_site_bilgileri["telefon"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.TELEFON + ": </span>" + dr_site_bilgileri["telefon"] + "</p>"))
+                            @MvcHtmlString.Create((dr_site_bilgileri["gsm"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.GSM + ": </span>" + dr_site_bilgileri["gsm"] + "</p>"))
+                            @MvcHtmlString.Create((dr_site_bilgileri["fax"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.FAX + ": </span>" + dr_site_bilgileri["fax"] + "</p>"))
+                            @MvcHtmlString.Create((dr_site_bilgileri["whatsapp"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.WHATSAPP + ": </span>" + dr_site_bilgileri["whatsapp"] + "</p>"))
+                            @MvcHtmlString.Create((dr_site_bilgileri["email"].ToString().Length <= 0 ? "" : "<p><span>" + sotec_web.Resources.Dil.E_MAİL + ": </span> <a href='mailto: " + dr_site_bilgileri["email"] + "'>" + dr_site_bilgileri["email"] + "</a></p>"))
+                        </address>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="tt-contact-info">
+                        <i class="tt-icon icon-f-24"></i>
+                        <h6 class="tt-title">@sotec_web.Resources.Dil.ADRES</h6>
+                        <address>
+                            @MvcHtmlString.Create((dr_site_bilgileri["adres"].ToString().Length <= 0 ? "" : "<p>" + dr_site_bilgileri["adres"] + "</p>"))
+                        </address>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="tt-contact-info">
+                        <i class="tt-icon icon-f-92"></i>
+                        <h6 class="tt-title">@sotec_web.Resources.Dil.ÇALIŞMA_SAATLERİ</h6>
+                        <address>
+                            @MvcHtmlString.Create((dr_site_bilgileri["calisma_saatleri"].ToString().Length <= 0 ? "" : "<p>" + dr_site_bilgileri["calisma_saatleri"] + "</p>"))
+                        </address>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-indent">
+    <div class="container container-fluid-custom-mobile-padding">
+        @using (Ajax.BeginForm("MesajGonder", "Wokiee", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divSonuc", OnSuccess = "onAjaxRequestSuccess" }, new { id = "formKapsayici" }))
+        {
+            <div class="row text-danger" id="divSonuc"></div>
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="hidden" name="kaynak" value="İletişim" />
+                    <div class="form-group">
+                        <input type="text" name="ad_soyad" class="form-control" id="form-blog-reply-name" placeholder="@sotec_web.Resources.Dil.AD_SOYAD *" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="email" class="form-control" id="form-blog-reply-email" placeholder="@sotec_web.Resources.Dil.E_MAİL *" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="telefon" class="form-control" id="form-blog-reply-telefon" placeholder="@sotec_web.Resources.Dil.TELEFON">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <textarea name="mesaj" class="form-control" rows="7" placeholder="@sotec_web.Resources.Dil.MESAJ" id="form-blog-reply-message" required></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" id="form-blog-reply-submit" class="btn">@sotec_web.Resources.Dil.GÖNDER</button>
+            </div>
+        }
+    </div>
+</div>

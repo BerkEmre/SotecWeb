@@ -12,11 +12,22 @@
 {
     <link rel="stylesheet" href="~/admin_src/vendor/dropify/css/dropify.min.css">
     <script src="~/admin_src/vendor/ckeditor/ckeditor.js"></script>
+
+    <link rel="stylesheet" href="~/admin_src/vendor/jquery-datatable/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/admin_src/vendor/jquery-datatable/fixedeader/dataTables.fixedcolumns.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/admin_src/vendor/jquery-datatable/fixedeader/dataTables.fixedheader.bootstrap4.min.css">
 }
 @section script
 {
     <script src="~/admin_src/assets/js/pages/ui/dialogs.js"></script>
     <script src="~/admin_src/vendor/dropify/js/dropify.min.js"></script>
+    <script src="~/admin_src/assets/bundles/datatablescripts.bundle.js"></script>
+    <script src="~/admin_src/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+    <script src="~/admin_src/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+    <script src="~/admin_src/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+    <script src="~/admin_src/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
+    <script src="~/admin_src/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
+    <script src="~/admin_src/assets/js/pages/tables/jquery-datatable.js"></script>
     <script>
         function urun_sil(urun_id) {
             swal({
@@ -53,22 +64,30 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="header">
-                <div class="pull-right">
-                    <a href="@Url.Action("UrunDetay", "Admin", new { id = 0 })" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Yeni Ürün</a>
-                </div>
+                <ul class="header-dropdown dropdown dropdown-animated scale-left">
+                    <li><a href="javascript:void(0);" class="full-screen"><i class="icon-size-fullscreen"></i></a></li>
+                    <li><a href="@Url.Action("UrunDetay", "Admin", new { id = 0 })" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Yeni Ürün</a></li>
+                </ul>
             </div>
             <div class="body">
-                <div class="table-responsive check-all-parent">
-                    <table class="table table-custom table-hover m-b-0 c_list">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover dataTable js-exportable">
                         <thead>
                             <tr>
-                                <th>Kategori</th>
                                 <th>Kullanıcı</th>
                                 <th>Ürün</th>
                                 <th>Tarih</th>
                                 <th></th>
                             </tr>
                         </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Kullanıcı</th>
+                                <th>Ürün</th>
+                                <th>Tarih</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
                         <tbody>
                             @foreach (DataRow dr_item in dt_blog.Rows)
                             {

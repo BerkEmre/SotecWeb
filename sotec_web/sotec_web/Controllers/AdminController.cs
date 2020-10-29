@@ -314,6 +314,8 @@ namespace sotec_web.Controllers
             cnt += dt.Rows.Count;
             dt = SQL.get("SELECT * FROM haberler WHERE silindi = 0 AND kategori_id = " + kategori_id);
             cnt += dt.Rows.Count;
+            dt = SQL.get("SELECT * FROM projeler WHERE silindi = 0 AND kategori_id = " + kategori_id);
+            cnt += dt.Rows.Count;
             dt = SQL.get("SELECT * FROM urun_kategorileri WHERE silindi = 0 AND kategori_id = " + kategori_id);
             cnt += dt.Rows.Count;
 
@@ -436,6 +438,101 @@ namespace sotec_web.Controllers
             }
 
             return RedirectToAction("Blog", new { tepki = 1 });
+        }
+        #endregion
+
+        #region PROJE
+        public ActionResult Proje()
+        {
+            if (Session["kullanici_id"] == null)
+                return RedirectToAction("Login");
+
+            return View();
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult projeEkle(HttpPostedFileBase gorsel, int proje_kategori_id, string baslik, string yazi)
+        {
+            if (baslik.Length <= 0)
+                return RedirectToAction("Proje", new { hata = "Eksik bilgi girdiniz!" });
+
+            string result = "";
+            if (gorsel != null && gorsel.ContentLength > 0)
+            {
+                result = string.Format(@"{0}", Guid.NewGuid());
+                WebImage img = new WebImage(gorsel.InputStream);
+                var path = Path.Combine("~/admin_src/images/proje/orjinal", result);
+                img.Save(path);
+                img.Resize(1600, 1600, true, false).Crop(1, 1, 1, 1);
+                path = Path.Combine("~/admin_src/images/proje/buyuk", result);
+                img.Save(path);
+                img.Resize(400, 400, true, false).Crop(1, 1, 1, 1);
+                path = Path.Combine("~/admin_src/images/proje/kucuk", result);
+                img.Save(path);
+                result += Path.GetExtension(gorsel.FileName);
+                result = result.Replace("jpg", "jpeg");
+            }
+
+            SQL.set("INSERT INTO projeler (kaydeden_kullanici_id, kategori_id, baslik, gorsel, yazi) VALUES (" + Session["kullanici_id"] + ", " + proje_kategori_id + ", '" + baslik + "', '" + result + "', '" + yazi + "')");
+
+            return RedirectToAction("Proje", new { tepki = 1 });
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult projeDuzenle(int proje_id, HttpPostedFileBase gorsel, int proje_kategori_id, string baslik, string yazi)
+        {
+            if (baslik.Length <= 0)
+                return RedirectToAction("Proje", new { hata = "Eksik bilgi girdiniz!" });
+
+            string result = "";
+            if (gorsel != null && gorsel.ContentLength > 0)
+            {
+                result = string.Format(@"{0}", Guid.NewGuid());
+                WebImage img = new WebImage(gorsel.InputStream);
+                var path = Path.Combine("~/admin_src/images/proje/orjinal", result);
+                img.Save(path);
+                img.Resize(1600, 1600, true, false).Crop(1, 1, 1, 1);
+                path = Path.Combine("~/admin_src/images/proje/buyuk", result);
+                img.Save(path);
+                img.Resize(400, 400, true, false).Crop(1, 1, 1, 1);
+                path = Path.Combine("~/admin_src/images/proje/kucuk", result);
+                img.Save(path);
+                result += Path.GetExtension(gorsel.FileName);
+                result = result.Replace("jpg", "jpeg");
+            }
+
+            SQL.set("UPDATE projeler SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), kategori_id = " + proje_kategori_id + ", baslik = '" + baslik + "', yazi = '" + yazi + "' " + (result.Length <= 0 ? "" : ", gorsel = '" + result + "' ") + " WHERE proje_id = " + proje_id);
+
+            return RedirectToAction("Proje", new { tepki = 1 });
+        }
+
+        public ActionResult projeSil(int proje_id)
+        {
+            SQL.set("UPDATE projeler SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE proje_id = " + proje_id);
+            return RedirectToAction("Proje", new { tepki = 3 });
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult projeDil(int[] dil_id, int proje_id, string[] baslik, string[] yazi)
+        {
+            DataTable dt_varmi;
+            for (int i = 0; i < dil_id.Length; i++)
+            {
+                dt_varmi = SQL.get("SELECT * FROM dil_projeler WHERE silindi = 0 AND dil_id = " + dil_id[i] + " AND proje_id = " + proje_id);
+                if (dt_varmi.Rows.Count > 0)
+                {
+                    SQL.set("UPDATE dil_projeler SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), baslik = '" + baslik[i] + "', yazi = '" + yazi[i] + "' WHERE dil_id = " + dil_id[i] + " AND proje_id = " + proje_id);
+                }
+                else
+                {
+                    SQL.set("INSERT INTO dil_projeler (kaydeden_kullanici_id, dil_id, proje_id, baslik, yazi) VALUES (" + Session["kullanici_id"] + ", " + dil_id[i] + ", " + proje_id + ", '" + baslik[i] + "', '" + yazi[i] + "')");
+                }
+            }
+
+            return RedirectToAction("Proje", new { tepki = 1 });
         }
         #endregion
 
@@ -626,6 +723,101 @@ namespace sotec_web.Controllers
             }
 
             return RedirectToAction("Hizmet", new { tepki = 1 });
+        }
+        #endregion
+
+        #region REFERANS
+        public ActionResult Referans()
+        {
+            if (Session["kullanici_id"] == null)
+                return RedirectToAction("Login");
+
+            return View();
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult referansEkle(HttpPostedFileBase gorsel, string baslik, string yazi)
+        {
+            if (baslik.Length <= 0)
+                return RedirectToAction("Referans", new { hata = "Eksik bilgi girdiniz!" });
+
+            string result = "";
+            if (gorsel != null && gorsel.ContentLength > 0)
+            {
+                result = string.Format(@"{0}", Guid.NewGuid());
+                WebImage img = new WebImage(gorsel.InputStream);
+                var path = Path.Combine("~/admin_src/images/referans/orjinal", result);
+                img.Save(path);
+                img.Resize(1600, 1600, true, false).Crop(1, 1, 1, 1);
+                path = Path.Combine("~/admin_src/images/referans/buyuk", result);
+                img.Save(path);
+                img.Resize(400, 400, true, false).Crop(1, 1, 1, 1);
+                path = Path.Combine("~/admin_src/images/referans/kucuk", result);
+                img.Save(path);
+                result += Path.GetExtension(gorsel.FileName);
+                result = result.Replace("jpg", "jpeg");
+            }
+
+            SQL.set("INSERT INTO referanslar (kaydeden_kullanici_id, baslik, gorsel, yazi) VALUES (" + Session["kullanici_id"] + ", '" + baslik + "', '" + result + "', '" + yazi + "')");
+
+            return RedirectToAction("Referans", new { tepki = 1 });
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult referansDuzenle(int referans_id, HttpPostedFileBase gorsel, string baslik, string yazi)
+        {
+            if (baslik.Length <= 0)
+                return RedirectToAction("Referans", new { hata = "Eksik bilgi girdiniz!" });
+
+            string result = "";
+            if (gorsel != null && gorsel.ContentLength > 0)
+            {
+                result = string.Format(@"{0}", Guid.NewGuid());
+                WebImage img = new WebImage(gorsel.InputStream);
+                var path = Path.Combine("~/admin_src/images/referans/orjinal", result);
+                img.Save(path);
+                img.Resize(1600, 1600, true, false).Crop(1, 1, 1, 1);
+                path = Path.Combine("~/admin_src/images/referans/buyuk", result);
+                img.Save(path);
+                img.Resize(400, 400, true, false).Crop(1, 1, 1, 1);
+                path = Path.Combine("~/admin_src/images/referans/kucuk", result);
+                img.Save(path);
+                result += Path.GetExtension(gorsel.FileName);
+                result = result.Replace("jpg", "jpeg");
+            }
+
+            SQL.set("UPDATE referanslar SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), baslik = '" + baslik + "', yazi = '" + yazi + "' " + (result.Length <= 0 ? "" : ", gorsel = '" + result + "' ") + " WHERE referans_id = " + referans_id);
+
+            return RedirectToAction("Referans", new { tepki = 1 });
+        }
+
+        public ActionResult referansSil(int referans_id)
+        {
+            SQL.set("UPDATE referanslar SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), silindi = 1 WHERE referans_id = " + referans_id);
+            return RedirectToAction("Referans", new { tepki = 3 });
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult referansDil(int[] dil_id, int referans_id, string[] baslik, string[] yazi)
+        {
+            DataTable dt_varmi;
+            for (int i = 0; i < dil_id.Length; i++)
+            {
+                dt_varmi = SQL.get("SELECT * FROM dil_referanslar WHERE silindi = 0 AND dil_id = " + dil_id[i] + " AND referans_id = " + referans_id);
+                if (dt_varmi.Rows.Count > 0)
+                {
+                    SQL.set("UPDATE dil_referanslar SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), baslik = '" + baslik[i] + "', yazi = '" + yazi[i] + "' WHERE dil_id = " + dil_id[i] + " AND referans_id = " + referans_id);
+                }
+                else
+                {
+                    SQL.set("INSERT INTO dil_referanslar (kaydeden_kullanici_id, dil_id, referans_id, baslik, yazi) VALUES (" + Session["kullanici_id"] + ", " + dil_id[i] + ", " + referans_id + ", '" + baslik[i] + "', '" + yazi[i] + "')");
+                }
+            }
+
+            return RedirectToAction("Referans", new { tepki = 1 });
         }
         #endregion
 
@@ -1096,12 +1288,18 @@ namespace sotec_web.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult ozellikDuzenle(int ozellik_id, string ozellik)
+        public ActionResult ozellikDuzenle(int ozellik_id, string ozellik, int ana_ozellik = 0)
         {
             if (ozellik.Length <= 0)
                 return RedirectToAction("UrunOzellik", new { hata = "Eksik bilgi girdiniz!" });
 
             SQL.set("UPDATE urun_ozellikleri SET guncelleyen_kullanici_id = " + Session["kullanici_id"] + ", guncelleme_tarihi = GETDATE(), ozellik = '" + ozellik + "' WHERE urun_ozellik_id = " + ozellik_id);
+
+            if(ana_ozellik == 1)
+            {
+                SQL.set("UPDATE urun_ozellikleri SET ana_ozellik = 0");
+                SQL.set("UPDATE urun_ozellikleri SET ana_ozellik = 1 WHERE urun_ozellik_id = " + ozellik_id);
+            }
 
             return RedirectToAction("UrunOzellik", new { tepki = 1 });
         }

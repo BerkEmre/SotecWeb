@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = sotec_web.Resources.Dil.KAYIT_OL;
+}
+<div class="container-indent">
+    <div class="container">
+        <h1 class="tt-title-subpages noborder">@sotec_web.Resources.Dil.KAYIT_OL</h1>
+        <div class="tt-login-form">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="tt-item">
+                        <h2 class="tt-title">@sotec_web.Resources.Dil.KAYIT_OL</h2>
+                        <div class="form-default">
+                            @using (Html.BeginForm("kullaniciEkle", "Wokiee", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+                            {
+                                <label class="text-danger">@Request.Params["hata"]</label>
+                                <div class="form-group">
+                                    <label for="loginInputName">@sotec_web.Resources.Dil.AD *</label>
+                                    <div class="tt-required">* Required Fields</div>
+                                    <input type="text" name="ad" class="form-control" id="ad" placeholder="@sotec_web.Resources.Dil.AD" autocomplete="off" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="loginLastName">@sotec_web.Resources.Dil.SOYAD *</label>
+                                    <input type="text" name="soyad" class="form-control" id="soyad" placeholder="@sotec_web.Resources.Dil.SOYAD" autocomplete="off" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="loginInputEmail">@sotec_web.Resources.Dil.E_MAİL *</label>
+                                    <input type="email" name="email" class="form-control" id="email" placeholder="@sotec_web.Resources.Dil.E_MAİL" autocomplete="off" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="loginInputEmail">@sotec_web.Resources.Dil.TELEFON *</label>
+                                    <input type="tel" name="telefon" class="form-control" id="telefon" placeholder="@sotec_web.Resources.Dil.TELEFON" autocomplete="off" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="loginInputPassword">@sotec_web.Resources.Dil.ŞİFRE *</label>
+                                    <input type="password" name="sifre" class="form-control" id="sifre" placeholder="@sotec_web.Resources.Dil.ŞİFRE" autocomplete="off" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <div class="form-group">
+                                            <button class="btn btn-border" type="submit">@sotec_web.Resources.Dil.KAYIT_OL</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
