@@ -5,29 +5,23 @@
 
     bool first = true;
     DataTable dt_diller_vs;
-    DataTable dt_blog_kategori = SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND kategori_tipi_parametre_id = 16");
-    DataTable dt_blog = SQL.get("SELECT u.*, k.ad, k.soyad FROM urunler u INNER JOIN kullanicilar k ON k.kullanici_id = u.kaydeden_kullanici_id WHERE u.silindi = 0");
+
+    int sayfa_no = ViewBag.sayfa_no;
+    int cnt_blog = Convert.ToInt32(SQL.get("SELECT cnt = COUNT(*) FROM urunler u INNER JOIN kullanicilar k ON k.kullanici_id = u.kaydeden_kullanici_id WHERE u.silindi = 0").Rows[0]["cnt"]);
+    int sayfa_sayisi = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(cnt_blog) / 10));
+
+    //DataTable dt_blog_kategori = SQL.get("SELECT * FROM kategoriler WHERE silindi = 0 AND kategori_tipi_parametre_id = 16");
+    DataTable dt_blog = SQL.get("SELECT u.*, k.ad, k.soyad FROM urunler u INNER JOIN kullanicilar k ON k.kullanici_id = u.kaydeden_kullanici_id WHERE u.silindi = 0 ORDER by u.urun_id DESC OFFSET " + (sayfa_no * 10) + " ROWS FETCH NEXT 10 ROWS ONLY");
 }
 @section style
 {
     <link rel="stylesheet" href="~/admin_src/vendor/dropify/css/dropify.min.css">
     <script src="~/admin_src/vendor/ckeditor/ckeditor.js"></script>
-
-    <link rel="stylesheet" href="~/admin_src/vendor/jquery-datatable/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="~/admin_src/vendor/jquery-datatable/fixedeader/dataTables.fixedcolumns.bootstrap4.min.css">
-    <link rel="stylesheet" href="~/admin_src/vendor/jquery-datatable/fixedeader/dataTables.fixedheader.bootstrap4.min.css">
 }
 @section script
 {
     <script src="~/admin_src/assets/js/pages/ui/dialogs.js"></script>
     <script src="~/admin_src/vendor/dropify/js/dropify.min.js"></script>
-    <script src="~/admin_src/assets/bundles/datatablescripts.bundle.js"></script>
-    <script src="~/admin_src/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
-    <script src="~/admin_src/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
-    <script src="~/admin_src/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
-    <script src="~/admin_src/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
-    <script src="~/admin_src/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
-    <script src="~/admin_src/assets/js/pages/tables/jquery-datatable.js"></script>
     <script>
         function urun_sil(urun_id) {
             swal({
@@ -61,122 +55,165 @@
 
         }
     }
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="header">
-                <ul class="header-dropdown dropdown dropdown-animated scale-left">
-                    <li><a href="javascript:void(0);" class="full-screen"><i class="icon-size-fullscreen"></i></a></li>
-                    <li><a href="@Url.Action("UrunDetay", "Admin", new { id = 0 })" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Yeni Ürün</a></li>
-                </ul>
-            </div>
-            <div class="body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover dataTable js-exportable">
-                        <thead>
+<div class="col-lg-12">
+    <div class="card">
+        <div class="header">
+            <h2>Ürünleri Filtrele</h2>
+        </div>
+        <div class="body">
+            <form id="basic-form" method="post" novalidate="">
+                <div class="form-group">
+                    <label>Text Input</label>
+                    <input type="text" class="form-control" required="">
+                </div>
+                <div class="form-group">
+                    <label>Email Input</label>
+                    <input type="email" class="form-control" required="">
+                </div>
+                <div class="form-group">
+                    <label>Checkbox</label>
+                    <br>
+                    <label class="fancy-checkbox">
+                        <input type="checkbox" name="checkbox" required="" data-parsley-errors-container="#error-checkbox" data-parsley-multiple="checkbox">
+                        <span>Option 1</span>
+                    </label>
+                    <label class="fancy-checkbox">
+                        <input type="checkbox" name="checkbox" data-parsley-multiple="checkbox">
+                        <span>Option 2</span>
+                    </label>
+                    <label class="fancy-checkbox">
+                        <input type="checkbox" name="checkbox" data-parsley-multiple="checkbox">
+                        <span>Option 3</span>
+                    </label>
+                    <p id="error-checkbox"></p>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">Filtrele</button>
+            </form>
+        </div>
+    </div>
+    <div class="card">
+        <div class="header">
+            <ul class="header-dropdown dropdown dropdown-animated scale-left">
+                <li><a href="javascript:void(0);" class="full-screen"><i class="icon-size-fullscreen"></i></a></li>
+                <li><a href="@Url.Action("UrunDetay", "Admin", new { id = 0 })" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Yeni Ürün</a></li>
+            </ul>
+        </div>
+        <div class="body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Kullanıcı</th>
+                            <th>Ürün</th>
+                            <th>Tarih</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Kullanıcı</th>
+                            <th>Ürün</th>
+                            <th>Tarih</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (DataRow dr_item in dt_blog.Rows)
+                        {
                             <tr>
-                                <th>Kullanıcı</th>
-                                <th>Ürün</th>
-                                <th>Tarih</th>
-                                <th></th>
+                                <td>@dr_item["ad"] @dr_item["soyad"]</td>
+                                <td>@dr_item["urun_adi"]</td>
+                                <td>@dr_item["kayit_tarihi"]</td>
+                                <td>
+                                    <a href="@Url.Action("UrunDetay", "Admin", new { id = dr_item["urun_id"] })" class="btn btn-sm btn-default"><i class="fa fa-edit"></i></a>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-default" data-toggle="modal" data-target="#tedarikci_dil_@dr_item["urun_id"]"><i class="fa fa-flag"></i></a>
+                                    <button onclick="urun_sil(@dr_item["urun_id"])" class="btn btn-danger" title="Delete" type="button"><i class="fa fa-trash-o"></i></button>
+                                </td>
                             </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <th>Kullanıcı</th>
-                                <th>Ürün</th>
-                                <th>Tarih</th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
-                        <tbody>
-                            @foreach (DataRow dr_item in dt_blog.Rows)
-                            {
-                                <tr>
-                                    <td>@dr_item["ad"] @dr_item["soyad"]</td>
-                                    <td>@dr_item["urun_adi"]</td>
-                                    <td>@dr_item["kayit_tarihi"]</td>
-                                    <td>
-                                        <a href="@Url.Action("UrunDetay", "Admin", new { id = dr_item["urun_id"] })" class="btn btn-sm btn-default"><i class="fa fa-edit"></i></a>
-                                        <a href="javascript:void(0);" class="btn btn-sm btn-default" data-toggle="modal" data-target="#tedarikci_dil_@dr_item["urun_id"]"><i class="fa fa-flag"></i></a>
-                                        <button onclick="urun_sil(@dr_item["urun_id"])" class="btn btn-danger" title="Delete" type="button"><i class="fa fa-trash-o"></i></button>
-                                    </td>
-                                </tr>
 
-                                <div class="modal fade" id="tedarikci_dil_@dr_item["urun_id"]" tabindex="-1" role="dialog">
-                                    <div class="modal-dialog modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <form action="/Admin/urunDil" method="post" enctype="multipart/form-data">
-                                                <div class="modal-header">
-                                                    <h6 class="title" id="defaultModalLabel">Ürün Dilleri</h6>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <input name="urun_id" type="hidden" value="@dr_item["urun_id"]" />
-                                                    <div class="body">
-                                                        <ul class="nav nav-tabs">
-                                                            @{
-                                                                first = true;
-                                                                dt_diller_vs = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 0");
-                                                            }
-                                                            @foreach (DataRow item2 in dt_diller_vs.Rows)
+                            <div class="modal fade" id="tedarikci_dil_@dr_item["urun_id"]" tabindex="-1" role="dialog">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <form action="/Admin/urunDil" method="post" enctype="multipart/form-data">
+                                            <div class="modal-header">
+                                                <h6 class="title" id="defaultModalLabel">Ürün Dilleri</h6>
+                                            </div>
+                                            <div class="modal-body">
+                                                <input name="urun_id" type="hidden" value="@dr_item["urun_id"]" />
+                                                <div class="body">
+                                                    <ul class="nav nav-tabs">
+                                                        @{
+                                                            first = true;
+                                                            dt_diller_vs = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 0");
+                                                        }
+                                                        @foreach (DataRow item2 in dt_diller_vs.Rows)
+                                                        {
+                                                            <li class="nav-item"><a class="nav-link @(first == true ? "active show" : "") " data-toggle="tab" href="#dil_@(item2["dil_id"] + "_" + dr_item["urun_id"])">@item2["dil"]</a></li>
+                                                            if (first)
                                                             {
-                                                                <li class="nav-item"><a class="nav-link @(first == true ? "active show" : "") " data-toggle="tab" href="#dil_@(item2["dil_id"] + "_" + dr_item["urun_id"])">@item2["dil"]</a></li>
-                                                                if (first)
-                                                                {
-                                                                    first = false;
-                                                                }
+                                                                first = false;
                                                             }
-                                                        </ul>
+                                                        }
+                                                    </ul>
 
 
-                                                        <div class="tab-content">
-                                                            @{
-                                                                first = true;
-                                                                dt_diller_vs = SQL.get("SELECT d.*, dk.urun_adi, dk.aciklama FROM diller d LEFT OUTER JOIN dil_urunler dk ON dk.dil_id = d.dil_id AND dk.urun_id = " + dr_item["urun_id"] + " WHERE d.silindi = 0 AND d.varsayilan = 0");
-                                                            }
-                                                            @foreach (DataRow item2 in dt_diller_vs.Rows)
-                                                            {
-                                                                <input type="hidden" name="dil_id[]" value="@item2["dil_id"]" />
-                                                                <div class="tab-pane @(first ? "active show" : "")" id="dil_@(item2["dil_id"] + "_" + dr_item["urun_id"])">
-                                                                    <h6>@item2["dil"]</h6>
-                                                                    <div class="row clearfix">
-                                                                        <div class="col-12">
-                                                                            <div class="form-group">
-                                                                                <label class="control-label">Ürün Adı</label>
-                                                                                <input type="text" name="urun_adi" class="form-control" placeholder="Ürün Adı" autocomplete="off" value="@item2["urun_adi"]" />
-                                                                                <span class="text-muted small">@dr_item["urun_adi"]</span>
-                                                                            </div>
+                                                    <div class="tab-content">
+                                                        @{
+                                                            first = true;
+                                                            dt_diller_vs = SQL.get("SELECT d.*, dk.urun_adi, dk.aciklama FROM diller d LEFT OUTER JOIN dil_urunler dk ON dk.dil_id = d.dil_id AND dk.urun_id = " + dr_item["urun_id"] + " WHERE d.silindi = 0 AND d.varsayilan = 0");
+                                                        }
+                                                        @foreach (DataRow item2 in dt_diller_vs.Rows)
+                                                        {
+                                                            <input type="hidden" name="dil_id[]" value="@item2["dil_id"]" />
+                                                            <div class="tab-pane @(first ? "active show" : "")" id="dil_@(item2["dil_id"] + "_" + dr_item["urun_id"])">
+                                                                <h6>@item2["dil"]</h6>
+                                                                <div class="row clearfix">
+                                                                    <div class="col-12">
+                                                                        <div class="form-group">
+                                                                            <label class="control-label">Ürün Adı</label>
+                                                                            <input type="text" name="urun_adi" class="form-control" placeholder="Ürün Adı" autocomplete="off" value="@item2["urun_adi"]" />
+                                                                            <span class="text-muted small">@dr_item["urun_adi"]</span>
                                                                         </div>
-                                                                        <div class="col-12">
-                                                                            <div class="form-group">
-                                                                                <label class="control-label">Açıklama</label>
-                                                                                <textarea name="aciklama" id="ckeditor1_@(item2["dil_id"] + "_" + dr_item["urun_id"])">@item2["aciklama"]</textarea>
-                                                                                <script>CKEDITOR.replace('ckeditor1_@(item2["dil_id"] + "_" + dr_item["urun_id"])');</script>
-                                                                                <span class="text-muted small">@MvcHtmlString.Create(dr_item["aciklama"].ToString())</span>
-                                                                            </div>
+                                                                    </div>
+                                                                    <div class="col-12">
+                                                                        <div class="form-group">
+                                                                            <label class="control-label">Açıklama</label>
+                                                                            <textarea name="aciklama" id="ckeditor1_@(item2["dil_id"] + "_" + dr_item["urun_id"])">@item2["aciklama"]</textarea>
+                                                                            <script>CKEDITOR.replace('ckeditor1_@(item2["dil_id"] + "_" + dr_item["urun_id"])');</script>
+                                                                            <span class="text-muted small">@MvcHtmlString.Create(dr_item["aciklama"].ToString())</span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                if (first)
-                                                                {
-                                                                    first = false;
-                                                                }
+                                                            </div>
+                                                            if (first)
+                                                            {
+                                                                first = false;
                                                             }
-                                                        </div>
+                                                        }
                                                     </div>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-primary">Düzenle</button>
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
-                                                </div>
-                                            </form>
-                                        </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary">Düzenle</button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                            </div>
+                        }
+                    </tbody>
+                </table>
             </div>
+
+            <ul class="pagination">
+                @for (int i = 0; i < sayfa_sayisi; i++)
+                {
+                    <li class="page-item @(i == sayfa_no ? "active" : "")"><a class="page-link" href="@Url.Action("Urun", new { id = i })">@(i + 1)</a></li>
+                }
+            </ul>
         </div>
     </div>
+</div>
 </div>

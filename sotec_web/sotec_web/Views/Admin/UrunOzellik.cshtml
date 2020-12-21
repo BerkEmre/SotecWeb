@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Ürün Özellikleri";
     DataTable dt_diller_vs;
-    DataTable dt_urun_ozellikleri = SQL.get("SELECT * FROM urun_ozellikleri WHERE silindi = 0");
+    DataTable dt_urun_ozellikleri = SQL.get("SELECT * FROM ozellikler WHERE silindi = 0");
 
     bool first = true;
 }

@@ -959,10 +959,12 @@ namespace sotec_web.Controllers
         #endregion
 
         #region ÜRÜN
-        public ActionResult Urun()
+        public ActionResult Urun(int id = 0)
         {
             if (Session["kullanici_id"] == null)
                 return RedirectToAction("Login");
+
+            ViewBag.sayfa_no = id;
 
             return View();
         }
