@@ -7,7 +7,10 @@
 
     string lang = Request.Cookies.Get("MultiLanguageExample").Value;
     DataTable dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND kisa_kod = '" + lang + "'");
-    if (dt_dil.Rows.Count <= 0) { dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); }
+    if (dt_dil.Rows.Count <= 0) 
+    { 
+        dt_dil = SQL.get("SELECT * FROM diller WHERE silindi = 0 AND varsayilan = 1"); 
+    }
     DataRow dr_dil = dt_dil.Rows[0];
 
     Regex rRemScript = new Regex(@"<iframe[^>]*>[\s\S]*?</iframe>");
